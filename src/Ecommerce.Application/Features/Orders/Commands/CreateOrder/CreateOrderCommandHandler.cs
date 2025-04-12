@@ -16,7 +16,10 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
         List<OrderItem> orderItems = new();
         foreach (CartItemDto cartItem in cart.CartItems)
         {
-            Product? product = await context.Products.FindAsync(cartItem.Id);
+            Product? product = await context.Products
+                .Include(p => p.Supplier)
+                .FirstOrDefaultAsync(p => p.Id == cartItem.Id, cancellationToken);
+                
             if (product is null)
                 throw new NotFoundException("Product", cartItem.Id);
 
@@ -34,6 +37,8 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
                 Quantity = cartItem.Quantity,
                 ProductName = product.Title,
                 ImageUrl = cartItem.ImageUrl,
+                SupplierId = product.SupplierId,
+                Status = OrderItemStatus.Pending
             });
         }
 

@@ -11,5 +11,16 @@ public class OrderItem : BaseEntity
     public int Quantity { get; set; }
     public Guid OrderId { get; set; }
     public Order Order { get; set; }
+    public Guid? SupplierId { get; set; }
+    public SupplierProfile? Supplier { get; set; }
+    public OrderItemStatus Status { get; set; } = OrderItemStatus.Pending;
+}
 
+public enum OrderItemStatus
+{
+    Pending,
+    Confirmed,
+    Shipped,
+    Delivered,
+    Cancelled
 }

@@ -10,5 +10,16 @@ internal class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {
         builder.Property(i => i.Price)
             .HasColumnType("decimal(18,2)");
+
+        builder.HasOne(i => i.Supplier)
+            .WithMany()
+            .HasForeignKey(i => i.SupplierId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(i => i.Status)
+            .HasConversion(
+                s => s.ToString(),
+                s => (OrderItemStatus)Enum.Parse(typeof(OrderItemStatus), s)
+            );
     }
 }

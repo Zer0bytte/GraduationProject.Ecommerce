@@ -13,6 +13,7 @@ public interface IApplicationDbContext
     DbSet<Product> Products { get; set; }
     DbSet<SupplierProfile> SupplierProfiles { get; set; }
     DbSet<TransactionRefernce> TransactionRefernces { get; set; }
+    DbSet<SupplierBalanceTransaction> SupplierBalanceTransactions { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 }

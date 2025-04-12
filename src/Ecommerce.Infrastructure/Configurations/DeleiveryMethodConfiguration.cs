@@ -10,12 +10,13 @@ internal class DeleiveryMethodConfiguration : IEntityTypeConfiguration<DeliveryM
         builder.Property(e => e.Price).HasColumnType("decimal(18,2)");
     }
 }
-internal class AddressConfiguration : IEntityTypeConfiguration<Address>
+
+
+internal class SupplierBalanceTransactionConfiguration : IEntityTypeConfiguration<SupplierBalanceTransaction>
 {
-    public void Configure(EntityTypeBuilder<Address> builder)
+    public void Configure(EntityTypeBuilder<SupplierBalanceTransaction> builder)
     {
-        builder.Property(a => a.Governorate).HasConversion(
-            to => to.ToString(),
-            db => (Governorate)Enum.Parse(typeof(Governorate), db));
+        builder.Property(t => t.TransactionType).HasConversion(type => type.ToString(),
+            dbType => (TransactionType)Enum.Parse(typeof(TransactionType), dbType));
     }
 }

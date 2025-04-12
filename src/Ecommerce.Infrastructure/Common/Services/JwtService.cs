@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 
 namespace Ecommerce.Infrastructure.Common.Services;
-public class JwtService(IOptions<JwtConfiguration> _iconfiguration, UserManager<AppUser> userManager, IApplicationDbContext dbContext) : IJwtService
+public class JwtService(JwtConfiguration jwtConfig, UserManager<AppUser> userManager, IApplicationDbContext dbContext) : IJwtService
 {
     private async Task<Guid> GetSupplierIdByUserIdAsync(Guid userId)
     {
@@ -47,11 +47,11 @@ public class JwtService(IOptions<JwtConfiguration> _iconfiguration, UserManager<
             }
         }
 
-        byte[] tokenKey = Encoding.UTF8.GetBytes(_iconfiguration.Value.Key);
+        byte[] tokenKey = Encoding.UTF8.GetBytes(jwtConfig.Key);
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddDays(_iconfiguration.Value.AccessTokenLifetime),
+            Expires = DateTime.UtcNow.AddDays(jwtConfig.AccessTokenLifetime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
         };
 
