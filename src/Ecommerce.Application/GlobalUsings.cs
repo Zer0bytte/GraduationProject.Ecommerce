@@ -1,0 +1,17 @@
+﻿global using BuildingBlocks.Exceptions;
+global using BuildingBlocks.Exceptions.Abstractions;
+global using Ecommerce.Application.Common.Configs;
+global using Ecommerce.Application.Common.Interfaces;
+global using Ecommerce.Application.Common.Persistance;
+global using Ecommerce.Application.Dtos;
+global using Ecommerce.Domain.Entities;
+global using Ecommerce.Domain.Enums;
+global using Ecommerce.Domain.Events;
+global using FluentValidation;
+global using MassTransit;
+global using MediatR;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Caching.Distributed;
+global using Newtonsoft.Json;

@@ -1,0 +1,22 @@
+﻿using Ecommerce.Application.Features.Identity.Authentication.Commands.RegisterUser;
+using Ecommerce.Application.Features.Identity.Authentication.Queries.Login;
+
+namespace Ecommerce.API.Endpoints.Identity.Authentication;
+
+public class LoginEndpoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost("/api/auth/login", async (LoginQuery request, ISender sender) =>
+        {
+            LoginResult result = await sender.Send(request);
+
+            return Results.Ok(ApiResponse<LoginResult>.Success(result, "User logged in successfully."));
+
+
+        }).WithTags("Authentication")
+            .WithSummary("Login")
+            .Produces<RegisterUserResult>(); ;
+    }
+
+}
