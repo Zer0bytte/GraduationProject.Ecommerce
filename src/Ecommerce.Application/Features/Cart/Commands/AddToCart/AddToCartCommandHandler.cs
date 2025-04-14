@@ -4,13 +4,15 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
 {
     const int FIRST_IMAGE_INDEX = 0;
     const int INITIAL_QUANTITY = 1;
-    CartDto UpdateOrAddCartItem(CartDto cachedCart, CartItemDto newItem)
+    CartDto UpdateOrAddCartItem(CartDto cachedCart, CartItemDto newItem, Product product)
     {
         CartItemDto? existingItem = cachedCart.CartItems.FirstOrDefault(i => i.Id == newItem.Id);
 
         if (existingItem is not null)
         {
             existingItem.Quantity++;
+            if(existingItem.Quantity > product.Stock)
+                throw new InternalServerException($"Product: '{product.Title}' max value is: {product.Stock}");
         }
         else
         {
@@ -61,7 +63,7 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
         else
         {
             cart = JsonConvert.DeserializeObject<CartDto>(cachedCart);
-            UpdateOrAddCartItem(cart, newCartItem);
+            UpdateOrAddCartItem(cart, newCartItem,product);
         }
 
         await cache.SetStringAsync(command.CartId, JsonConvert.SerializeObject(cart));
