@@ -38,7 +38,7 @@ public static class DependancyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-
+        services.AddSingleton<IShippingCalculatorService, ShippingCalculatorService>();
         return services;
     }
 }

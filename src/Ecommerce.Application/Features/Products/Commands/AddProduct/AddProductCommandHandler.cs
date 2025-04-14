@@ -36,16 +36,19 @@ public class AddProductCommandHandler(IApplicationDbContext context, IHostEnviro
                 NameOnServer = fileName,
             });
         }
-
-        foreach (AddProductOption option in command.ProductOptions)
+        if (command.ProductOptions is not null)
         {
-            product.Options.Add(new ProductOption
+            foreach (AddProductOption option in command.ProductOptions)
             {
-                OptionGroupName = option.OptionGroupName,
-                OptionName = option.OptionName,
-                OptionPrice = option.OptionPrice,
-            });
+                product.Options.Add(new ProductOption
+                {
+                    OptionGroupName = option.OptionGroupName,
+                    OptionName = option.OptionName,
+                    OptionPrice = option.OptionPrice,
+                });
+            }
         }
+
         await context.Products.AddAsync(product);
         await context.SaveChangesAsync(cancellationToken);
         return new AddProductResult() { IsSuccess = true };

@@ -11,5 +11,4 @@ public record GetOrderDetailsResult
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.None;
     public OrderDetailsAddress ShippingAddress { get; set; } = default!;
     public PaymentMethod PaymentMethod { get; set; }
-    public string DeliveryMethod { get; set; } = default!;
 }

@@ -49,6 +49,7 @@ public class RegisterSupplierCommandHandler(IApplicationDbContext context,
                 NationalId = command.NationalId,
                 TaxNumber = command.TaxNumber,
                 StoreName = command.StoreName,
+                Governorate = command.Governorate,
                 NationalIdFrontNameOnServer = nameFront,
                 NationalIdBackNameOnServer = nameBack,
                 TaxCardNameOnServer = nameTax

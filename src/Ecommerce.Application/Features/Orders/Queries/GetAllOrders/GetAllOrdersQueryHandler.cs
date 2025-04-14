@@ -13,7 +13,7 @@ public class GetAllOrdersQueryHandler(IApplicationDbContext context) : IRequestH
             OrderDate = x.OrderDate,
             PaymentMethod = x.PaymentMethod,
             PaymentStatus = x.PaymentStatus,
-            ShippingPrice = x.DeliveryMethod.Price,
+            //ShippingPrice = x.DeliveryMethod.Price,
             SubTotal = x.SubTotal,
             Status = x.Status
         })

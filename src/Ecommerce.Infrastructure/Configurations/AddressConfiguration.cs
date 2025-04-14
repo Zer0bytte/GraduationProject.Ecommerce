@@ -12,3 +12,14 @@ internal class AddressConfiguration : IEntityTypeConfiguration<Address>
             db => (Governorate)Enum.Parse(typeof(Governorate), db));
     }
 }
+
+
+internal class SupplierProfileConfiguration : IEntityTypeConfiguration<SupplierProfile>
+{
+    public void Configure(EntityTypeBuilder<SupplierProfile> builder)
+    {
+        builder.Property(a => a.Governorate).HasConversion(
+            to => to.ToString(),
+            db => (Governorate)Enum.Parse(typeof(Governorate), db));
+    }
+}

@@ -6,6 +6,5 @@ public class CreateOrderCommand : IRequest<CreateOrderResult>
     public string? CouponCode { get; set; }
     public Guid Address { get; set; } = default!;
     public PaymentMethod PaymentMethod { get; set; }
-    public Guid DeliveryMethod { get; set; }
 
 }

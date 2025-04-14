@@ -7,6 +7,7 @@ public class Order : BaseEntity
 {
     public string BuyerEmail { get; set; } = default!;
     public decimal SubTotal { get; set; }
+    public decimal ShippingPrice { get; set; }
     public string? PaymentIntentId { get; set; } = default!;
     public DateTime OrderDate { get; set; } = DateTime.UtcNow;
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
@@ -15,7 +16,6 @@ public class Order : BaseEntity
     public Guid AddressId { get; set; } = default!;
     public IReadOnlyList<OrderItem> OrderItems { get; set; } = [];
     public PaymentMethod PaymentMethod { get; set; }
-    public DeliveryMethod DeliveryMethod { get; set; } = default!;
     public Guid DeliveryMethodId { get; set; } = default!;
 
     public Guid UserId { get; set; }

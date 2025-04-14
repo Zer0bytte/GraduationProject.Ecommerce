@@ -4,7 +4,6 @@ public interface IApplicationDbContext
     DbSet<Address> Addresses { get; set; }
     DbSet<Category> Categories { get; set; }
     DbSet<CouponCode> CouponCodes { get; set; }
-    DbSet<DeliveryMethod> DeliveryMethods { get; set; }
     DbSet<OrderItem> OrderItems { get; set; }
     DbSet<Order> Orders { get; set; }
     DbSet<ProductImage> ProductImages { get; set; }

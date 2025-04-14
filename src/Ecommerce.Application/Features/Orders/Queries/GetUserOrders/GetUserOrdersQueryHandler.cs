@@ -14,7 +14,7 @@ public class GetUserOrdersQueryHandler(IApplicationDbContext context, ICurrentUs
             OrderDate = o.OrderDate,
             PaymentMethod = o.PaymentMethod,
             PaymentStatus = o.PaymentStatus,
-            ShippingPrice = o.DeliveryMethod.Price,
+            //ShippingPrice = o.DeliveryMethod.Price,
             Status = o.Status,
             SubTotal = o.SubTotal,
         }).Skip((query.Page - 1) * query.Limit)

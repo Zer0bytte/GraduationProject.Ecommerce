@@ -4,10 +4,9 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
 {
     const int FIRST_IMAGE_INDEX = 0;
     const int INITIAL_QUANTITY = 1;
-    CartDto UpdateOrAddCartItem(string cachedCart, CartItemDto newItem)
+    CartDto UpdateOrAddCartItem(CartDto cachedCart, CartItemDto newItem)
     {
-        CartDto? cart = JsonConvert.DeserializeObject<CartDto>(cachedCart);
-        CartItemDto? existingItem = cart.CartItems.FirstOrDefault(i => i.Id == newItem.Id);
+        CartItemDto? existingItem = cachedCart.CartItems.FirstOrDefault(i => i.Id == newItem.Id);
 
         if (existingItem is not null)
         {
@@ -15,15 +14,16 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
         }
         else
         {
-            cart.CartItems.Add(newItem);
+            cachedCart.CartItems.Add(newItem);
         }
 
-        return cart;
+        return cachedCart;
     }
     public async Task<AddToCartResult> Handle(AddToCartCommand command, CancellationToken cancellationToken)
     {
         Product product = await context.Products
             .Include(p => p.Category)
+            .Include(p => p.Supplier)
             .Include(p => p.Images)
             .SingleOrDefaultAsync(p => p.Id == command.ProductId, cancellationToken)
             ?? throw new NotFoundException("Product", command.ProductId);
@@ -45,17 +45,26 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
             Title = product.Title
         };
 
+
         string? cachedCart = await cache.GetStringAsync(command.CartId);
-        CartDto cart = string.IsNullOrEmpty(cachedCart)
-            ? new CartDto
+
+        CartDto cart = new();
+
+        if (string.IsNullOrEmpty(cachedCart))
+        {
+            cart = new CartDto
             {
                 Id = command.CartId,
-                CartItems = new List<CartItemDto> { newCartItem }
-            }
-            : UpdateOrAddCartItem(cachedCart, newCartItem);
+                CartItems = new List<CartItemDto> { newCartItem },
+            };
+        }
+        else
+        {
+            cart = JsonConvert.DeserializeObject<CartDto>(cachedCart);
+            UpdateOrAddCartItem(cart, newCartItem);
+        }
 
         await cache.SetStringAsync(command.CartId, JsonConvert.SerializeObject(cart));
         return new AddToCartResult(true);
     }
 }
-

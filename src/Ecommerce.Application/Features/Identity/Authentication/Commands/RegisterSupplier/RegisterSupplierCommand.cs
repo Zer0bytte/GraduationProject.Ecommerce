@@ -10,6 +10,7 @@ public class RegisterSupplierCommand : IRequest<RegisterSupplierResult>
     public string StoreName { get; set; } = default!;
     public string TaxNumber { get; set; } = default!;
     public string NationalId { get; set; } = default!;
+    public Governorate Governorate { get; set; }
     public IFormFile NationalIdFront { get; set; } = default!;
     public IFormFile NationalIdBack { get; set; } = default!;
     public IFormFile TaxCard { get; set; } = default!;

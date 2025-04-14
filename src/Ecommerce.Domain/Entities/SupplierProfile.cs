@@ -1,4 +1,5 @@
-﻿using Ecommerce.Domain.Shared;
+﻿using Ecommerce.Domain.Enums;
+using Ecommerce.Domain.Shared;
 
 namespace Ecommerce.Domain.Entities;
 
@@ -17,15 +18,23 @@ public class SupplierProfile : BaseEntity
     public string NationalIdBackNameOnServer { get; set; } = default!;
     public string TaxCardNameOnServer { get; set; } = default!;
     public bool IsVerified { get; set; }
+    public bool IsRejected { get; set; }
     public string? VerificationFailureReason { get; set; }
     public bool IsBanned { get; set; }
+    public Governorate Governorate { get; set; }
+
+
 
     public void Verify()
     {
         IsVerified = true;
         ModifiedOn = DateTime.UtcNow;
     }
-
+    public void RejectSupplier(string reason)
+    {
+        IsRejected = true;
+        VerificationFailureReason = reason;
+    }
     public bool IsSupplierVerified()
     {
         return IsVerified;

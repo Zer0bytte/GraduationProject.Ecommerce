@@ -10,7 +10,6 @@ public class GetOrderDetailsQueryHandler(IApplicationDbContext context, ICurrent
             {
                 OrderId = o.Id,
                 OrderDate = o.OrderDate,
-                DeliveryMethod = o.DeliveryMethod.ShortName,
                 PaymentMethod = o.PaymentMethod,
                 PaymentStatus = o.PaymentStatus,
                 ShippingAddress = new OrderDetailsAddress
@@ -23,7 +22,7 @@ public class GetOrderDetailsQueryHandler(IApplicationDbContext context, ICurrent
                 },
                 Status = o.Status,
                 SubTotal = o.SubTotal,
-                ShippingPrice = o.DeliveryMethod.Price,
+                //ShippingPrice = o.DeliveryMethod.Price,
                 OrderItems = o.OrderItems.Select(oi => new OrderDetailItems
                 {
                     ProductId = oi.ProductId,

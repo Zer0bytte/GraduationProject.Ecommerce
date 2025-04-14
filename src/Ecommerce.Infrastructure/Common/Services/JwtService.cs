@@ -13,14 +13,12 @@ using System.Text;
 namespace Ecommerce.Infrastructure.Common.Services;
 public class JwtService(JwtConfiguration jwtConfig, UserManager<AppUser> userManager, IApplicationDbContext dbContext) : IJwtService
 {
-    private async Task<Guid> GetSupplierIdByUserIdAsync(Guid userId)
+    private async Task<SupplierProfile?> GetSupplierIdByUserIdAsync(Guid userId)
     {
         SupplierProfile? supplier = await dbContext.SupplierProfiles
             .FirstOrDefaultAsync(s => s.UserId == userId);
 
-        if (supplier is null) return Guid.Empty;
-
-        return supplier.Id;
+        return supplier;
     }
     public async Task<string> GenerateJwtToken(AppUser user)
     {
@@ -40,10 +38,11 @@ public class JwtService(JwtConfiguration jwtConfig, UserManager<AppUser> userMan
 
         if (userType == UserTypes.Supplier)
         {
-            Guid supplierId = await GetSupplierIdByUserIdAsync(user.Id);
-            if (supplierId != Guid.Empty)
+            var supplier = await GetSupplierIdByUserIdAsync(user.Id);
+            if (supplier is not null)
             {
-                claims.Add(new Claim("SupplierId", supplierId.ToString()));
+                claims.Add(new Claim("SupplierId", supplier.Id.ToString()));
+                claims.Add(new Claim("VerifiedSupplier", supplier.IsVerified.ToString()));
             }
         }
 

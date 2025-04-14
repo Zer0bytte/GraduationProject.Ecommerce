@@ -12,7 +12,7 @@ public record AddProductCommand : IRequest<AddProductResult>
     public string Description { get; set; } = default!;
     public Guid CategoryId { get; set; }
     public List<IFormFile> Images { get; set; } = [];
-    public List<AddProductOption> ProductOptions { get; set; } = [];
+    public List<AddProductOption>? ProductOptions { get; set; } = [];
 }
 
 public record AddProductOption

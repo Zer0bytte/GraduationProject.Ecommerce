@@ -1,6 +1,8 @@
-﻿namespace Ecommerce.Application.Features.Orders.Commands.CreateOrder;
+﻿using Ecommerce.Application.Features.Orders.Queries.GetOrderPriceDetails;
 
-public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayService paymentService, IDistributedCache cache, ICurrentUser ICurrentUser)
+namespace Ecommerce.Application.Features.Orders.Commands.CreateOrder;
+
+public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayService paymentService, IDistributedCache cache, ICurrentUser ICurrentUser, ISender sender)
     : IRequestHandler<CreateOrderCommand, CreateOrderResult>
 {
     public async Task<CreateOrderResult> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
@@ -9,8 +11,8 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
         if (string.IsNullOrEmpty(cartJson))
             throw new NotFoundException("Cart", command.CartId);
 
-        bool addressExist = await context.Addresses.AnyAsync(ad => ad.Id == command.Address && ad.UserId == ICurrentUser.Id);
-        if (!addressExist) throw new NotFoundException("Address", command.Address);
+        var address = await context.Addresses.FirstOrDefaultAsync(ad => ad.Id == command.Address && ad.UserId == ICurrentUser.Id);
+        if (address is null) throw new NotFoundException("Address", command.Address);
 
         CartDto? cart = JsonConvert.DeserializeObject<CartDto>(cartJson);
         List<OrderItem> orderItems = new();
@@ -19,7 +21,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
             Product? product = await context.Products
                 .Include(p => p.Supplier)
                 .FirstOrDefaultAsync(p => p.Id == cartItem.Id, cancellationToken);
-                
+
             if (product is null)
                 throw new NotFoundException("Product", cartItem.Id);
 
@@ -42,26 +44,28 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
             });
         }
 
-        DeliveryMethod? deliveryMethod = await context.DeliveryMethods.FindAsync(command.DeliveryMethod);
 
-        if (deliveryMethod is null) throw new NotFoundException("DeliveryMethod", command.DeliveryMethod);
-
+        var orderPriceDetails = await sender.Send(new GetOrderPriceDetailsQuery
+        {
+            AddressId = address.Id,
+            CartId = command.CartId
+        });
         Order order = new Order
         {
             Id = Guid.NewGuid(),
             BuyerEmail = ICurrentUser.Email,
-            DeliveryMethodId = command.DeliveryMethod,
             PaymentMethod = command.PaymentMethod,
             OrderDate = DateTime.UtcNow,
             OrderItems = orderItems,
             AddressId = command.Address,
             Status = OrderStatus.Pending,
             PaymentStatus = PaymentStatus.None,
-            SubTotal = orderItems.Sum(i => i.Price * i.Quantity),
-            UserId = ICurrentUser.Id
+            UserId = ICurrentUser.Id,
+            SubTotal = orderPriceDetails.SubTotal,
+            ShippingPrice = orderPriceDetails.ShippingPrice
         };
 
-        decimal orderTotalPrice = order.SubTotal + deliveryMethod.Price;
+        decimal orderTotalPrice = order.SubTotal + order.ShippingPrice;
 
         if (!string.IsNullOrEmpty(command.CouponCode))
         {
@@ -90,7 +94,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
             TransactionRefernce transactionReference = new TransactionRefernce
             {
                 UserId = ICurrentUser.Id,
-                Amount = order.SubTotal + deliveryMethod.Price,
+                Amount = order.SubTotal,
                 OrderId = order.Id,
                 TransactionRefId = paymentIntent.TranRef,
             };

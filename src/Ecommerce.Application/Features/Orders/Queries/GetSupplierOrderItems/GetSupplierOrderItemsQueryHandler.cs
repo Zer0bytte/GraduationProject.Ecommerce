@@ -1,10 +1,3 @@
-using Ecommerce.Application.Common.Interfaces;
-using Ecommerce.Application.Common.Persistance;
-using Ecommerce.Domain.Entities;
-using Ecommerce.Domain.Shared;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-
 namespace Ecommerce.Application.Features.Orders.Queries.GetSupplierOrderItems;
 
 public class GetSupplierOrderItemsQueryHandler : IRequestHandler<GetSupplierOrderItemsQuery, PagedResult<GetSupplierOrderItemsResult>>
@@ -23,7 +16,7 @@ public class GetSupplierOrderItemsQueryHandler : IRequestHandler<GetSupplierOrde
         if (_currentUser.SupplierId == Guid.Empty)
             throw new UnauthorizedAccessException("User is not a supplier");
 
-        var baseQuery = _context.OrderItems
+        IQueryable<OrderItem> baseQuery = _context.OrderItems
             .Include(oi => oi.Order)
                 .ThenInclude(o => o.User)
             .Include(oi => oi.Order)
@@ -35,9 +28,9 @@ public class GetSupplierOrderItemsQueryHandler : IRequestHandler<GetSupplierOrde
             baseQuery = baseQuery.Where(oi => oi.Status == query.Status.Value);
         }
 
-        var total = await baseQuery.CountAsync(cancellationToken);
+        int total = await baseQuery.CountAsync(cancellationToken);
 
-        var items = await baseQuery
+        List<GetSupplierOrderItemsResult> items = await baseQuery
             .Skip((query.Page - 1) * query.Limit)
             .Take(query.Limit)
             .Select(oi => new GetSupplierOrderItemsResult
@@ -59,4 +52,4 @@ public class GetSupplierOrderItemsQueryHandler : IRequestHandler<GetSupplierOrde
 
         return PagedResult<GetSupplierOrderItemsResult>.Create(query, total, items);
     }
-} 
+}
