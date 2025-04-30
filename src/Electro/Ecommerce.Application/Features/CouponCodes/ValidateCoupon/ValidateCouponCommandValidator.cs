@@ -4,7 +4,7 @@ public class ValidateCouponCommandValidator : AbstractValidator<ValidateCouponCo
 {
     public ValidateCouponCommandValidator()
     {
-        RuleFor(c => c.Code).NotEmpty().WithMessage("Coupon code is required!");
-        RuleFor(c => c.TotalPrice).GreaterThan(1).WithMessage("Total price should be above 1");
+        RuleFor(c => c.Code).NotEmpty().WithMessage("رمز الكوبون مطلوب!");
+        RuleFor(c => c.TotalPrice).GreaterThan(1).WithMessage("يجب أن يكون السعر الإجمالي أكثر من 1");
     }
 }

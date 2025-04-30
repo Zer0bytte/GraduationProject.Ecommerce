@@ -5,7 +5,7 @@ public class LoginQueryHandler(SignInManager<AppUser> signInManager, UserManager
     public async Task<LoginResult> Handle(LoginQuery query, CancellationToken cancellationToken)
     {
         AppUser? user = await userManager.FindByEmailAsync(query.Email);
-        if (user is null) throw new InternalServerException("Wrong email or password");
+        if (user is null) throw new InternalServerException("الايميل او الباسورد خطأ");
         if (!user.EmailConfirmed)
         {
             await bus.Publish(new EmailVerificationCodeGeneratedEvent
@@ -16,6 +16,15 @@ public class LoginQueryHandler(SignInManager<AppUser> signInManager, UserManager
             throw new EmailNotConfirmedException() { UserId = user.Id };
         }
 
+
+        if (user.IsSeller)
+        {
+            var supplierProfile = context.SupplierProfiles.Find(user.SupplierProfileId);
+            if(supplierProfile is null) throw new InternalServerException("الايميل او الباسورد خطأ");
+
+            if (!supplierProfile.IsVerified || supplierProfile.IsBanned)
+                throw new ApplicationException("من فضلك انتظر لحين تنشيط حسابك");
+        }
         SignInResult result = await signInManager.PasswordSignInAsync(user, query.Password, true, false);
         if (result.Succeeded)
         {

@@ -10,7 +10,7 @@ public class VerifySupplierEndpoint : ICarterModule
         {
             VerifySupplierResult result = await sender.Send(new VerifySupplierCommand { SupplierId = id });
 
-            return Results.Ok(ApiResponse<VerifySupplierResult>.Success(result, "Supplier verified successfully"));
+            return Results.Ok(ApiResponse<VerifySupplierResult>.Success(result, ArabicResponseMessages.Suppliers.Verified));
 
         })
           .RequireAuthorization("Admin")

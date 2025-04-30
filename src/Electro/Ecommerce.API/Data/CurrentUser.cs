@@ -68,7 +68,16 @@ public class CurrentUser : ICurrentUser
             if (!_isAuthenticated) return false;
             string? claim = _user?.FindFirstValue("SupplierId");
             return claim != null;
-             
+
+        }
+    }
+
+    public bool IsAuthenticated
+    {
+        get
+        {
+            return _isAuthenticated;
+
         }
     }
     public string FullName
@@ -92,6 +101,18 @@ public class CurrentUser : ICurrentUser
             return claim == null
                   ? throw new NotFoundException("Invalid user, type missing in token.")
                   : claim;
+        }
+    }
+
+
+    public bool IsVerifiedSupplier
+    {
+        get
+        {
+            if (!_isAuthenticated) return false;
+            string? claim = _user?.FindFirstValue("VerifiedSupplier");
+            return claim != null;
+
         }
     }
 }

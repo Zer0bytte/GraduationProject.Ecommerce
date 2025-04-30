@@ -11,7 +11,7 @@ public class StartConversationEndpoint : ICarterModule
         {
             StartConversationResult result = await sender.Send(command);
 
-            return Results.Ok(ApiResponse<StartConversationResult>.Success(result, "Conversation started succesfully."));
+            return Results.Ok(ApiResponse<StartConversationResult>.Success(result, ArabicResponseMessages.Conversations.Started));
 
         })
             .RequireAuthorization("User")

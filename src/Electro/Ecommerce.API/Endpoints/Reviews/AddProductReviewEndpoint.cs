@@ -10,7 +10,7 @@ public class AddProductReviewEndpoint : ICarterModule
         app.MapPost("/api/reviews/", async ([FromForm] AddProductReviewCommand request, ISender sender) =>
         {
             AddProductReviewResult result = await sender.Send(request);
-            return Results.Ok(ApiResponse<AddProductReviewResult>.Success(result, "Thanks, review created succesfully."));
+            return Results.Ok(ApiResponse<AddProductReviewResult>.Success(result, ArabicResponseMessages.Reviews.Created));
 
         })
             .WithTags("Reviews")

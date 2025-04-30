@@ -4,10 +4,10 @@ public class AddCouponCodeCommandValidator : AbstractValidator<AddCouponCodeComm
 {
     public AddCouponCodeCommandValidator()
     {
-        RuleFor(c => c.Code).NotEmpty().WithMessage("Coupon code is required!");
-        RuleFor(c => c.DiscountPercentage).GreaterThanOrEqualTo(1).WithMessage("Discount percentage should be 1% at least");
-        RuleFor(c => c.MaximumDiscountValue).GreaterThanOrEqualTo(1).WithMessage("Maximum discount value should be 1 at least");
-        RuleFor(c => c.ExpirationDate).GreaterThan(DateTime.Now).WithMessage("Expiration date must be in the future");
+        RuleFor(c => c.Code).NotEmpty().WithMessage("رمز الكوبون مطلوب!");
+        RuleFor(c => c.DiscountPercentage).GreaterThanOrEqualTo(1).WithMessage("يجب أن تكون نسبة الخصم 1% على الأقل");
+        RuleFor(c => c.MaximumDiscountValue).GreaterThanOrEqualTo(1).WithMessage("يجب أن تكون قيمة الخصم القصوى 1 على الأقل");
+        RuleFor(c => c.ExpirationDate).GreaterThan(DateTime.Now).WithMessage("يجب أن يكون تاريخ الانتهاء في المستقبل");
 
     }
 }

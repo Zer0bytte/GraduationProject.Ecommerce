@@ -13,7 +13,7 @@ public class RegisterUserEndpoint : ICarterModule
                 return Results.BadRequest(result);
 
 
-            return Results.Ok(ApiResponse<RegisterUserResult>.Success(result, "Registration succeeded, please enter your confirmation code"));
+            return Results.Ok(ApiResponse<RegisterUserResult>.Success(result, ArabicResponseMessages.Authentication.RegisterSuccess));
 
         })
             .WithTags("Authentication")

@@ -4,7 +4,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
     public CreateOrderCommandValidator()
     {
-        RuleFor(x => x.CartId).NotEmpty().WithMessage("Cart it is required.");
+        RuleFor(x => x.CartId).NotEmpty().WithMessage("معرف السلة مطلوب");
 
     }
 }

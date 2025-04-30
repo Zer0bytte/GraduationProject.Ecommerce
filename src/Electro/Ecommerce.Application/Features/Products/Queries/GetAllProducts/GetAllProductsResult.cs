@@ -12,4 +12,5 @@ public class GetAllProductsResult
     public decimal DiscountedPrice { get; set; }
     public string Description { get; set; } = default!;
     public string[] Images { get; set; } = default!;
+    public DateTime CreatedOn { get; set; }
 }

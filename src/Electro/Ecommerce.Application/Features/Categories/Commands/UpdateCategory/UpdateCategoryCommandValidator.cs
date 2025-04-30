@@ -3,6 +3,6 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
 {
     public UpdateCategoryCommandValidator()
     {
-        RuleFor(c => c.Name).NotEmpty().WithMessage("Category name is required");
+        RuleFor(c => c.Name).NotEmpty().WithMessage("اسم الفئة مطلوب");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
+﻿using Ecommerce.Application.Common.Persistance.Cursor;
+using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
 
 namespace Ecommerce.API.Endpoints.Products;
 
@@ -8,13 +9,32 @@ public class GetAllProductsEndpoint : ICarterModule
     {
         app.MapGet("/api/products", async ([AsParameters] GetAllProductsQuery query, ISender sender) =>
         {
-            PagedResult<GetAllProductsResult> result = await sender.Send(query);
+            CursorResult<GetAllProductsResult> result = await sender.Send(query);
 
-            return Results.Ok(ApiResponse<PagedResult<GetAllProductsResult>>.Success(result));
+            return Results.Ok(ApiResponse<CursorResult<GetAllProductsResult>>.Success(result));
 
         })
             .WithTags("Products")
             .WithSummary("Get Products")
-            .Produces<PagedResult<GetAllProductsResult>>();
+            .Produces<CursorResult<GetCurrentSupplierProductsResult>>();
+    }
+}
+
+
+public class GetCurrentSupplierProductsEndpoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapGet("/api/supplier-products", async ([AsParameters] GetCurrentSupplierProductsQuery query, ISender sender) =>
+        {
+            CursorResult<GetCurrentSupplierProductsResult> result = await sender.Send(query);
+
+            return Results.Ok(ApiResponse<CursorResult<GetCurrentSupplierProductsResult>>.Success(result));
+
+        })
+            .RequireAuthorization("Supplier")
+            .WithTags("Products")
+            .WithSummary("Get Supplier Products")
+            .Produces<CursorResult<GetCurrentSupplierProductsResult>>();
     }
 }

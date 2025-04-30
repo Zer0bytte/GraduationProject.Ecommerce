@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Application.Features.Products.Queries.GetProductByd;
 
-public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ICurrentUser ICurrentUser) : IRequestHandler<GetProductByIdQuery, GetProductByIdResult>
+public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser) : IRequestHandler<GetProductByIdQuery, GetProductByIdResult>
 {
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
@@ -12,7 +12,7 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
             Title = product.Title,
             Category = product.Category.Name,
             Description = product.Description,
-            Images = product.Images.Select(p => imageUrl + p.NameOnServer).ToArray(),
+            Images = product.Images.Select(p => new ImageResult { Url = imageUrl + p.NameOnServer, Id = p.Id }).ToArray(),
             Brand = product.Brand,
             Price = product.Price,
             DiscountedPrice = product.Discount >= 1 ? product.Price * (1 - product.Discount / 100m) : 0,
@@ -31,23 +31,31 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
                         OptionName = opt.OptionName,
                         OptionPrice = opt.OptionPrice
                     }).ToList()
-                }).ToList()
+                }).ToList(),
+            IsReviewd = currentUser.IsAuthenticated && product.Reviews.Any(r => r.UserId == currentUser.Id),
+            ProductReviews = product.Reviews.Select(rev => new ProductReviewResult
+            {
+                FullName = rev.User.FullName,
+                ReviewText = rev.ReviewText,
+                Stars = rev.Stars
+            }).ToList()
+
         }).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
 
         if (product is null)
             throw new NotFoundException("Product", query.Id);
 
 
-        if (ICurrentUser.Id != Guid.Empty)
-            product.IsReviewd = context.ProductReviews.Any(rev => rev.ProductId == query.Id && rev.UserId == ICurrentUser.Id);
+        if (currentUser.Id != Guid.Empty)
+            product.IsReviewd = context.ProductReviews.Any(rev => rev.ProductId == query.Id && rev.UserId == currentUser.Id);
 
-        product.ProductReviews = context.ProductReviews.Where(rev => rev.ProductId == query.Id).Select(rev => new ProductReviewResult
-        {
-            FullName = rev.User.FullName,
-            ReviewText = rev.ReviewText,
-            Stars = rev.Stars,
-            ReviewImage = imageUrl + rev.ReviewImageNameOnServer
-        }).ToList();
+        //product.ProductReviews = context.ProductReviews.Where(rev => rev.ProductId == query.Id).Select(rev => new ProductReviewResult
+        //{
+        //    FullName = rev.User.FullName,
+        //    ReviewText = rev.ReviewText,
+        //    Stars = rev.Stars,
+        //    ReviewImage = imageUrl + rev.ReviewImageNameOnServer
+        //}).ToList();
         return product;
 
 

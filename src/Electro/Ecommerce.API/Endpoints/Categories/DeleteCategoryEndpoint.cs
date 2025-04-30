@@ -9,7 +9,7 @@ public class DeleteCategoryEndpoint : ICarterModule
         app.MapDelete("/api/categories/{id}", async (Guid id, ISender sender) =>
         {
             DeleteCategoryResult result = await sender.Send(new DeleteCategoryCommand() { CategoryId = id });
-            return Results.Ok(ApiResponse<DeleteCategoryResult>.Success(result, "Category deleted successfully."));
+            return Results.Ok(ApiResponse<DeleteCategoryResult>.Success(result, ArabicResponseMessages.Categories.Deleted));
         })
             .WithTags("Categories")
             .WithSummary("Delete Category").

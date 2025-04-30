@@ -10,7 +10,7 @@ public class UpdateProductEndpoint : ICarterModule
         {
             request.Id = id;
             UpdateProductResult result = await sender.Send(request);
-            return Results.Ok(ApiResponse<UpdateProductResult>.Success(result, "Product updated succesfully."));
+            return Results.Ok(ApiResponse<UpdateProductResult>.Success(result, ArabicResponseMessages.Products.Updated));
 
         })
             .WithTags("Products")

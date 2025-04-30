@@ -12,7 +12,7 @@ public class RejectSupplierEndpoint : ICarterModule
             command.SupplierId = id;
             RejectSupplierResult result = await sender.Send(command);
 
-            return Results.Ok(ApiResponse<RejectSupplierResult>.Success(result, "Supplier rejected successfully"));
+            return Results.Ok(ApiResponse<RejectSupplierResult>.Success(result, ArabicResponseMessages.Suppliers.Rejected));
 
         })
           .RequireAuthorization("Admin")

@@ -8,7 +8,7 @@ public class AddCategoryCommandValidator : AbstractValidator<AddCategoryCommand>
 
     public AddCategoryCommandValidator(MediaValidator mediaValidator)
     {
-        RuleFor(c => c.Name).NotEmpty().WithMessage("Category name is required");
+        RuleFor(c => c.Name).NotEmpty().WithMessage("اسم الفئة مطلوب");
         RuleFor(c => c.Image).Must(BeValidImage);
         this.mediaValidator = mediaValidator;
     }

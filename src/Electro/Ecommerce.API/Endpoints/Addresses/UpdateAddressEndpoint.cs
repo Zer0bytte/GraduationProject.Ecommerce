@@ -11,7 +11,7 @@ public class UpdateAddressEndpoint : ICarterModule
             request.Id = id;
             UpdateAddressResult result = await sender.Send(request);
 
-            return Results.Ok(ApiResponse<UpdateAddressResult>.Success(result, "Address updated successfully."));
+            return Results.Ok(ApiResponse<UpdateAddressResult>.Success(result, ArabicResponseMessages.Addresses.Updated));
         })
             .RequireAuthorization("User")
             .WithTags("Addresses")

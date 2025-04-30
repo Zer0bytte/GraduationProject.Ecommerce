@@ -10,10 +10,10 @@ public class DeleteProductImageEndpoint : ICarterModule
         {
             DeleteProductImageResult result = await sender.Send(new DeleteProductImageCommand { ImageId = id });
 
-            return Results.Ok(ApiResponse<DeleteProductImageResult>.Success(result));
+            return Results.Ok(ApiResponse<DeleteProductImageResult>.Success(result, ArabicResponseMessages.Products.ImageDeleted));
 
         })
-            .RequireAuthorization("Admin")
+            .RequireAuthorization("Supplier")
             .WithTags("Products")
             .WithSummary("Delete Product Image")
             .Produces<DeleteProductImageResult>();

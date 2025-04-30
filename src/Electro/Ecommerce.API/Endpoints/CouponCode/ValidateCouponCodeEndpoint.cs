@@ -10,7 +10,7 @@ public class ValidateCouponCodeEndpoint : ICarterModule
         {
             ValidateCouponResult result = await sender.Send(command);
 
-            return Results.Ok(ApiResponse<ValidateCouponResult>.Success(result, "Coupon code is valid"));
+            return Results.Ok(ApiResponse<ValidateCouponResult>.Success(result, ArabicResponseMessages.CouponCodes.Valid));
 
         })
             .WithTags("Coupon Codes")

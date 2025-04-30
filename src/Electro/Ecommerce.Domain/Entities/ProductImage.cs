@@ -6,4 +6,5 @@ public class ProductImage : BaseEntity
 {
     public string NameOnServer { get; set; } = default!;
     public Guid ProductId { get; set; }
+    public Product Product { get; set; }
 }

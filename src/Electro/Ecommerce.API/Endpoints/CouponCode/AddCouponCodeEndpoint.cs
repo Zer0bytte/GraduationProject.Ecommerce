@@ -10,7 +10,7 @@ public class AddCouponCodeEndpoint : ICarterModule
         {
             AddCouponCodeResult result = await sender.Send(command);
 
-            return Results.Ok(ApiResponse<AddCouponCodeResult>.Success(result, "Coupon code created successfully."));
+            return Results.Ok(ApiResponse<AddCouponCodeResult>.Success(result, ArabicResponseMessages.CouponCodes.Created));
 
         })
             .RequireAuthorization("Admin")

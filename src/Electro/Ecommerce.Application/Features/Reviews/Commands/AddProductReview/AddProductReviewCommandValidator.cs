@@ -4,11 +4,11 @@ public class AddProductReviewCommandValidator : AbstractValidator<AddProductRevi
 {
     public AddProductReviewCommandValidator()
     {
-        RuleFor(rev => rev.ReviewText).NotEmpty().WithMessage("Review text is required");
-        RuleFor(rev => rev.Stars).InclusiveBetween(1, 5).WithMessage("Stars must be between 1-5");
+        RuleFor(rev => rev.ReviewText).NotEmpty().WithMessage("نص المراجعة مطلوب");
+        RuleFor(rev => rev.Stars).InclusiveBetween(1, 5).WithMessage("يجب أن تكون النجوم بين 1-5");
         RuleFor(x => x.Image)
             .Must(BeValidImage)
-            .When(x => x.Image != null).WithMessage("Invalid image.");
+            .When(x => x.Image != null).WithMessage("صورة غير صالحة");
 
     }
 

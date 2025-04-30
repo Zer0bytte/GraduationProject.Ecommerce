@@ -10,7 +10,7 @@ public class DeleteAddressEndpoint : ICarterModule
         {
             DeleteAddressResult result = await sender.Send(new DeleteAddressCommand(id));
 
-            return Results.Ok(ApiResponse<DeleteAddressResult>.Success(result, "Address updated successfully."));
+            return Results.Ok(ApiResponse<DeleteAddressResult>.Success(result, ArabicResponseMessages.Addresses.Deleted));
         })
             .RequireAuthorization("User")
             .WithTags("Addresses")

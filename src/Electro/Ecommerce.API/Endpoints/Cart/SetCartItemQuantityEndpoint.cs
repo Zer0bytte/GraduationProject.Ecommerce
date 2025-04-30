@@ -9,7 +9,7 @@ public class SetCartItemQuantityEndpoint : ICarterModule
         app.MapPost("/api/cart/update-cart", async (SetCartItemQuantityCommnad request, ISender sender) =>
         {
             SetCartItemQuantityResult result = await sender.Send(request);
-            return Results.Ok(ApiResponse<SetCartItemQuantityResult>.Success(result, "Cart updated successfully."));
+            return Results.Ok(ApiResponse<SetCartItemQuantityResult>.Success(result, ArabicResponseMessages.Cart.UpdatedCart));
 
         })
             .WithTags("Cart")

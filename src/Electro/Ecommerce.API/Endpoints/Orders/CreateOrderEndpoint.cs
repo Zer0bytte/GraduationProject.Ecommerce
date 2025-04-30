@@ -11,7 +11,7 @@ public class CreateOrderEndpoint : ICarterModule
             CreateOrderResult result = await sender.Send(command);
 
 
-            return Results.Ok(ApiResponse<CreateOrderResult>.Success(result, "Order created successfully."));
+            return Results.Ok(ApiResponse<CreateOrderResult>.Success(result, ArabicResponseMessages.Orders.Created));
 
         })
             .RequireAuthorization("User")

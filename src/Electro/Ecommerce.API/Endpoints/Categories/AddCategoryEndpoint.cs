@@ -10,7 +10,7 @@ public class AddCategoryEndpoint : ICarterModule
         app.MapPost("/api/categories", async ([FromForm] AddCategoryCommand command, ISender sender) =>
         {
             AddCategoryResult result = await sender.Send(command);
-            return Results.Ok(ApiResponse<AddCategoryResult>.Success(result, "Category created successfully."));
+            return Results.Ok(ApiResponse<AddCategoryResult>.Success(result, ArabicResponseMessages.Categories.Created));
 
         })
             .DisableAntiforgery()

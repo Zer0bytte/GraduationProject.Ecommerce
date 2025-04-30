@@ -1,10 +1,11 @@
 ﻿namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct;
 
-public class UpdateProductCommandHandler(IApplicationDbContext context) : IRequestHandler<UpdateProductCommand, UpdateProductResult>
+public class UpdateProductCommandHandler(IApplicationDbContext context, ICurrentUser currentUser) : IRequestHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        Product? product = await context.Products.FindAsync(command.Id);
+
+        Product? product = await context.Products.FirstOrDefaultAsync(prd => prd.Id == command.Id && prd.SupplierId == currentUser.SupplierId);
         if (product is null) throw new NotFoundException("Product", command.Id);
 
         bool categoryExist = await context.Categories.AnyAsync(cat => cat.Id == command.CategoryId);

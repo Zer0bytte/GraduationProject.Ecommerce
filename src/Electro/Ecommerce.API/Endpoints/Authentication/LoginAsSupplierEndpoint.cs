@@ -10,7 +10,7 @@ public class LoginAsSupplierEndpoint : ICarterModule
         {
             LoginAsSupplierResult result = await sender.Send(request);
 
-            return Results.Ok(ApiResponse<LoginAsSupplierResult>.Success(result, "Supplier logged in successfully."));
+            return Results.Ok(ApiResponse<LoginAsSupplierResult>.Success(result, ArabicResponseMessages.Authentication.SupplierLoginSuccess));
 
 
         })

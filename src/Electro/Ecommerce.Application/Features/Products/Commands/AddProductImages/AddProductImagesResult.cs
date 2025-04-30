@@ -2,5 +2,8 @@
 
 public record AddProductImagesResult
 {
-    public bool IsSuccess { get; set; }
+    public Guid ImageId { get; set; }
+    public string ImageUrl { get; set; } = default!;
 }
+
+

@@ -9,7 +9,7 @@ public class UpdateCategoryEndpoint : ICarterModule
         app.MapPut("/api/categories/{id}", async (UpdateCategoryCommand command, Guid id, ISender sender) =>
         {
             UpdateCategoryResult result = await sender.Send(command);
-            return Results.Ok(ApiResponse<UpdateCategoryResult>.Success(result, "Category updated successfully."));
+            return Results.Ok(ApiResponse<UpdateCategoryResult>.Success(result, ArabicResponseMessages.Categories.Updated));
 
         })
             .RequireAuthorization("Admin")

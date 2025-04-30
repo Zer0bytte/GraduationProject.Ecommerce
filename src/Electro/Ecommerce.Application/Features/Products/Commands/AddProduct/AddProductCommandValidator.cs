@@ -10,37 +10,37 @@ public class AddProductCommandValidator : AbstractValidator<AddProductCommand>
     {
         RuleFor(x => x.Images)
             .NotNull()
-            .WithMessage("Images collection cannot be null")
+            .WithMessage("مجموعة الصور لا يمكن أن تكون فارغة")
             .NotEmpty()
-            .WithMessage("At least one image is required");
+            .WithMessage("مطلوب صورة واحدة على الأقل");
 
         RuleFor(x => x.Images)
              .Must(images => images.Count <= 5)
              .When(x => x.Images != null)
-             .WithMessage("Maximum 5 images allowed");
+             .WithMessage("الحد الأقصى 5 صور مسموح به");
 
         RuleForEach(x => x.Images)
             .Must(BeValidImage)
             .When(x => x.Images != null)
-            .WithMessage("Invalid image file format")
+            .WithMessage("تنسيق ملف الصورة غير صالح")
             .Must(file => file.Length > 0)
             .When(x => x.Images != null)
-            .WithMessage("Image file cannot be empty")
+            .WithMessage("ملف الصورة لا يمكن أن يكون فارغاً")
             .Must(file => file.Length <= 5 * 1024 * 1024) // 5MB max size
             .When(x => x.Images != null)
-            .WithMessage("Image file size must not exceed 5MB");
+            .WithMessage("يجب ألا يتجاوز حجم ملف الصورة 5 ميجابايت");
 
-        RuleFor(p => p.Brand).NotEmpty().WithMessage("Brand is required");
-        RuleFor(p => p.CategoryId).NotNull().WithMessage("CategoryId is required");
-        RuleFor(p => p.Description).NotEmpty().WithMessage("Description is required");
-        RuleFor(p => p.Price).GreaterThan(0).WithMessage("Price is required");
-        RuleFor(p => p.DiscountPercentage).GreaterThanOrEqualTo(0).WithMessage("Discount should be more than '0' ");
-        RuleFor(p => p.Stock).GreaterThan(0).WithMessage("Stock is required");
-        RuleFor(p => p.SKU).NotEmpty().WithMessage("SKU is required");
-        RuleFor(p => p.Title).NotEmpty().WithMessage("Title is required");
+        RuleFor(p => p.Brand).NotEmpty().WithMessage("العلامة التجارية مطلوبة");
+        RuleFor(p => p.CategoryId).NotNull().WithMessage("معرف الفئة مطلوب");
+        RuleFor(p => p.Description).NotEmpty().WithMessage("الوصف مطلوب");
+        RuleFor(p => p.Price).GreaterThan(0).WithMessage("السعر مطلوب");
+        RuleFor(p => p.DiscountPercentage).GreaterThanOrEqualTo(0).WithMessage("يجب أن يكون الخصم أكثر من '0'");
+        RuleFor(p => p.Stock).GreaterThan(0).WithMessage("المخزون مطلوب");
+        RuleFor(p => p.SKU).NotEmpty().WithMessage("رمز SKU مطلوب");
+        RuleFor(p => p.Title).NotEmpty().WithMessage("العنوان مطلوب");
         RuleFor(p => p.Tags)
          .Matches("^([\\u0600-\\u06FFa-zA-Z0-9]+,)*[\\u0600-\\u06FFa-zA-Z0-9]+$")
-         .WithMessage("Please enter tags in this format: tag1,tag2,tag3...");
+         .WithMessage("الرجاء إدخال الوسوم بهذا الشكل: tag1,tag2,tag3...");
 
         this.mediaValidator = mediaValidator;
     }

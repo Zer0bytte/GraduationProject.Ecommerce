@@ -10,7 +10,7 @@ public class AddProductEndpoint : ICarterModule
         app.MapPost("/api/products/", async ([FromForm] AddProductCommand request, ISender sender) =>
         {
             AddProductResult result = await sender.Send(request);
-            return Results.Ok(ApiResponse<AddProductResult>.Success(result, "Product created succesfully."));
+            return Results.Ok(ApiResponse<AddProductResult>.Success(result, ArabicResponseMessages.Products.Created));
 
         })
             .WithTags("Products")

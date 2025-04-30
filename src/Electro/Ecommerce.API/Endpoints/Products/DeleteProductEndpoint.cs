@@ -9,10 +9,10 @@ public class DeleteProductEndpoint : ICarterModule
         app.MapDelete("/api/products/{id}", async (Guid id, ISender sender) =>
         {
             DeleteProductResult result = await sender.Send(new DeleteProductCommand() { ProductId = id });
-            return Results.Ok(ApiResponse<DeleteProductResult>.Success(result, "Product deleted succesfully."));
+            return Results.Ok(ApiResponse<DeleteProductResult>.Success(result, ArabicResponseMessages.Products.Deleted));
 
         })
-            .RequireAuthorization("Admin")
+            .RequireAuthorization("Supplier")
             .WithTags("Products")
             .WithSummary("Delete Product")
             .Produces<DeleteProductResult>();

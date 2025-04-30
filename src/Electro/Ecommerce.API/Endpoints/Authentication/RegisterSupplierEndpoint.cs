@@ -13,7 +13,7 @@ public class RegisterSupplierEndpoint : ICarterModule
             if (result.Errors.Count > 0)
                 return Results.BadRequest(result);
 
-            return Results.Ok(ApiResponse<RegisterSupplierResult>.Success(result, "Registration succeeded, please enter your confirmation code"));
+            return Results.Ok(ApiResponse<RegisterSupplierResult>.Success(result, ArabicResponseMessages.Authentication.RegisterSuccess));
 
         })
             .DisableAntiforgery()

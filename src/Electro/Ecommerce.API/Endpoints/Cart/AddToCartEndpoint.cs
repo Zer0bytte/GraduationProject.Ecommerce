@@ -9,7 +9,7 @@ public class AddToCartEndpoint : ICarterModule
         app.MapPost("/api/cart/add-to-cart", async (AddToCartCommand request, ISender sender) =>
         {
             AddToCartResult result = await sender.Send(request);
-            return Results.Ok(ApiResponse<AddToCartResult>.Success(result, "Product added to cart."));
+            return Results.Ok(ApiResponse<AddToCartResult>.Success(result, ArabicResponseMessages.Cart.AddedToCart));
 
         })
             .RequireRateLimiting("fixed")

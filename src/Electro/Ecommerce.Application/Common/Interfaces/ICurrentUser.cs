@@ -7,6 +7,8 @@ public interface ICurrentUser
     Guid Id { get; }
     Guid SupplierId { get; }
     bool IsSupplier { get; }
+    bool IsAuthenticated { get; }
+    bool IsVerifiedSupplier { get; }
     string UserType { get; }
 
 }

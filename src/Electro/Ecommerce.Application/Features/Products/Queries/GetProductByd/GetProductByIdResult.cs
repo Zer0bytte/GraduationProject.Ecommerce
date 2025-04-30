@@ -26,13 +26,18 @@ public record GetProductByIdResult
     public string Tags { get; set; } = default!;
     public string SKU { get; set; } = default!;
     public string Brand { get; set; } = default!;
-    public string[] Images { get; set; } = default!;
+    public ICollection<ImageResult> Images { get; set; } = default!;
     public bool IsReviewd { get; set; }
     public List<ProductReviewResult> ProductReviews { get; set; } = [];
     public List<OptionGroupDto> ProductOptions { get; set; } = [];
 }
 
+public record ImageResult
+{
+    public Guid Id { get; set; }
+    public string Url { get; set; } = default!;
 
+}
 public record ProductReviewResult
 {
     public string? FullName { get; set; }

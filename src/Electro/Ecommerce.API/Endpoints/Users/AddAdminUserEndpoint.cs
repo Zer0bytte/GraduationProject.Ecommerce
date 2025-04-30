@@ -10,7 +10,7 @@ public class AddAdminUserEndpoint : ICarterModule
         {
             AddAdminResult result = await sender.Send(command);
 
-            return Results.Ok(ApiResponse<AddAdminResult>.Success(result, "Account created and the reset password url was sent."));
+            return Results.Ok(ApiResponse<AddAdminResult>.Success(result, ArabicResponseMessages.AdminUsers.Created));
 
         })
             .WithTags("Users")

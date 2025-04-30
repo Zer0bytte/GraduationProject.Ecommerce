@@ -11,7 +11,7 @@ public class LoginEndpoint : ICarterModule
         {
             LoginResult result = await sender.Send(request);
 
-            return Results.Ok(ApiResponse<LoginResult>.Success(result, "User logged in successfully."));
+            return Results.Ok(ApiResponse<LoginResult>.Success(result, ArabicResponseMessages.Authentication.LoginSuccess));
 
 
         }).WithTags("Authentication")

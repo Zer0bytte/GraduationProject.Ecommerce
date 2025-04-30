@@ -9,7 +9,7 @@ public class DeleteAdminUserEndpoint : ICarterModule
         app.MapDelete("/api/users/{id}", async (Guid id, ISender sender) =>
         {
             DeleteAdminResult result = await sender.Send(new DeleteAdminCommand { Id = id });
-            return Results.Ok(ApiResponse<DeleteAdminResult>.Success(result, "Admin deleted successfully."));
+            return Results.Ok(ApiResponse<DeleteAdminResult>.Success(result, ArabicResponseMessages.AdminUsers.Deleted));
 
         })
             .RequireAuthorization("Admin")

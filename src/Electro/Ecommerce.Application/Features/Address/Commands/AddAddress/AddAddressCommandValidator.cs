@@ -4,10 +4,10 @@ public class AddAddressCommandValidator : AbstractValidator<AddAddressCommand>
 {
     public AddAddressCommandValidator()
     {
-        RuleFor(x => x.FirstName).NotEmpty().WithMessage("FirstName is required");
-        RuleFor(x => x.LastName).NotEmpty().WithMessage("LastName is required");
-        RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("PhoneNumber is required");
-        RuleFor(x => x.City).NotEmpty().WithMessage("City is required");
-        RuleFor(x => x.Street).NotEmpty().WithMessage("Street is required");
+        RuleFor(x => x.FirstName).NotEmpty().WithMessage("الاسم الأول مطلوب");
+        RuleFor(x => x.LastName).NotEmpty().WithMessage("الاسم الأخير مطلوب");
+        RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("رقم الهاتف مطلوب");
+        RuleFor(x => x.City).NotEmpty().WithMessage("المدينة مطلوبة");
+        RuleFor(x => x.Street).NotEmpty().WithMessage("الشارع مطلوب");
     }
 }

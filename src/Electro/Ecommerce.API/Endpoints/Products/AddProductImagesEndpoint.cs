@@ -11,12 +11,12 @@ public class AddProductImagesEndpoint : ICarterModule
         {
             request.ProductId = id;
 
-            AddProductImagesResult result = await sender.Send(request);
+            List<AddProductImagesResult> result = await sender.Send(request);
 
-            return Results.Ok(ApiResponse<AddProductImagesResult>.Success(result, "Product image added succesfully."));
+            return Results.Ok(ApiResponse<List<AddProductImagesResult>>.Success(result, ArabicResponseMessages.Products.ImageAdded));
 
         })
-            .RequireAuthorization("Admin")
+            .RequireAuthorization("Supplier")
             .WithTags("Products")
             .WithSummary("Add Product Image")
             .DisableAntiforgery();

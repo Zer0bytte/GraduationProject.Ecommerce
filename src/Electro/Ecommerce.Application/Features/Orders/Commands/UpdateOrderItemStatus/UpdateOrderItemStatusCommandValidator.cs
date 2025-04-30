@@ -4,7 +4,7 @@ public class UpdateOrderItemStatusCommandValidator : AbstractValidator<UpdateOrd
 {
     public UpdateOrderItemStatusCommandValidator()
     {
-        RuleFor(x => x.OrderItemId).NotEmpty().WithMessage("Order item ID is required.");
-        RuleFor(x => x.Status).IsInEnum().WithMessage("Invalid order item status.");
+        RuleFor(x => x.OrderItemId).NotEmpty().WithMessage("معرف عنصر الطلب مطلوب");
+        RuleFor(x => x.Status).IsInEnum().WithMessage("حالة عنصر الطلب غير صالحة");
     }
 } 

@@ -11,7 +11,7 @@ public class UpdateOrderItemStatusEndpoint : ICarterModule
             command.OrderItemId = orderItemId;
             UpdateOrderItemStatusResult result = await sender.Send(command);
 
-            return Results.Ok(ApiResponse<UpdateOrderItemStatusResult>.Success(result, "Order item status updated successfully."));
+            return Results.Ok(ApiResponse<UpdateOrderItemStatusResult>.Success(result, ArabicResponseMessages.Orders.StatusUpdated));
         })
             .RequireAuthorization("Supplier")
             .WithTags("Orders")

@@ -10,7 +10,7 @@ public class AddAddressEndpoint : ICarterModule
         {
             AddAddressResult result = await sender.Send(request);
 
-            return Results.Ok(ApiResponse<AddAddressResult>.Success(result, "Address created successfully."));
+            return Results.Ok(ApiResponse<AddAddressResult>.Success(result, ArabicResponseMessages.Addresses.Created));
         })
             .RequireAuthorization("User")
             .WithTags("Addresses")
