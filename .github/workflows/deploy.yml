@@ -21,13 +21,13 @@ jobs:
         dotnet-version: '9.0'  # Update to your exact .NET 9 preview version
 
     - name: Restore NuGet packages
-      run: dotnet restore ./src/Presentation/Ecommerce.Api/Ecommerce.Api.csproj
+      run: dotnet restore ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj
 
     - name: Build the project
-      run: dotnet build ./src/Presentation/Ecommerce.Api/Ecommerce.Api.csproj --configuration Release
+      run: dotnet build ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj --configuration Release
 
     - name: Publish the app
-      run: dotnet publish ./src/Presentation/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o ./publish
+      run: dotnet publish ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o ./publish
 
     - name: Stop IIS Site (optional)
       run: |
