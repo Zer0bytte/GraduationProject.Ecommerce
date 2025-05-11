@@ -43,23 +43,35 @@ jobs:
         $appPoolName = "ecommerce"
         $siteName = "ecommerce"
 
-        $appPool = Get-WebAppPoolState -Name $appPoolName
-        if ($appPool.Value -eq "Started") {
-          Write-Host "Stopping App Pool: $appPoolName"
-          Stop-WebAppPool -Name $appPoolName
-        } else {
-          Write-Host "App Pool already stopped: $appPoolName"
+        # Try/catch blocks to prevent failures if app pool or site doesn't exist
+        try {
+          $appPool = Get-WebAppPoolState -Name $appPoolName -ErrorAction SilentlyContinue
+          if ($appPool -and $appPool.Value -eq "Started") {
+            Write-Host "Stopping App Pool: $appPoolName"
+            Stop-WebAppPool -Name $appPoolName
+          } else {
+            Write-Host "App Pool already stopped or doesn't exist: $appPoolName"
+          }
+        } catch {
+          Write-Host "Error checking app pool state: $_"
         }
 
-        $site = Get-WebSiteState -Name $siteName
-        if ($site.Value -eq "Started") {
-          Write-Host "Stopping Website: $siteName"
-          Stop-WebSite -Name $siteName
-        } else {
-          Write-Host "Website already stopped: $siteName"
+        try {
+          $site = Get-WebSiteState -Name $siteName -ErrorAction SilentlyContinue
+          if ($site -and $site.Value -eq "Started") {
+            Write-Host "Stopping Website: $siteName"
+            Stop-WebSite -Name $siteName
+          } else {
+            Write-Host "Website already stopped or doesn't exist: $siteName"
+          }
+        } catch {
+          Write-Host "Error checking website state: $_"
         }
 
-    - name: Deploy to IIS folder using Robocopy
+        # Wait for processes to fully release locks on files
+        Start-Sleep -Seconds 5
+
+    - name: Deploy to IIS folder
       run: |
         $source = "$env:GITHUB_WORKSPACE\publish"
         $destination = "C:\inetpub\wwwroot\Ecommerce"
@@ -67,32 +79,152 @@ jobs:
         Write-Host "Publishing from: $source"
         Write-Host "To IIS path: $destination"
 
+        # Create destination if it doesn't exist
         if (!(Test-Path $destination)) {
           Write-Host "Destination does not exist. Creating..."
-          New-Item -ItemType Directory -Path $destination | Out-Null
+          New-Item -ItemType Directory -Path $destination -Force | Out-Null
         }
 
-        robocopy "$source" "$destination" /MIR /MT:8 /NFL /NDL /NP /NJH /NJS
+        # First try to clear destination to avoid file lock issues
+        try {
+          Write-Host "Clearing destination directory..."
+          Get-ChildItem -Path $destination -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+        } catch {
+          Write-Host "Warning: Could not completely clear destination: $_"
+        }
 
-    - name: Start IIS Website & App Pool if stopped
+        # Run robocopy with error handling
+        Write-Host "Running Robocopy..."
+        $robocopyExitCodes = @{
+          0 = "No files were copied. No failure was encountered. No files were mismatched. The files already exist in the destination directory."
+          1 = "One or more files were copied successfully."
+          2 = "Some Extra files or directories were detected. No files were copied."
+          3 = "Some files were copied. Additional files were present. No failure was encountered."
+          4 = "Some Mismatched files or directories were detected."
+          5 = "Some files were copied. Some files were mismatched. No failure was encountered."
+          6 = "Additional files and mismatched files exist. No files were copied and no failures were encountered."
+          7 = "Files were copied, a file mismatch was present, and additional files were present."
+          8 = "Several files did not copy."
+        }
+
+        $robocopyArgs = @(
+          "$source" 
+          "$destination" 
+          "/MIR"         # Mirror directories
+          "/MT:8"        # Multi-threaded (8 threads)
+          "/R:3"         # Retry 3 times
+          "/W:5"         # Wait 5 seconds between retries
+          "/NP"          # No Progress
+          "/NFL"         # No File List
+          "/NDL"         # No Directory List
+        )
+        
+        $robocopyResult = Start-Process -FilePath "robocopy.exe" -ArgumentList $robocopyArgs -NoNewWindow -Wait -PassThru
+        
+        # Check robocopy exit code
+        $exitCode = $robocopyResult.ExitCode
+        if ($exitCode -ge 8) {
+          Write-Host "Robocopy failed with exit code $exitCode"
+          exit 1
+        } else {
+          $message = $robocopyExitCodes[[Math]::Min($exitCode, 8)]
+          Write-Host "Robocopy completed with exit code $exitCode: $message"
+        }
+
+        # Verify deployment with fallback
+        if (!(Test-Path "$destination\web.config")) {
+          Write-Host "Warning: web.config not found in destination. Using manual file copy as fallback."
+          
+          # Fallback to PowerShell copy
+          try {
+            Write-Host "Using PowerShell Copy-Item as fallback..."
+            Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+          } catch {
+            Write-Host "Error during fallback copy: $_"
+            exit 1
+          }
+        }
+
+    - name: Verify deployment
+      run: |
+        $destination = "C:\inetpub\wwwroot\Ecommerce"
+        $keyFiles = @("web.config", "Ecommerce.Api.dll")
+        
+        $failed = $false
+        foreach ($file in $keyFiles) {
+          if (!(Test-Path "$destination\$file")) {
+            Write-Host "ERROR: $file not found in destination!"
+            $failed = $true
+          } else {
+            Write-Host "Verified: $file exists in destination"
+          }
+        }
+        
+        if ($failed) {
+          Write-Host "Deployment verification failed!"
+          exit 1
+        }
+
+    - name: Start IIS Website & App Pool
       run: |
         Import-Module WebAdministration
 
         $appPoolName = "ecommerce"
         $siteName = "ecommerce"
 
-        $appPool = Get-WebAppPoolState -Name $appPoolName
-        if ($appPool.Value -eq "Stopped") {
-          Write-Host "Starting App Pool: $appPoolName"
-          Start-WebAppPool -Name $appPoolName
-        } else {
-          Write-Host "App Pool already running: $appPoolName"
+        # Ensure app pool exists and is running
+        try {
+          # Check if app pool exists, create if not
+          if (!(Test-Path "IIS:\AppPools\$appPoolName")) {
+            Write-Host "Creating App Pool: $appPoolName"
+            New-WebAppPool -Name $appPoolName
+            # Configure app pool settings as needed
+            Set-ItemProperty -Path "IIS:\AppPools\$appPoolName" -Name "managedRuntimeVersion" -Value "v4.0"
+            Set-ItemProperty -Path "IIS:\AppPools\$appPoolName" -Name "startMode" -Value "AlwaysRunning"
+          }
+
+          # Start app pool
+          $appPool = Get-WebAppPoolState -Name $appPoolName -ErrorAction SilentlyContinue
+          if ($appPool -and $appPool.Value -ne "Started") {
+            Write-Host "Starting App Pool: $appPoolName"
+            Start-WebAppPool -Name $appPoolName
+          } else {
+            Write-Host "App Pool already running or doesn't exist: $appPoolName"
+          }
+        } catch {
+          Write-Host "Error handling app pool: $_"
+          exit 1
         }
 
-        $site = Get-WebSiteState -Name $siteName
-        if ($site.Value -eq "Stopped") {
-          Write-Host "Starting Website: $siteName"
-          Start-WebSite -Name $siteName
-        } else {
-          Write-Host "Website already running: $siteName"
+        # Ensure website exists and is running
+        try {
+          # Check if website exists, create if not
+          if (!(Get-Website -Name $siteName -ErrorAction SilentlyContinue)) {
+            Write-Host "Creating Website: $siteName"
+            New-Website -Name $siteName -PhysicalPath "C:\inetpub\wwwroot\Ecommerce" -ApplicationPool $appPoolName
+          }
+
+          # Start website
+          $site = Get-WebSiteState -Name $siteName -ErrorAction SilentlyContinue
+          if ($site -and $site.Value -ne "Started") {
+            Write-Host "Starting Website: $siteName"
+            Start-WebSite -Name $siteName
+          } else {
+            Write-Host "Website already running or doesn't exist: $siteName"
+          }
+        } catch {
+          Write-Host "Error handling website: $_"
+          exit 1
+        }
+
+    - name: Application warm-up (optional)
+      run: |
+        try {
+          $siteUrl = "http://localhost"  # Adjust to your actual site URL
+          Write-Host "Warming up application by sending request to $siteUrl"
+          $response = Invoke-WebRequest -Uri $siteUrl -UseBasicParsing -TimeoutSec 30
+          Write-Host "Warm-up request status: $($response.StatusCode)"
+        } catch {
+          Write-Host "Warning: Application warm-up failed: $_"
+          # Don't fail the build for warm-up issues
         }
