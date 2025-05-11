@@ -1,28 +1,42 @@
+name: Deploy ASP.NET to IIS via Self-Hosted Runner
+
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: [self-hosted, windows]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Clean workspace (optional)
+      run: |
+        if (Test-Path "$env:GITHUB_WORKSPACE") {
+          Remove-Item "$env:GITHUB_WORKSPACE\*" -Recurse -Force -ErrorAction SilentlyContinue
+        }
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Checkout code
+      uses: actions/checkout@v4
       with:
-        dotnet-version: '9.0.x'  # Make sure .NET 9 SDK is installed on your runner
+        persist-credentials: false
+        clean: true
 
-    # dotnet build and publish
-    - name: Build Ecommerce API project
-      shell: cmd
-      run: dotnet build src\Ecommerce.Api\Ecommerce.Api.csproj --configuration Release
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.203'
 
-    - name: Publish Ecommerce API project
-      shell: cmd
-      run: dotnet publish src\Ecommerce.Api\Ecommerce.Api.csproj -c Release -o .\myapp
+    - name: Restore NuGet packages
+      run: dotnet restore ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj
 
-    - name: Deploy to IIS
+    - name: Build the project
+      run: dotnet build ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj --configuration Release -warnasmessage:0
+
+    - name: Publish the app
+      run: dotnet publish ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o .\myapp -warnasmessage:0
+
+    - name: Deploy to IIS using iisreset and xcopy
       shell: cmd
       run: |
         iisreset /stop
