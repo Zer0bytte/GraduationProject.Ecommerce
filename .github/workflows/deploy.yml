@@ -59,7 +59,7 @@ jobs:
           Write-Host "Website already stopped: $siteName"
         }
 
-    - name: Deploy to IIS folder
+    - name: Deploy to IIS folder using Robocopy
       run: |
         $source = "$env:GITHUB_WORKSPACE\publish"
         $destination = "C:\inetpub\wwwroot\Ecommerce"
@@ -72,8 +72,7 @@ jobs:
           New-Item -ItemType Directory -Path $destination | Out-Null
         }
 
-        Get-ChildItem -Path $destination -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
-        Copy-Item -Path "$source\*" -Destination $destination -Recurse
+        robocopy "$source" "$destination" /MIR /MT:8 /NFL /NDL /NP /NJH /NJS
 
     - name: Start IIS Website & App Pool if stopped
       run: |
