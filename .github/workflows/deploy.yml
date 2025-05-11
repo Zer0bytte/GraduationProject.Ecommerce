@@ -25,22 +25,39 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.203'  # Use your exact .NET 9 version
+        dotnet-version: '9.0.203'  # Replace with your installed .NET 9 version
 
     - name: Restore NuGet packages
       run: dotnet restore ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj
 
     - name: Build the project
-      run: dotnet build ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj --configuration Release
+      run: dotnet build ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj --configuration Release -warnasmessage:0
 
     - name: Publish the app
-      run: dotnet publish ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o ./publish
+      run: dotnet publish ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o ./publish -warnasmessage:0
 
-    - name: Stop IIS Website & App Pool
+    - name: Stop IIS Website & App Pool if running
       run: |
         Import-Module WebAdministration
-        Stop-WebSite -Name "ecommerce"
-        Stop-WebAppPool -Name "ecommerce"
+
+        $appPoolName = "ecommerce"
+        $siteName = "ecommerce"
+
+        $appPool = Get-WebAppPoolState -Name $appPoolName
+        if ($appPool.Value -eq "Started") {
+          Write-Host "Stopping App Pool: $appPoolName"
+          Stop-WebAppPool -Name $appPoolName
+        } else {
+          Write-Host "App Pool already stopped: $appPoolName"
+        }
+
+        $site = Get-WebSiteState -Name $siteName
+        if ($site.Value -eq "Started") {
+          Write-Host "Stopping Website: $siteName"
+          Stop-WebSite -Name $siteName
+        } else {
+          Write-Host "Website already stopped: $siteName"
+        }
 
     - name: Deploy to IIS folder
       run: |
@@ -58,8 +75,25 @@ jobs:
         Get-ChildItem -Path $destination -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
         Copy-Item -Path "$source\*" -Destination $destination -Recurse
 
-    - name: Start IIS Website & App Pool
+    - name: Start IIS Website & App Pool if stopped
       run: |
         Import-Module WebAdministration
-        Start-WebAppPool -Name "ecommerce"
-        Start-WebSite -Name "ecommerce"
+
+        $appPoolName = "ecommerce"
+        $siteName = "ecommerce"
+
+        $appPool = Get-WebAppPoolState -Name $appPoolName
+        if ($appPool.Value -eq "Stopped") {
+          Write-Host "Starting App Pool: $appPoolName"
+          Start-WebAppPool -Name $appPoolName
+        } else {
+          Write-Host "App Pool already running: $appPoolName"
+        }
+
+        $site = Get-WebSiteState -Name $siteName
+        if ($site.Value -eq "Stopped") {
+          Write-Host "Starting Website: $siteName"
+          Start-WebSite -Name $siteName
+        } else {
+          Write-Host "Website already running: $siteName"
+        }
