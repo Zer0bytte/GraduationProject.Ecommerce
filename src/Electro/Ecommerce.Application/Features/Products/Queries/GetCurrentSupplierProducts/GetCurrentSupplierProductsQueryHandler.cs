@@ -46,6 +46,7 @@ public class GetCurrentSupplierProductsQueryHandler(IApplicationDbContext contex
                 Images = p.Images.Select(p => imageUrl + p.NameOnServer).ToArray(),
                 Category = p.Category.Name,
                 CreatedOn = p.CreatedOn,
+                Stock = p.Stock,
                 BoughtCount = context.OrderItems.Where(oi => oi.ProductId == p.Id).Sum(oi => oi.Quantity)
             }).Take(query.Limit + 1).ToListAsync(cancellationToken);
 

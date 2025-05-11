@@ -8,6 +8,7 @@ public class GetCurrentSupplierProductsResult
     public decimal Price { get; set; }
     public string[] Images { get; set; } = default!;
     public int BoughtCount { get; set; }
+    public int Stock { get; set; }
     public DateTime CreatedOn { get; set; }
 
 }
