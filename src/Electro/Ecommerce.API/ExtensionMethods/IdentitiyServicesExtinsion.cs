@@ -68,6 +68,13 @@ public static class IdentitiyServicesExtinsion
                         c.Type == "UserType" && (c.Value == "User" || c.Value == "Supplier")));
             });
 
+
+            options.AddPolicy("VerifiedSupplier", policy =>
+            {
+                policy.RequireAssertion(context =>
+                    context.User.HasClaim(c =>
+                        c.Type == "VerificationStatus" && c.Value == "Verified"));
+            });
             options.AddPolicy("User", policy =>
             {
                 policy.RequireClaim("UserType", "User");

@@ -15,7 +15,7 @@ public class AddProductEndpoint : ICarterModule
         })
             .WithTags("Products")
             .WithSummary("Create Product")
-            .RequireAuthorization("Supplier")
+            .RequireAuthorization("VerifiedSupplier")
             .DisableAntiforgery();
     }
 }
