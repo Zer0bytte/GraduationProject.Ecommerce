@@ -3,7 +3,9 @@ public class GetConversationsQueryHandler(IApplicationDbContext context, ICurren
 {
     public async Task<PagedResult<GetConversationsResult>> Handle(GetConversationsQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Conversation> source = context.Conversations.Where(c => c.UserId == currentUser.Id || c.SupplierId == currentUser.Id);
+        IQueryable<Conversation> source = context.Conversations
+            .Where(c => c.UserId == currentUser.Id || c.SupplierId == currentUser.Id)
+            .OrderByDescending(c => c.LastMessageTime);
         IQueryable<GetConversationsResult> conversations;
         if (currentUser.IsSupplier)
         {
