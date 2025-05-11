@@ -15,7 +15,7 @@ public class Order : BaseEntity
     public Guid AddressId { get; set; } = default!;
     public ICollection<OrderItem> OrderItems { get; set; } = [];
     public PaymentMethod PaymentMethod { get; set; }
-
+    public string? CouponCode { get; set; }
     public Guid UserId { get; set; }
     public AppUser User { get; set; }
 

@@ -97,6 +97,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
 
                         orderTotalPrice = orderTotalPrice - discountValue;
                         order.SubTotal = orderTotalPrice;
+                        order.CouponCode = command.CouponCode;
                     }
                 }
             }

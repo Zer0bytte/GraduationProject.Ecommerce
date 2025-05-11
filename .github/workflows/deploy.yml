@@ -1,0 +1,51 @@
+name: Deploy ASP.NET to IIS via Self-Hosted Runner
+
+on:
+  push:
+    branches:
+      - main  # Trigger this on push to main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, windows]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0'  # Replace with your .NET version
+
+    - name: Restore NuGet packages
+      run: dotnet restore
+
+    - name: Build the project
+      run: dotnet build --configuration Release
+
+    - name: Publish the app
+      run: dotnet publish -c Release -o ./publish
+
+    - name: Stop IIS Site (optional)
+      run: |
+        Import-Module WebAdministration
+        Stop-WebSite -Name "ecommerce"
+
+    - name: Deploy to IIS folder
+      run: |
+        $source = "$env:GITHUB_WORKSPACE\publish"
+        $destination = "C:\inetpub\wwwroot\Ecommerce"
+        
+        if (Test-Path $destination) {
+          Remove-Item "$destination\*" -Recurse -Force
+        } else {
+          New-Item -ItemType Directory -Path $destination
+        }
+
+        Copy-Item "$source\*" -Destination $destination -Recurse
+
+    - name: Start IIS Site (optional)
+      run: |
+        Import-Module WebAdministration
+        Start-WebSite -Name "ecommerce"

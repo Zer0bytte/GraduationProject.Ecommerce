@@ -41,17 +41,12 @@ public class GetCurrentSupplierProductsQueryHandler(IApplicationDbContext contex
             .Select(p => new GetCurrentSupplierProductsResult
             {
                 Id = p.Id,
-                SupplierId = p.Supplier.UserId,
-                SupplierName = p.Supplier.StoreName,
                 Title = p.Title,
                 Price = p.Price,
-                DiscountedPrice = p.Discount >= 1 ? p.Price * (1 - p.Discount / 100m) : 0,
-                DiscountPercentage = p.Discount,
-                Description = p.Description,
                 Images = p.Images.Select(p => imageUrl + p.NameOnServer).ToArray(),
                 Category = p.Category.Name,
                 CreatedOn = p.CreatedOn,
-                BoughtCount = context.OrderItems.Where(oi => oi.ProductId == p.Id).Count()
+                BoughtCount = context.OrderItems.Where(oi => oi.ProductId == p.Id).Sum(oi => oi.Quantity)
             }).Take(query.Limit + 1).ToListAsync(cancellationToken);
 
         var prdFinal = products.Take(query.Limit).ToList();
