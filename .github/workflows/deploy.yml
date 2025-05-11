@@ -12,15 +12,9 @@ jobs:
     steps:
     - name: Clean workspace (optional but safe)
       run: |
-        $path = "$env:GITHUB_WORKSPACE"
-        Write-Host "Cleaning workspace except appsettings.json..."
-
-        Get-ChildItem -Path $path -Recurse -Force |
-          Where-Object {
-            $_.FullName -notlike "*appsettings.json"
-          } |
-          Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-
+        if (Test-Path "$env:GITHUB_WORKSPACE") {
+          Remove-Item "$env:GITHUB_WORKSPACE\*" -Recurse -Force -ErrorAction SilentlyContinue
+        }
 
     - name: Checkout code
       uses: actions/checkout@v4
