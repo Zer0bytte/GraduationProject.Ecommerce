@@ -18,7 +18,7 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, IHttpCont
         string imageUrl = httpRequest?.Scheme + "://" + httpRequest?.Host + "/media/";
 
 
-    
+
         //var productssss = await context.Products
         //.Include(p => p.Images)
         //.Include(p => p.Options)
@@ -64,7 +64,7 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, IHttpCont
 
         IQueryable<Product> baseQuery = context.Products.AsQueryable();
         if (!string.IsNullOrWhiteSpace(query.SearchQuery))
-            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery));
+            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) || prd.Tags.Contains(query.SearchQuery));
 
         if (query.HasDiscount.HasValue && query.HasDiscount.Value)
         {

@@ -11,5 +11,7 @@ public enum OrderStatus
     [EnumMember(Value = "Shipped")]
     Shipped,
     [EnumMember(Value = "Delivered")]
-    Delivered
+    Delivered,
+    [EnumMember(Value = "Cancelled")]
+    Cancelled
 }

@@ -2,6 +2,5 @@
 
 public class GetAllSuppliersQuery : PagedQuery, IRequest<PagedResult<GetAllSuppliersResult>>
 {
-    public bool? IsVerified { get; set; }
 
 }

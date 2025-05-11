@@ -28,6 +28,7 @@ public class SupplierProfile : BaseEntity
     public void Verify()
     {
         IsVerified = true;
+        IsRejected = false;
         ModifiedOn = DateTime.UtcNow;
     }
     public void RejectSupplier(string reason)

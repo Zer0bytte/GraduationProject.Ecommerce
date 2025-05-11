@@ -1,4 +1,6 @@
-﻿namespace Ecommerce.Application.Common.Interfaces;
+﻿using Ecommerce.Application.Common.Enums;
+
+namespace Ecommerce.Application.Common.Interfaces;
 
 public interface ICurrentUser
 {
@@ -9,6 +11,6 @@ public interface ICurrentUser
     bool IsSupplier { get; }
     bool IsAuthenticated { get; }
     bool IsVerifiedSupplier { get; }
-    string UserType { get; }
+    UserTypes UserType { get; }
 
 }

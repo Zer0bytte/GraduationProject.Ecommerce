@@ -17,11 +17,14 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
             Price = product.Price,
             DiscountedPrice = product.Discount >= 1 ? product.Price * (1 - product.Discount / 100m) : 0,
             DiscountPercentage = product.Discount,
-            Stocks = product.Stock,
+            Stock = product.Stock,
+            StockStatus = CalculateStockStatus(product.Stock),
             Tags = product.Tags,
             SKU = product.SKU,
+            Rate = product.Reviews.Count > 0 ? product.Reviews.Sum(r => r.Stars) / product.Reviews.Count : 0,
             SupplierId = product.Supplier.UserId,
             StoreName = product.Supplier.StoreName,
+
             ProductOptions = product.Options.GroupBy(
                 po => po.OptionGroupName).Select(g => new OptionGroupDto
                 {
@@ -32,12 +35,14 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
                         OptionPrice = opt.OptionPrice
                     }).ToList()
                 }).ToList(),
-            IsReviewd = currentUser.IsAuthenticated && product.Reviews.Any(r => r.UserId == currentUser.Id),
+            CanReview = context.OrderItems.Any(oi => oi.ProductId == product.Id && currentUser.IsAuthenticated && oi.Order.UserId == currentUser.Id
+            && !product.Reviews.Any(r => r.UserId == currentUser.Id)),
             ProductReviews = product.Reviews.Select(rev => new ProductReviewResult
             {
                 FullName = rev.User.FullName,
                 ReviewText = rev.ReviewText,
-                Stars = rev.Stars
+                Stars = rev.Stars,
+                ReviewImage = imageUrl + rev.ReviewImageNameOnServer
             }).ToList()
 
         }).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
@@ -46,18 +51,21 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
             throw new NotFoundException("Product", query.Id);
 
 
-        if (currentUser.Id != Guid.Empty)
-            product.IsReviewd = context.ProductReviews.Any(rev => rev.ProductId == query.Id && rev.UserId == currentUser.Id);
 
-        //product.ProductReviews = context.ProductReviews.Where(rev => rev.ProductId == query.Id).Select(rev => new ProductReviewResult
-        //{
-        //    FullName = rev.User.FullName,
-        //    ReviewText = rev.ReviewText,
-        //    Stars = rev.Stars,
-        //    ReviewImage = imageUrl + rev.ReviewImageNameOnServer
-        //}).ToList();
+
         return product;
 
 
+    }
+
+    private static StockStatus CalculateStockStatus(int stock)
+    {
+        if (stock > 10) return StockStatus.InStock;
+
+        if (stock < 10 && stock > 0) return StockStatus.LowStock;
+
+        if (stock <= 0) return StockStatus.OutOfStock;
+
+        return StockStatus.InStock;
     }
 }

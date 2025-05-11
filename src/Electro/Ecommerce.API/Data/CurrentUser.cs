@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Exceptions.Abstractions;
+using Ecommerce.Application.Common.Enums;
 using Ecommerce.Application.Common.Interfaces;
 using System.Security.Claims;
 
@@ -92,15 +93,15 @@ public class CurrentUser : ICurrentUser
         }
     }
 
-    public string UserType
+    public UserTypes UserType
     {
         get
         {
-            if (!_isAuthenticated) return "";
+            if (!_isAuthenticated) throw new NotFoundException("Invalid user.");
             string? claim = _user?.FindFirstValue("UserType");
             return claim == null
                   ? throw new NotFoundException("Invalid user, type missing in token.")
-                  : claim;
+                  : (UserTypes)Enum.Parse(typeof(UserTypes), claim);
         }
     }
 

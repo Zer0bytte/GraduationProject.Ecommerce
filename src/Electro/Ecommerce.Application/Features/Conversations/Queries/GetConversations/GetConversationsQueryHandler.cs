@@ -12,7 +12,10 @@ public class GetConversationsQueryHandler(IApplicationDbContext context, ICurren
                 Id = c.Id,
                 FullName = c.User.FullName,
                 LastMessage = c.LastMessage,
-                UnreadCount = c.Messages.Count(m => m.ReadOn == null && m.MessageBy == MessageBy.User)
+                UnreadCount = c.Messages.Count(m => m.ReadOn == null && m.MessageBy == MessageBy.User),
+                LastMessageTime = c.LastMessageTime,
+                LastMessageType = c.LastMessageType
+
             });
         }
         else

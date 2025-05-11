@@ -23,6 +23,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
                o => o.ToString(),
                o => (PaymentStatus)Enum.Parse(typeof(PaymentStatus), o)
            );
+
+        builder.Property(s => s.PaymentMethod)
+         .HasConversion(
+             o => o.ToString(),
+             o => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), o)
+         );
         builder.HasMany(o => o.OrderItems).WithOne().OnDelete(DeleteBehavior.Cascade);
     }
 }

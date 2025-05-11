@@ -29,7 +29,6 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRole<Guid
     public DbSet<Conversation> Conversations { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-
     private static void SetGlobalQueryFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : BaseEntity
     {
         modelBuilder.Entity<TEntity>().HasQueryFilter(e => !e.IsDeleted);

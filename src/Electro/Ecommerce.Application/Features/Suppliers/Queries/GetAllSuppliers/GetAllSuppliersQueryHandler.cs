@@ -6,10 +6,9 @@ public class GetAllSuppliersQueryHandler(IApplicationDbContext context) : IReque
     {
         IQueryable<SupplierProfile> baseQuery = context.SupplierProfiles.AsQueryable();
 
-        if (query.IsVerified.HasValue)
-        {
-            baseQuery = baseQuery.Where(s => s.IsVerified == query.IsVerified.Value);
-        }
+
+        baseQuery = baseQuery.Where(s => s.IsVerified == false);
+
 
         IQueryable<GetAllSuppliersResult> source = baseQuery.Select(sup => new GetAllSuppliersResult
         {

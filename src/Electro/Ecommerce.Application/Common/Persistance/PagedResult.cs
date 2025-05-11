@@ -5,7 +5,6 @@ public class PagedResult<TModel>
     public int Page { get; set; }
     public int Limit { get; set; }
     public int TotalItems { get; set; }
-    public bool HasMore { get; private set; }
 
     public IList<TModel> Items { get; set; } = new List<TModel>();
 
@@ -32,16 +31,7 @@ public class PagedResult<TModel>
         };
         return result;
     }
-    public static PagedResult<TModel> CreateHasMore(PagedQuery query, bool hasMore, IEnumerable<TModel> items)
-    {
-        return new PagedResult<TModel>
-        {
-            Page = query.Page,
-            Limit = query.Limit,
-            HasMore = hasMore,
-            Items = items.ToList()
-        };
-    }
+  
     public static PagedResult<TModel> CreateStatic(PagedQuery query, int totalItems, IList<TModel> items)
     {
         return new PagedResult<TModel>

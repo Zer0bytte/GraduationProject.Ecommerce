@@ -1,4 +1,5 @@
-﻿using Ecommerce.Application.Features.Authentication.Commands.ConfirmEmail;
+﻿using Ecommerce.Application.Features.Authentication.Commands.ChangePassword;
+using Ecommerce.Application.Features.Authentication.Commands.ConfirmEmail;
 
 namespace Ecommerce.API.Endpoints.Authentication;
 
@@ -9,10 +10,11 @@ public class ConfirmEmailEndpoint : ICarterModule
         app.MapPost("/api/auth/confirm-email", async (ConfirmEmailCommand command, ISender sender) =>
         {
             ConfirmEmailResult result = await sender.Send(command);
-            return Results.Ok(result);
+            return Results.Ok(ApiResponse<ConfirmEmailResult>.Success(result, "تم تأكيد حسابك بنجاح"));
+
         })
             .WithTags("Authentication")
             .WithSummary("Confirm Email")
-            .Produces<ConfirmEmailResult>();
+            .Produces<ApiResponse<ConfirmEmailResult>>();
     }
 }

@@ -13,5 +13,6 @@ public class GetCurrentSupplierProductsResult
     public string Description { get; set; } = default!;
     public string[] Images { get; set; } = default!;
     public DateTime CreatedOn { get; set; }
+    public int BoughtCount { get; set; }
 }
 

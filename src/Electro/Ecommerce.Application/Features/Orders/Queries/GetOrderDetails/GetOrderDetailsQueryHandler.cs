@@ -5,9 +5,10 @@ public class GetOrderDetailsQueryHandler(IApplicationDbContext context, ICurrent
     public async Task<GetOrderDetailsResult> Handle(GetOrderDetailsQuery query, CancellationToken cancellationToken)
     {
         GetOrderDetailsResult? orderDetails = await context.Orders
-            .Where(o => o.Id == query.OrderId && o.UserId == ICurrentUser.Id)
+            .Where(o => o.Id == query.OrderId)
             .Select(o => new GetOrderDetailsResult
             {
+                
                 OrderId = o.Id,
                 OrderDate = o.OrderDate,
                 PaymentMethod = o.PaymentMethod,
@@ -22,9 +23,9 @@ public class GetOrderDetailsQueryHandler(IApplicationDbContext context, ICurrent
                 },
                 Status = o.Status,
                 SubTotal = o.SubTotal,
-                //ShippingPrice = o.DeliveryMethod.Price,
                 OrderItems = o.OrderItems.Select(oi => new OrderDetailItems
                 {
+                    OrderItemId = oi.Id,
                     ProductId = oi.ProductId,
                     ImageUrl = oi.ImageUrl,
                     Price = oi.Price,

@@ -21,6 +21,7 @@ public static class ArabicResponseMessages
     public static class Orders
     {
         public const string Created = "تم إنشاء الطلب بنجاح";
+        public const string Cancelled = "تم الغاء طلب هذا العنصر بنجاح";
         public const string StatusUpdated = "تم تحديث حالة الطلب بنجاح";
     }
 
@@ -58,7 +59,8 @@ public static class ArabicResponseMessages
     public static class AdminUsers
     {
         public const string Created = "تم إنشاء الحساب وتم إرسال رابط إعادة تعيين كلمة المرور";
-        public const string Deleted = "تم حذف المشرف بنجاح";
+        public const string Deactivated = "تم تعطيل المشرف بنجاح";
+        public const string Reactivated = "تم تنشيط المشرف بنجاح";
     }
 
     public static class CouponCodes
@@ -71,4 +73,4 @@ public static class ArabicResponseMessages
     {
         public const string Started = "تم بدء المحادثة بنجاح";
     }
-} 
+}

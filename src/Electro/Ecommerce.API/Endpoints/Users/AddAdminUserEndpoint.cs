@@ -13,6 +13,7 @@ public class AddAdminUserEndpoint : ICarterModule
             return Results.Ok(ApiResponse<AddAdminResult>.Success(result, ArabicResponseMessages.AdminUsers.Created));
 
         })
+            .RequireAuthorization("Admin")
             .WithTags("Users")
             .WithSummary("Add Admin User")
             .Produces<AddAdminResult>();

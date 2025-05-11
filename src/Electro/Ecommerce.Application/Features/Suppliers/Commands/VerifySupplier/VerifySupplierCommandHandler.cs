@@ -13,7 +13,6 @@ public class VerifySupplierCommandHandler(IApplicationDbContext context, IBus bu
 
         await context.SaveChangesAsync(cancellationToken);
 
-        // Send Email
         await bus.Publish(new SupplierVerifiedEvent
         {
             SupplierId = supplier.Id,

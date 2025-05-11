@@ -50,7 +50,8 @@ public class GetCurrentSupplierProductsQueryHandler(IApplicationDbContext contex
                 Description = p.Description,
                 Images = p.Images.Select(p => imageUrl + p.NameOnServer).ToArray(),
                 Category = p.Category.Name,
-                CreatedOn = p.CreatedOn
+                CreatedOn = p.CreatedOn,
+                BoughtCount = context.OrderItems.Where(oi => oi.ProductId == p.Id).Count()
             }).Take(query.Limit + 1).ToListAsync(cancellationToken);
 
         var prdFinal = products.Take(query.Limit).ToList();

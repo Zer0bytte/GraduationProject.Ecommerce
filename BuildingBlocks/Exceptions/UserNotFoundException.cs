@@ -2,7 +2,7 @@
 
 public class UserNotFoundException : NotFoundException
 {
-    public UserNotFoundException(Guid id) : base($"User with Id: '{id}' not found!")
+    public UserNotFoundException() : base($"لم يتم العثور علي هذا المستخدم")
     {
     }
 }

@@ -2,6 +2,7 @@
 
 public record OrderDetailItems
 {
+    public Guid OrderItemId { get; set; }
     public Guid ProductId { get; set; }
     public string ProductName { get; set; } = default!;
     public string ImageUrl { get; set; } = default!;
@@ -9,5 +10,6 @@ public record OrderDetailItems
     public int Quantity { get; set; }
     public Guid? SupplierId { get; set; }
     public string? SupplierName { get; set; }
+
     public OrderItemStatus Status { get; set; }
 }

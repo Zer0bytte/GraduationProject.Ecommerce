@@ -51,7 +51,7 @@ public class JwtService(JwtConfiguration jwtConfig, UserManager<AppUser> userMan
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(jwtConfig.AccessTokenLifetime),
+            Expires = DateTime.UtcNow.AddSeconds(jwtConfig.AccessTokenLifetime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
         };
 

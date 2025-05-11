@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Domain.Shared;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ecommerce.Domain.Entities;
 
@@ -14,6 +15,11 @@ public class OrderItem : BaseEntity
     public Guid? SupplierId { get; set; }
     public SupplierProfile? Supplier { get; set; }
     public OrderItemStatus Status { get; set; } = OrderItemStatus.Pending;
+
+    public void Cancel()
+    {
+        Status = OrderItemStatus.Cancelled;
+    }
 }
 
 public enum OrderItemStatus

@@ -7,6 +7,7 @@ using Ecommerce.API.Hubs;
 using Ecommerce.API.Seeds;
 using Ecommerce.API.Transformers;
 using Ecommerce.Application;
+using Ecommerce.Application.BackgroundServices;
 using Ecommerce.Application.Common.Configs;
 using Ecommerce.Application.Common.Interfaces;
 using Ecommerce.Domain.Entities;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 using Serilog;
 Log.Logger = new LoggerConfiguration()
@@ -64,9 +66,10 @@ try
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
-            .WithOrigins(origins);
+        .WithOrigins(origins);
     }));
 
+    builder.Services.AddHostedService<OrderPaymentTimoutCheckerService>();
 
     WebApplication app = builder.Build();
     app.UseCors("web");
@@ -101,9 +104,9 @@ try
     app.MapFallbackToFile("index.html");
 
 
-    app.MapGet("/checkout-success", () =>
+    app.MapPost("/checkout-success", (HttpRequest request, HttpResponse response) =>
     {
-        return Results.Redirect("https://ecommerce.zerobytetools.com/payment/success");
+        return Results.Redirect("https://electroo.vercel.app/checkout-success");
     });
 
     app.UseAuthentication();
