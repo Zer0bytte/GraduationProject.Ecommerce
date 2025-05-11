@@ -40,5 +40,5 @@ jobs:
       shell: cmd
       run: |
         iisreset /stop
-        xcopy /s /y .\myapp\* C:\www\gh-actions-iis-demo.com\
+        xcopy /s /y .\myapp\* C:\inetpub\wwwroot\Ecommerce
         iisreset /start
