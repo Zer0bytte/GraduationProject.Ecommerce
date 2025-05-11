@@ -9,10 +9,6 @@ public class AddProductCommandHandler(IApplicationDbContext context, DirectoryCo
 {
     public async Task<AddProductResult> Handle(AddProductCommand command, CancellationToken cancellationToken)
     {
-        if (!(currentUser.IsSupplier && currentUser.IsVerifiedSupplier))
-        {
-            throw new ApplicationException("من فضلك انتظر لحين تأكيد حسابك");
-        }
         Product product = new Product
         {
             Id = Guid.Parse(NewId.Next().ToString()),

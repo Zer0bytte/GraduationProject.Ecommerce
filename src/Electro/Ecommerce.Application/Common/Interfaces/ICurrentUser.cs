@@ -10,7 +10,7 @@ public interface ICurrentUser
     Guid SupplierId { get; }
     bool IsSupplier { get; }
     bool IsAuthenticated { get; }
-    bool IsVerifiedSupplier { get; }
+    VerificationStatus VerificationStatus { get; }
     UserTypes UserType { get; }
 
 }

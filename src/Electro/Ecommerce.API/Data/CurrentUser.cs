@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.Exceptions.Abstractions;
 using Ecommerce.Application.Common.Enums;
 using Ecommerce.Application.Common.Interfaces;
+using Ecommerce.Domain.Entities;
 using System.Security.Claims;
 
 namespace Ecommerce.API.Data;
@@ -106,13 +107,13 @@ public class CurrentUser : ICurrentUser
     }
 
 
-    public bool IsVerifiedSupplier
+    public VerificationStatus VerificationStatus
     {
         get
         {
-            if (!_isAuthenticated) return false;
-            string? claim = _user?.FindFirstValue("VerifiedSupplier");
-            return claim != null;
+            if (!_isAuthenticated) return VerificationStatus.Banned;
+            VerificationStatus claim = (VerificationStatus)Enum.Parse(typeof(VerificationStatus),_user?.FindFirstValue("VerificationStatus"));
+            return claim;
 
         }
     }
