@@ -25,7 +25,7 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.203'  # Match your installed SDK version
+        dotnet-version: '9.0.203'  # Use your exact .NET 9 version
 
     - name: Restore NuGet packages
       run: dotnet restore ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj
@@ -36,9 +36,10 @@ jobs:
     - name: Publish the app
       run: dotnet publish ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o ./publish
 
-    - name: Stop IIS App Pool (to unlock files)
+    - name: Stop IIS Website & App Pool
       run: |
         Import-Module WebAdministration
+        Stop-WebSite -Name "ecommerce"
         Stop-WebAppPool -Name "ecommerce"
 
     - name: Deploy to IIS folder
@@ -57,7 +58,8 @@ jobs:
         Get-ChildItem -Path $destination -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
         Copy-Item -Path "$source\*" -Destination $destination -Recurse
 
-    - name: Start IIS App Pool
+    - name: Start IIS Website & App Pool
       run: |
         Import-Module WebAdministration
         Start-WebAppPool -Name "ecommerce"
+        Start-WebSite -Name "ecommerce"
