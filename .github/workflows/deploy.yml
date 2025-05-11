@@ -3,22 +3,29 @@ name: Deploy ASP.NET to IIS via Self-Hosted Runner
 on:
   push:
     branches:
-      - main  # Trigger this on push to main branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: [self-hosted, windows]
 
     steps:
+    - name: Clean workspace (optional but safe)
+      run: |
+        if (Test-Path "$env:GITHUB_WORKSPACE") {
+          Remove-Item "$env:GITHUB_WORKSPACE\*" -Recurse -Force -ErrorAction SilentlyContinue
+        }
+
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        persist-credentials: false  # Prevent zip corruption on Windows
+        persist-credentials: false
+        clean: true
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0'  # Update to your exact .NET 9 preview version
+        dotnet-version: '9.0.203'  # Match your installed SDK version
 
     - name: Restore NuGet packages
       run: dotnet restore ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj
@@ -29,25 +36,28 @@ jobs:
     - name: Publish the app
       run: dotnet publish ./src/Electro/Ecommerce.Api/Ecommerce.Api.csproj -c Release -o ./publish
 
-    - name: Stop IIS Site (optional)
+    - name: Stop IIS App Pool (to unlock files)
       run: |
         Import-Module WebAdministration
-        Stop-WebSite -Name "ecommerce"
+        Stop-WebAppPool -Name "ecommerce"
 
     - name: Deploy to IIS folder
       run: |
         $source = "$env:GITHUB_WORKSPACE\publish"
         $destination = "C:\inetpub\wwwroot\Ecommerce"
-        
-        if (Test-Path $destination) {
-          Remove-Item "$destination\*" -Recurse -Force
-        } else {
-          New-Item -ItemType Directory -Path $destination
+
+        Write-Host "Publishing from: $source"
+        Write-Host "To IIS path: $destination"
+
+        if (!(Test-Path $destination)) {
+          Write-Host "Destination does not exist. Creating..."
+          New-Item -ItemType Directory -Path $destination | Out-Null
         }
 
-        Copy-Item "$source\*" -Destination $destination -Recurse
+        Get-ChildItem -Path $destination -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+        Copy-Item -Path "$source\*" -Destination $destination -Recurse
 
-    - name: Start IIS Site (optional)
+    - name: Start IIS App Pool
       run: |
         Import-Module WebAdministration
-        Start-WebSite -Name "ecommerce"
+        Start-WebAppPool -Name "ecommerce"
