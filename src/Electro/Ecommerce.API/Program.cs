@@ -117,7 +117,7 @@ try
     app.MapScalarApiReference(options =>
     {
         options.Title = "Ecommerce";
-        options.Theme = ScalarTheme.BluePlanet;
+        options.Theme = ScalarTheme.DeepSpace;
         options.WithPreferredScheme("Bearer")
         .WithHttpBearerAuthentication(bearer =>
         {
