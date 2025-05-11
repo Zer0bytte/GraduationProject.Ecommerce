@@ -8,11 +8,7 @@ public class AddProductImagesCommandHandler(IApplicationDbContext context, Direc
 {
     public async Task<List<AddProductImagesResult>> Handle(AddProductImagesCommand command, CancellationToken cancellationToken)
     {
-        if (!(currentUser.IsSupplier && currentUser.IsVerifiedSupplier))
-        {
-            throw new ApplicationException("من فضلك انتظر لحين تأكيد حسابك");
-        }
-
+        
         bool product = await context.Products.AnyAsync(prd => prd.Id == command.ProductId && prd.SupplierId == currentUser.SupplierId);
         if (!product) throw new NotFoundException("Product", command.ProductId);
 
