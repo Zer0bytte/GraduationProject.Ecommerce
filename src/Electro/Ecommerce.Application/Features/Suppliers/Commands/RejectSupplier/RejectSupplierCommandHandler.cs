@@ -7,9 +7,9 @@ public class RejectSupplierCommandHandler(IApplicationDbContext context) : IRequ
 
         if (supplier is null) throw new NotFoundException("Supplier", command.SupplierId);
 
-        if (supplier.IsRejected) throw new InternalServerException("هذا البائع مرفوض بالفعل");
+        if (supplier.VerificationStatus == VerificationStatus.Rejected) throw new InternalServerException("هذا البائع مرفوض بالفعل");
 
-        if (supplier.IsVerified) throw new InternalServerException("تم تأكيد هذا البائع بالفعل");
+        if (supplier.VerificationStatus == VerificationStatus.Verified) throw new InternalServerException("تم تأكيد هذا البائع بالفعل");
 
         supplier.RejectSupplier(command.RejectionResult);
 

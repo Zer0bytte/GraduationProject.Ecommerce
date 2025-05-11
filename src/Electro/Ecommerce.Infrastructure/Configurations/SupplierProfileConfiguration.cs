@@ -12,5 +12,10 @@ internal class SupplierProfileConfiguration : IEntityTypeConfiguration<SupplierP
         builder.Property(a => a.Governorate).HasConversion(
             to => to.ToString(),
             db => (Governorate)Enum.Parse(typeof(Governorate), db));
+
+
+        builder.Property(a => a.VerificationStatus).HasConversion(
+           to => to.ToString(),
+           db => (VerificationStatus)Enum.Parse(typeof(VerificationStatus), db));
     }
 }

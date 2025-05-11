@@ -3,6 +3,13 @@ using Ecommerce.Domain.Shared;
 
 namespace Ecommerce.Domain.Entities;
 
+public enum VerificationStatus
+{
+    Pending,
+    Verified,
+    Rejected,
+    Banned
+}
 public class SupplierProfile : BaseEntity
 {
     public Guid UserId { get; set; }
@@ -17,27 +24,29 @@ public class SupplierProfile : BaseEntity
     public string NationalIdFrontNameOnServer { get; set; } = default!;
     public string NationalIdBackNameOnServer { get; set; } = default!;
     public string TaxCardNameOnServer { get; set; } = default!;
-    public bool IsVerified { get; set; }
-    public bool IsRejected { get; set; }
     public string? VerificationFailureReason { get; set; }
-    public bool IsBanned { get; set; }
     public Governorate Governorate { get; set; }
-
+    public VerificationStatus VerificationStatus { get; set; } = VerificationStatus.Pending;
 
 
     public void Verify()
     {
-        IsVerified = true;
-        IsRejected = false;
+        VerificationStatus = VerificationStatus.Verified;
         ModifiedOn = DateTime.UtcNow;
     }
+
     public void RejectSupplier(string reason)
     {
-        IsRejected = true;
         VerificationFailureReason = reason;
+        VerificationStatus = VerificationStatus.Rejected;
     }
-    public bool IsSupplierVerified()
+
+    public void BanSupplier()
     {
-        return IsVerified;
+        VerificationStatus = VerificationStatus.Banned;
+    }
+    public bool IsVerified()
+    {
+        return VerificationStatus == VerificationStatus.Verified;
     }
 }

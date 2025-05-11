@@ -16,7 +16,7 @@ public class GetSupplierByIdQueryHandler(IApplicationDbContext context, IHttpCon
             BusinessName = supplier.BusinessName,
             StoreName = supplier.StoreName,
             TaxNumber = supplier.TaxNumber,
-            IsVerified = supplier.IsVerified,
+            VerificationStatus = supplier.VerificationStatus,
             NationalIdNumber = supplier.NationalId,
             NationalIdFront = imageUrl + supplier.NationalIdFrontNameOnServer,
             NationalIdBack = imageUrl + supplier.NationalIdBackNameOnServer,

@@ -43,7 +43,7 @@ public class JwtService(JwtConfiguration jwtConfig, UserManager<AppUser> userMan
             if (supplier is not null)
             {
                 claims.Add(new Claim("SupplierId", supplier.Id.ToString()));
-                claims.Add(new Claim("VerifiedSupplier", supplier.IsVerified.ToString()));
+                claims.Add(new Claim("VerificationStatus", supplier.VerificationStatus.ToString()));
             }
         }
 

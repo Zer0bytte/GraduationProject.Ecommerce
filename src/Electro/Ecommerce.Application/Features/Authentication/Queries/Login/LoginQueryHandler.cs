@@ -21,9 +21,6 @@ public class LoginQueryHandler(SignInManager<AppUser> signInManager, UserManager
         {
             var supplierProfile = context.SupplierProfiles.Find(user.SupplierProfileId);
             if(supplierProfile is null) throw new InternalServerException("الايميل او الباسورد خطأ");
-
-            if (!supplierProfile.IsVerified || supplierProfile.IsBanned)
-                throw new ApplicationException("من فضلك انتظر لحين تنشيط حسابك");
         }
         SignInResult result = await signInManager.PasswordSignInAsync(user, query.Password, true, false);
         if (result.Succeeded)

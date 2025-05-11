@@ -7,7 +7,8 @@ public class VerifySupplierCommandHandler(IApplicationDbContext context, IBus bu
         SupplierProfile? supplier = await context.SupplierProfiles.FindAsync(command.SupplierId);
 
         if (supplier is null) throw new NotFoundException("Supplier", command.SupplierId);
-        if (supplier.IsSupplierVerified()) throw new InternalServerException("Supplier Already Verified");
+
+        if (supplier.IsVerified()) throw new InternalServerException("Supplier Already Verified");
 
         supplier.Verify();
 

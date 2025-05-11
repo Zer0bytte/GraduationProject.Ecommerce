@@ -7,7 +7,7 @@ public class GetAllSuppliersQueryHandler(IApplicationDbContext context) : IReque
         IQueryable<SupplierProfile> baseQuery = context.SupplierProfiles.AsQueryable();
 
 
-        baseQuery = baseQuery.Where(s => s.IsVerified == false);
+        baseQuery = baseQuery;
 
 
         IQueryable<GetAllSuppliersResult> source = baseQuery.Select(sup => new GetAllSuppliersResult
@@ -16,7 +16,7 @@ public class GetAllSuppliersQueryHandler(IApplicationDbContext context) : IReque
             BusinessName = sup.BusinessName,
             FullName = sup.User.FullName,
             StoreName = sup.StoreName,
-            IsVerified = sup.IsVerified
+            VerificationStatus = sup.VerificationStatus
         });
 
 

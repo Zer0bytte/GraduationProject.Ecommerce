@@ -10,5 +10,5 @@ public record GetSupplierByIdResult
     public string NationalIdFront { get; set; } = default!;
     public string NationalIdBack { get; set; } = default!;
     public string TaxCard { get; set; } = default!;
-    public bool IsVerified { get; set; }
+    public VerificationStatus VerificationStatus { get; set; }
 }
