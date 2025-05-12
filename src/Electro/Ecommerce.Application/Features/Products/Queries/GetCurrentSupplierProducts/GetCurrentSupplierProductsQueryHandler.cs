@@ -14,7 +14,7 @@ public class GetCurrentSupplierProductsQueryHandler(IApplicationDbContext contex
         IQueryable<Product> baseQuery = context.Products.Where(p => p.SupplierId == currentUser.SupplierId).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.SearchQuery))
-            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery));
+            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) || prd.Description.Contains(query.SearchQuery) || prd.Tags.Contains(query.SearchQuery));
 
         if (query.HasDiscount.HasValue && query.HasDiscount.Value)
         {

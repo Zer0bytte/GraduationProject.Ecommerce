@@ -18,53 +18,9 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, IHttpCont
         string imageUrl = httpRequest?.Scheme + "://" + httpRequest?.Host + "/media/";
 
 
-
-        //var productssss = await context.Products
-        //.Include(p => p.Images)
-        //.Include(p => p.Options)
-        //.ToListAsync(cancellationToken);
-
-        //int number = productssss.Count + 1;
-        //context.Products.RemoveRange(productssss);
-        //foreach (var original in productssss)
-        //{
-        //    var duplicate = new Product
-        //    {
-        //        Id = Guid.Parse(NewId.Next().ToString()),
-        //        Title = original.Title,
-        //        Price = original.Price,
-        //        Discount = original.Discount,
-        //        Stock = original.Stock,
-        //        SKU = $"{original.SKU}",
-        //        Tags = original.Tags,
-        //        Brand = original.Brand,
-        //        Description = original.Description,
-        //        CategoryId = original.CategoryId,
-        //        SupplierId = original.SupplierId,
-        //    };
-        //    duplicate.Images = original.Images.Select(img => new ProductImage
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        NameOnServer = img.NameOnServer,
-        //        ProductId = duplicate.Id
-        //    }).ToList();
-        //    duplicate.Options = original.Options.Select(opt => new ProductOption
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        OptionGroupName = opt.OptionGroupName,
-        //        OptionName = opt.OptionName,
-        //        ProductId = duplicate.Id
-        //    }).ToList();
-        //    number++;
-        //    context.Products.Add(duplicate);
-        //}
-
-        //await context.SaveChangesAsync(cancellationToken);
-
-
         IQueryable<Product> baseQuery = context.Products.AsQueryable();
         if (!string.IsNullOrWhiteSpace(query.SearchQuery))
-            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) || prd.Tags.Contains(query.SearchQuery));
+            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) || prd.Tags.Contains(query.SearchQuery) || prd.Description.Contains(query.SearchQuery));
 
         if (query.HasDiscount.HasValue && query.HasDiscount.Value)
         {
