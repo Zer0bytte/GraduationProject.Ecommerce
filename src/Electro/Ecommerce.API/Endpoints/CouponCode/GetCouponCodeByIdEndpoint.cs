@@ -21,7 +21,7 @@ public class GetCouponCodeByIdEndpoint : ICarterModule
         })
                .RequireAuthorization("Admin")
                .WithTags("Coupon Codes")
-               .WithSummary("Get Coupon Codes By Id")
+               .WithSummary("Get Coupon Code By Id")
                .Produces<ApiResponse<GetCouponByIdResult>>();
     }
 }
