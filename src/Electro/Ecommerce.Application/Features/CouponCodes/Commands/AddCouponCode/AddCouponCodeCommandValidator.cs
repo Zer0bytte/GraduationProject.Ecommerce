@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.CouponCodes;
+﻿namespace Ecommerce.Application.Features.CouponCodes.Commands.AddCouponCode;
 
 public class AddCouponCodeCommandValidator : AbstractValidator<AddCouponCodeCommand>
 {

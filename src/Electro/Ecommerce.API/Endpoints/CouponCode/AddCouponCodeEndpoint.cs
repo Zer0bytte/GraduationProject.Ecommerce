@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Features.CouponCodes;
+﻿using Ecommerce.Application.Features.CouponCodes.Commands.AddCouponCode;
 
 namespace Ecommerce.API.Endpoints.CouponCode;
 

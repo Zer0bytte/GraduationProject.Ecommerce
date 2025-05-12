@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Features.CouponCodes.ValidateCoupon;
+﻿using Ecommerce.Application.Features.CouponCodes.Commands.ValidateCoupon;
 
 namespace Ecommerce.API.Endpoints.CouponCode;
 

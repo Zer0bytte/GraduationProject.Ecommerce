@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.CouponCodes.ValidateCoupon;
+﻿namespace Ecommerce.Application.Features.CouponCodes.Commands.ValidateCoupon;
 
 public record ValidateCouponResult
 {

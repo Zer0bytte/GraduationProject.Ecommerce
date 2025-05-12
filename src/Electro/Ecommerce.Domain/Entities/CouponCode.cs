@@ -9,5 +9,6 @@ public class CouponCode : BaseEntity
     public decimal DiscountPercentage { get; set; }
     public decimal MaximumDiscountValue { get; set; }
     public DateTime ExpirationDate { get; set; }
+    public bool IsActive { get; set; }
 
 }

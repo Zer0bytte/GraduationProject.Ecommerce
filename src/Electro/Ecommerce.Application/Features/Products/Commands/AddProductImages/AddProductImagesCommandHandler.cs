@@ -15,7 +15,7 @@ public class AddProductImagesCommandHandler(IApplicationDbContext context, Direc
         int productImagesCount = await context.ProductImages.CountAsync(prd => prd.ProductId == command.ProductId);
 
         if (productImagesCount >= 5 || 5 - productImagesCount < command.Images.Count)
-            throw new InternalServerException("You cant upload more than 5 images per product!");
+            throw new InternalServerException("يمكنك اضافة 5 صور فقط بحد اقصي");
 
         List<AddProductImagesResult> results = new List<AddProductImagesResult>();
 

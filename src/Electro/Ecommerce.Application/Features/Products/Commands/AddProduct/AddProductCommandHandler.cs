@@ -24,6 +24,7 @@ public class AddProductCommandHandler(IApplicationDbContext context, DirectoryCo
             SupplierId = currentUser.SupplierId
 
         };
+
         foreach (IFormFile image in command.Images)
         {
             string fileName = Guid.NewGuid().ToString() + ".webp";
