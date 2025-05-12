@@ -1,4 +1,5 @@
-﻿using Ecommerce.Domain.Shared;
+﻿using Ecommerce.Domain.Exceptions;
+using Ecommerce.Domain.Shared;
 
 namespace Ecommerce.Domain.Entities;
 
@@ -11,4 +12,16 @@ public class CouponCode : BaseEntity
     public DateTime ExpirationDate { get; set; }
     public bool IsActive { get; set; } = true;
 
+
+    public void Deactivate()
+    {
+        if (!IsActive) throw new DomainException("هذا الكود غير نشط بالفعل");
+        IsActive = false;
+    }
+
+    public void Reactivate()
+    {
+        if (IsActive) throw new DomainException("هذا الكود نشط بالفعل");
+        IsActive = true;
+    }
 }

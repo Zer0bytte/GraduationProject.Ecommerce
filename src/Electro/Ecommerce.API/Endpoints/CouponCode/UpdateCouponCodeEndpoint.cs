@@ -17,7 +17,7 @@ public class UpdateCouponCodeEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPut("/api/coupons/{id}", async (UpdateCouponCodeRequest request, Guid id, ISender sender) =>
-       {
+        {
            UpdateCouponCodeResult result = await sender.Send(new UpdateCouponCodeCommand
 
            {
@@ -31,7 +31,7 @@ public class UpdateCouponCodeEndpoint : ICarterModule
 
            return Results.Ok(ApiResponse<UpdateCouponCodeResult>.Success(result));
 
-       })
+        })
                .RequireAuthorization("Admin")
                .WithTags("Coupon Codes")
                .WithSummary("Update Coupon Code")
