@@ -6,7 +6,7 @@ public class ReactivateCouponCodeCommandHandler(IApplicationDbContext context) :
         CouponCode? code = await context.CouponCodes.FindAsync(command.Id);
         if (code is null) throw new NotFoundException("لم يتم العثور علي هذا الكود");
 
-        code.Deactivate();
+        code.Reactivate();
 
         await context.SaveChangesAsync(cancellationToken);
 
