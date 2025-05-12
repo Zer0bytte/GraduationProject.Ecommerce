@@ -3,7 +3,7 @@ public class GetCouponCodesQueryHandle(IApplicationDbContext context) : IRequest
 {
     public async Task<PagedResult<GetCouponCodesResult>> Handle(GetCouponCodesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<CouponCode> source = context.CouponCodes;
+        var source = context.CouponCodes.OrderByDescending(c => c.CreatedOn);
 
         List<GetCouponCodesResult> couponCodes = await source.Select(c => new GetCouponCodesResult
         {
