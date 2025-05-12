@@ -14,7 +14,7 @@ public class DeactiveCouponCodeEndpoint : ICarterModule
                 Id = id,
             });
 
-            return Results.Ok(ApiResponse<DeactivateCouponCodeResult>.Success(result));
+            return Results.Ok(ApiResponse<DeactivateCouponCodeResult>.Success(result, ArabicResponseMessages.CouponCodes.Deactivated));
 
         })
           .RequireAuthorization("Admin")

@@ -14,7 +14,7 @@ public class ReactiveCouponCodeEndpoint : ICarterModule
                 Id = id,
             });
 
-            return Results.Ok(ApiResponse<ReactivateCouponCodeResult>.Success(result));
+            return Results.Ok(ApiResponse<ReactivateCouponCodeResult>.Success(result, ArabicResponseMessages.CouponCodes.Reactivated));
 
         })
           .RequireAuthorization("Admin")

@@ -67,6 +67,8 @@ public static class ArabicResponseMessages
     {
         public const string Created = "تم إنشاء كود الخصم بنجاح";
         public const string Valid = "كود الخصم صالح";
+        public const string Deactivated = "تم الغاء تنشيط هذا الكود بنجاح";
+        public const string Reactivated = "تم تنشيط هذا الكود بنجاح";
     }
 
     public static class Conversations
