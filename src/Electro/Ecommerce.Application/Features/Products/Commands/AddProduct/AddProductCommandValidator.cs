@@ -38,9 +38,7 @@ public class AddProductCommandValidator : AbstractValidator<AddProductCommand>
         RuleFor(p => p.Stock).GreaterThan(0).WithMessage("المخزون مطلوب");
         RuleFor(p => p.SKU).NotEmpty().WithMessage("رمز SKU مطلوب");
         RuleFor(p => p.Title).NotEmpty().WithMessage("العنوان مطلوب");
-        RuleFor(p => p.Tags)
-         .Matches("^([\\u0600-\\u06FFa-zA-Z0-9]+,)*[\\u0600-\\u06FFa-zA-Z0-9]+$")
-         .WithMessage("الرجاء إدخال الوسوم بهذا الشكل: tag1,tag2,tag3...");
+        RuleFor(p => p.Tags).NotEmpty();
 
         this.mediaValidator = mediaValidator;
     }
