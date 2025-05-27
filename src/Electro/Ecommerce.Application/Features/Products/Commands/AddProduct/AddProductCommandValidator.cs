@@ -38,7 +38,8 @@ public class AddProductCommandValidator : AbstractValidator<AddProductCommand>
         RuleFor(p => p.Stock).GreaterThan(0).WithMessage("المخزون مطلوب");
         RuleFor(p => p.SKU).NotEmpty().WithMessage("رمز SKU مطلوب");
         RuleFor(p => p.Title).NotEmpty().WithMessage("العنوان مطلوب");
-        RuleFor(p => p.Tags).NotEmpty();
+        RuleFor(p => p.Tags).NotNull().WithMessage("يجب اضافه كلمة مفتاحيه علي الاقل");
+        RuleFor(p => p.Tags.Count).GreaterThan(0).WithMessage("يجب اضافه كلمة مفتاحيه علي الاقل");
 
         this.mediaValidator = mediaValidator;
     }
