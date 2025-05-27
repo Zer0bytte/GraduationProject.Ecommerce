@@ -6,9 +6,7 @@ namespace BuildingBlocks.MediaSecurity;
 public class MediaValidator
 {
     private readonly List<string> AllowedExtensions = [
-        ".aac", ".m4a", ".wav", ".mp4",
-        ".png", ".jpeg", ".jpg", ".gif",
-        ".ogg", ".avi", ".mov", ".webm",".avif"
+        ".png", ".jpeg", ".jpg",
     ];
     public bool IsMediaValid(IFormFile media)
     {

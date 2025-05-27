@@ -20,7 +20,7 @@ public class AddProductCommandHandler(IApplicationDbContext context, DirectoryCo
             Discount = command.DiscountPercentage,
             Stock = command.Stock,
             SKU = command.SKU,
-            Tags = command.Tags,
+            Tags = string.Join(",", command.Tags),
             SupplierId = currentUser.SupplierId
 
         };

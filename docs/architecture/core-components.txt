@@ -1,0 +1,125 @@
+Core Components
+
+1. Product Management System
+   - Product Catalog
+     * Product creation and management
+     * Category management
+     * Product options and variants
+     * Product images
+     * Technical specifications
+     * Stock management
+     * Pricing management
+
+   - Search and Filtering
+     * Full-text search
+     * Category-based filtering
+     * Price range filtering
+     * Technical specification filtering
+     * Manufacturer filtering
+     * Availability filtering
+
+2. Order Processing System
+   - Shopping Cart
+     * Add/remove items
+     * Update quantities
+     * Save for later
+     * Price calculations
+     * Coupon application
+
+   - Checkout Process
+     * Address management
+     * Payment processing
+     * Order confirmation
+     * Email notifications
+     * Order tracking
+
+   - Order Management
+     * Order status tracking
+     * Order history
+     * Invoice generation
+     * Return processing
+     * Refund handling
+
+3. User Management System
+   - Authentication
+     * User registration
+     * Supplier registration
+     * Login/logout
+     * Password management
+     * Google login integration
+     * JWT token handling
+
+   - User Profiles
+     * Personal information
+     * Address management
+     * Order history
+     * Cart
+
+   - Role Management
+     * Customer roles
+     * Supplier roles
+     * Admin roles
+     * Permission management
+
+4. Supplier Management
+   - Supplier Portal
+     * Product management
+     * Order management
+     * Inventory management
+     * Payment tracking
+
+   - Supplier Profiles
+     * Company information
+     * Product catalog
+
+5. Payment System
+   - Payment Processing
+     * Clickpay payment method
+     * Secure transactions
+     * Payment verification
+     * Transaction history
+
+   - Financial Management
+     * Revenue tracking
+     * Commission calculations
+     * Payment distribution
+     * Financial reporting
+
+6. Communication System
+   - Messaging
+     * Customer-supplier chat
+     * Order notifications
+     * System notifications
+
+8. Security System
+   - Authentication
+     * JWT implementation
+     * Role-based access
+
+   - Data Protection
+     * Encryption
+     * Secure storage
+
+9. Caching System
+   - Redis Implementation
+     * Product caching
+     * Cart caching
+
+10. Integration System
+    - External Services
+      * Payment gateway
+      * Email services
+
+    - API Management
+      * API versioning
+      * Rate limiting
+      * Documentation
+      * Monitoring
+      * Error handling
+
+11. Email Notification System
+      * Order events
+      * Payment events
+      * System events
+      * User events
+      * Supplier events
