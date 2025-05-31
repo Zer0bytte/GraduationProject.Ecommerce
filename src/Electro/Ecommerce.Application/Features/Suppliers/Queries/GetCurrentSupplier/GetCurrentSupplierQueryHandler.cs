@@ -25,7 +25,9 @@ public class GetCurrentSupplierQueryHandler(ICurrentUser currentUser, IApplicati
             StoreName = supplier.StoreName,
             VerificationStatus = supplier.VerificationStatus,
             Balance = supplier.Balance,
-            SalesChart = salesChart
+            SalesChart = salesChart,
+            ItemsSoldCount = itemsSoldCount,
+            OrdersCount = ordersCount
         };
     }
 }

@@ -6,6 +6,8 @@ public class GetCurrentSupplierResult
     public string StoreName { get; set; } = default!;
     public VerificationStatus VerificationStatus { get; set; }
     public decimal Balance { get; set; }
+    public int ItemsSoldCount { get; set; }
+    public int OrdersCount { get; set; }
     public List<SalesChartItem> SalesChart { get; set; } = [];
 }
 
