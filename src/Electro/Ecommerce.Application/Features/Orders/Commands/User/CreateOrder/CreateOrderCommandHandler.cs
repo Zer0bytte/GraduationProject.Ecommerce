@@ -122,7 +122,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
             }
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync(cancellationToken);
-
+            await cache.RemoveAsync(command.CartId);
             return new CreateOrderResult
             {
                 IsSuccess = true,
