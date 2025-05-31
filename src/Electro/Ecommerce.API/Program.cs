@@ -80,7 +80,7 @@ try
         RoleManager<IdentityRole<Guid>> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
         UserManager<AppUser> usermanager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
         ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.MigrateAsync().GetAwaiter().GetResult();
+        //dbContext.Database.MigrateAsync().GetAwaiter().GetResult();
         await SeedRoles.Seed(roleManager);
         await SeedAdmins.Seed(usermanager);
 

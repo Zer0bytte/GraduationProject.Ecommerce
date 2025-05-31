@@ -17,6 +17,7 @@ public class Product : BaseEntity
     public List<ProductImage> Images { get; set; } = [];
     public List<ProductReview> Reviews { get; set; } = [];
     public List<ProductOption> Options { get; set; } = [];
+    public List<OrderItem> OrderItems { get; set; } = [];
     public SupplierProfile? Supplier { get; set; }
     public Guid? SupplierId { get; set; }
     public bool IsOutOfStock()
