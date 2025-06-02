@@ -4,7 +4,7 @@ public class VerifySupplierCommandHandler(IApplicationDbContext context, IBus bu
 {
     public async Task<VerifySupplierResult> Handle(VerifySupplierCommand command, CancellationToken cancellationToken)
     {
-        SupplierProfile? supplier = await context.SupplierProfiles.FindAsync(command.SupplierId);
+        SupplierProfile? supplier = await context.SupplierProfiles.Include(s => s.User).FirstOrDefaultAsync(s => s.Id == command.SupplierId);
 
         if (supplier is null) throw new NotFoundException("Supplier", command.SupplierId);
 
@@ -16,7 +16,11 @@ public class VerifySupplierCommandHandler(IApplicationDbContext context, IBus bu
 
         await bus.Publish(new SupplierVerifiedEvent
         {
-            SupplierId = supplier.Id,
+            SupplierName = supplier.User.FullName,
+            StoreName = supplier.StoreName,
+            BusinessName = supplier.BusinessName,
+            Email = supplier.User.Email
+
         },
         cancellationToken);
 

@@ -2,5 +2,9 @@
 
 public class SupplierVerifiedEvent
 {
-    public Guid SupplierId { get; set; }
+    public string Email { get; set; } = default!;
+    public string StoreName { get; set; } = default!;
+    public string BusinessName { get; set; } = default!;
+    public string SupplierName { get; set; } = default!;
+
 }
