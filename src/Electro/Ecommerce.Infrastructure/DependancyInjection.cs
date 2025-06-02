@@ -43,6 +43,10 @@ public static class DependancyInjection
         services.AddSingleton(hostingConfig);
 
 
+        ChatGptConfig chatGptConfig = new();
+        configuration.GetSection("ChatGptConfig").Bind(chatGptConfig);
+        services.AddSingleton(chatGptConfig);
+
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 

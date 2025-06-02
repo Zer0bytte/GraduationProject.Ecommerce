@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Ecommerce.Application.Common.Configs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -9,14 +10,13 @@ namespace Ecommerce.API.Hubs;
 public class ChatBotHub : Hub
 {
     private static readonly HttpClient _httpClient = new HttpClient();
-    private static readonly string _apiKey = "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";
     private static readonly string _apiUrl = "https://api.openai.com/v1/chat/completions";
     private readonly IDistributedCache _cache;
 
-    public ChatBotHub(IDistributedCache cache)
+    public ChatBotHub(IDistributedCache cache, ChatGptConfig chatGptConfig)
     {
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", chatGptConfig.Key);
         _cache = cache;
     }
 
