@@ -255,7 +255,7 @@ public static class EmailTemplates
                 <table class=""container"" cellpadding=""0"" cellspacing=""0"">
                   <tr>
                     <td align=""center"">
-                      <img src=""https://ecommerce.markomedhat.com/media/supplier-verified.jpg"" alt=""تم التحقق من المورد"" width=""300"" style=""max-width:100%; display:block;"">
+                      <img src=""https://ecommerce.markomedhat.com/media/supplier-verified.png"" alt=""تم التحقق من المورد"" width=""300"" style=""max-width:100%; display:block;"">
                     </td>
                   </tr>
                   <tr>
@@ -298,6 +298,201 @@ public static class EmailTemplates
           </table>
         </body>
         </html>";
-    public static readonly string SupplierRejectedEmailTemplate = "";
-    public static readonly string OrderItemStatusChangedEmailTempalte = "";
+
+    public static readonly string SupplierRejectedEmailTemplate = @"
+        <!DOCTYPE html>
+        <html lang=""ar"" dir=""rtl"">
+        <head>
+          <meta charset=""UTF-8"">
+          <title>لم يتم التحقق من المورد</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: Tahoma, sans-serif;
+              background-color: #f4f4f4;
+            }
+            .container {
+              background-color: #ffffff;
+              border-radius: 6px;
+              padding: 20px;
+              width: 600px;
+            }
+            .rejected-box {
+              background-color: #e74c3c;
+              color: #ffffff;
+              padding: 15px;
+              border-radius: 5px;
+              font-size: 20px;
+              font-weight: bold;
+              text-align: center;
+              margin: 20px 0;
+            }
+            .footer {
+              font-size: 12px;
+              color: #999999;
+              padding-top: 30px;
+            }
+            .supplier-info {
+              background-color: #f8f9fa;
+              border-radius: 5px;
+              padding: 15px;
+              margin: 20px 0;
+              border-right: 4px solid #e74c3c;
+            }
+          </style>
+        </head>
+        <body>
+          <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""padding: 20px 0;"">
+            <tr>
+              <td align=""center"">
+                <table class=""container"" cellpadding=""0"" cellspacing=""0"">
+                  <tr>
+                    <td align=""center"">
+                      <img src=""https://ecommerce.markomedhat.com/media/supplier-rejected.png"" alt=""لم يتم التحقق من المورد"" width=""300"" style=""max-width:100%; display:block;"">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align=""center"" style=""padding-bottom: 20px;"">
+                      <h1 style=""margin: 0; font-size: 28px; color: #e74c3c; font-weight: bold;"">إلكـــــــتروو</h1>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style=""color: #333333; font-size: 16px; line-height: 1.6; padding: 0 20px;"">
+                      <h2 style=""margin: 0 0 15px;"">مرحبًا {SUPPLIER_NAME}،</h2>
+                      <p style=""margin: 0 0 10px;"">نأسف لإبلاغك بأن عملية التحقق من حسابك كمورد لم تكتمل بنجاح.</p>
+              
+                      <div class=""rejected-box"">
+                        لم يتم التحقق من الحساب
+                      </div>
+
+                      <div class=""supplier-info"">
+                        <p style=""margin: 0 0 10px;""><strong>معلومات المورد:</strong></p>
+                        <p style=""margin: 0 0 5px;"">اسم الشركة: {BUSINESS_NAME}</p>
+                        <p style=""margin: 0 0 5px;"">اسم المتجر: {STORE_NAME}</p>
+                        <p style=""margin: 0 0 5px;"">تاريخ المراجعة: {REVIEW_DATE}</p>
+                      </div>
+
+                      <p style=""margin: 20px 0 10px;""><strong>سبب الرفض (إن وجد):</strong></p>
+                      <p style=""margin: 0 0 10px;"">{REJECTION_REASON}</p>
+
+                      <p style=""margin: 20px 0 10px;"">نرجو مراجعة البيانات المقدمة والتأكد من استيفاء جميع المتطلبات، ثم إعادة تقديم طلب التحقق.</p>
+
+                      <p style=""margin: 0 0 10px;"">إذا كنت بحاجة إلى توضيحات إضافية أو دعم، يرجى التواصل مع فريق الدعم الفني.</p>
+                      <p style=""margin: 0;"">مع تحياتنا،<br>فريق إلكتروو</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align=""center"" class=""footer"">
+                      &copy; 2025 جميع الحقوق محفوظة. لا ترد على هذا البريد الإلكتروني.
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>";
+
+    public static string OrderItemStatusChangedEmailTemplate = @"
+<!DOCTYPE html>
+<html lang=""ar"" dir=""rtl"">
+
+<head>
+    <meta charset=""UTF-8"">
+    <title>تحديث حالة المنتج في طلبك</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 20px;
+            width: 600px;
+        }
+
+        .status-box {
+            background-color: #00BBA7;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #999999;
+            padding-top: 30px;
+        }
+
+        .order-info {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            border-right: 4px solid #00BBA7;
+        }
+
+        a.button {
+            display: inline-block;
+            background-color: #00BBA7;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""padding: 20px 0;"">
+        <tr>
+            <td align=""center"">
+                <table class=""container"" cellpadding=""0"" cellspacing=""0"">
+                    <tr>
+                        <td align=""center"">
+                            <img src=""https://ecommerce.markomedhat.com/media/{IMAGE_NAME}""
+                                alt=""تحديث حالة الطلب"" width=""300"" style=""max-width:100%; display:block;"">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style=""color: #333333; font-size: 16px; line-height: 1.6; padding: 0 20px;"">
+                            <h2 style=""margin: 0 0 15px;"">مرحبًا {CUSTOMER_NAME}،</h2>
+
+                            <div class=""order-info"">
+                                <p style=""margin: 0 0 10px;""><strong>تفاصيل المنتج:</strong></p>
+                                <p style=""margin: 0 0 5px;"">اسم المنتج: {PRODUCT_NAME}</p>
+                                <p style=""margin: 0 0 5px;"">تاريخ التحديث: {DATE}</p>
+                            </div>
+
+                            <p style=""margin: 20px 0 10px;"">لمتابعة الطلب أو التحقق من حالة الشحن، اضغط على الرابط
+                                أدناه:</p>
+                            <p><a href=""{TRACKING_LINK}"" class=""button"">تتبع الطلب</a></p>
+
+                            <p style=""margin: 20px 0 10px;"">نحن هنا دائمًا إذا كنت بحاجة لأي مساعدة.</p>
+                            <p style=""margin: 0;"">مع تحياتنا،<br>فريق إلكتروو</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align=""center"" class=""footer"">
+                            &copy; 2025 جميع الحقوق محفوظة. لا ترد على هذا البريد الإلكتروني.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
+";
 }

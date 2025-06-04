@@ -1,16 +1,17 @@
 using Ecommerce.Domain.Rules;
+using MassTransit;
 using Microsoft.Extensions.Hosting;
 using TagLib.Ape;
 
 namespace Ecommerce.Application.Features.Orders.Commands.Admin.UpdateOrderItemStatus;
 
-public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context)
+public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context, IBus bus)
     : IRequestHandler<UpdateOrderItemStatusCommand, UpdateOrderItemStatusResult>
 {
     public async Task<UpdateOrderItemStatusResult> Handle(UpdateOrderItemStatusCommand command, CancellationToken cancellationToken)
     {
         OrderItem? orderItem = await context.OrderItems
-            .Include(oi => oi.Order)
+            .Include(oi => oi.Order).ThenInclude(order => order.User)
             .FirstOrDefaultAsync(oi => oi.Id == command.OrderItemId, cancellationToken);
 
         if (orderItem == null)
@@ -20,6 +21,32 @@ public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context)
             throw new InvalidOperationException($"·« Ì„ﬂ‰  €ÌÌ— «·Õ«·… „‰ {orderItem.Status} ≈·Ï {command.Status}");
 
         orderItem.Status = command.Status;
+
+        var statusEvent = new OrderItemStatusChangedEvent
+        {
+            CustomerName = orderItem.Order.User.FullName,
+            Email = orderItem.Order.User.Email,
+            ProductName = orderItem.ProductName,
+        };
+        switch (command.Status)
+        {
+            case OrderItemStatus.Confirmed:
+                statusEvent.Status = OrderItemStatus.Confirmed;
+                break;
+            case OrderItemStatus.Shipped:
+                statusEvent.Status = OrderItemStatus.Shipped;
+                break;
+            case OrderItemStatus.Delivered:
+                statusEvent.Status = OrderItemStatus.Delivered;
+                break;
+            case OrderItemStatus.Cancelled:
+                statusEvent.Status = OrderItemStatus.Cancelled;
+
+                break;
+            default:
+                break;
+        }
+
 
         if (command.Status == OrderItemStatus.Delivered)
         {
@@ -35,6 +62,7 @@ public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context)
         }
 
         await context.SaveChangesAsync(cancellationToken);
+        await bus.Publish(statusEvent);
 
         return new UpdateOrderItemStatusResult
         {
