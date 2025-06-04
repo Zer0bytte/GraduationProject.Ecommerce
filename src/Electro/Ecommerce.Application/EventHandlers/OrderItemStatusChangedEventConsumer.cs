@@ -21,7 +21,7 @@ public class OrderItemStatusChangedEventConsumer(IEmailSender emailSender) : ICo
                 template = template.Replace("{IMAGE_NAME}", "order-delivered.png");
                 break;
             case OrderItemStatus.Cancelled:
-                template = template.Replace("{IMAGE_NAME}", "order-shipped.png");
+                template = template.Replace("{IMAGE_NAME}", "order-cancelled.png");
                 break;
             default:
                 break;
