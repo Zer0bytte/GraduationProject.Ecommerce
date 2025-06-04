@@ -5,7 +5,9 @@ public class GetUserOrdersQueryHandler(IApplicationDbContext context, ICurrentUs
 {
     public async Task<PagedResult<GetUserOrdersResult>> Handle(GetUserOrdersQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Order> source = context.Orders.Where(x => x.UserId == ICurrentUser.Id).OrderBy(o => o.Status == OrderStatus.Cancelled);
+        IQueryable<Order> source = context.Orders.Where(x => x.UserId == ICurrentUser.Id)
+            .OrderBy(o => o.Status == OrderStatus.Cancelled)
+            .ThenByDescending(o=>o.OrderDate);
 
 
         IQueryable<GetUserOrdersResult> orders = source.Select(o => new GetUserOrdersResult
