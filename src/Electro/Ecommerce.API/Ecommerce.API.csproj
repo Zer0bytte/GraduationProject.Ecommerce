@@ -6,12 +6,20 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>f4e1a9a4-c573-4c62-9671-edc86cd34418</UserSecretsId>
 	</PropertyGroup>
-
 	<ItemGroup>
-	  <Compile Remove="uploads\**" />
-	  <Content Remove="uploads\**" />
-	  <EmbeddedResource Remove="uploads\**" />
-	  <None Remove="uploads\**" />
+		<Content Update="appsettings.Development.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+		
+		<Content Update="appsettings.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="uploads\**" />
+		<Content Remove="uploads\**" />
+		<EmbeddedResource Remove="uploads\**" />
+		<None Remove="uploads\**" />
 	</ItemGroup>
 
 	<ItemGroup>
