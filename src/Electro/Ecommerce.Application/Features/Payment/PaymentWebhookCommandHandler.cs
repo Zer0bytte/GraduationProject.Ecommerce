@@ -26,23 +26,23 @@ public class PaymentWebhookCommandHandler(IApplicationDbContext context) : IRequ
             order.PaymentStatus = PaymentStatus.Paid;
             transaction.PaidOn = DateTime.UtcNow;
 
-            foreach (OrderItemDetails item in orderItems)
-            {
-                Product? product = await context.Products
-                    .Include(p => p.Supplier)
-                    .FirstOrDefaultAsync(p => p.Id == item.ProductId, cancellationToken);
+            //foreach (OrderItemDetails item in orderItems)
+            //{
+            //    Product? product = await context.Products
+            //        .Include(p => p.Supplier)
+            //        .FirstOrDefaultAsync(p => p.Id == item.ProductId, cancellationToken);
 
-                if (product?.Supplier is not null)
-                {
-                    product.Supplier.Balance += item.Price * item.Quantity;
-                    product.Supplier.BalanceTransactions.Add(new SupplierBalanceTransaction
-                    {
-                        TransactionType = TransactionType.Revenue,
-                        Amount = item.Price * item.Quantity,
-                        Reason = $"Revenue from order: {order.Id}, and item: {product.Title}"
-                    });
-                }
-            }
+            //    if (product?.Supplier is not null)
+            //    {
+            //        product.Supplier.Balance += item.Price * item.Quantity;
+            //        product.Supplier.BalanceTransactions.Add(new SupplierBalanceTransaction
+            //        {
+            //            TransactionType = TransactionType.Revenue,
+            //            Amount = item.Price * item.Quantity,
+            //            Reason = $"Revenue from order: {order.Id}, and item: {product.Title}"
+            //        });
+            //    }
+            //}
         }
         else
         {

@@ -1,3 +1,4 @@
+using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Rules;
 using MassTransit;
 using Microsoft.Extensions.Hosting;
@@ -58,6 +59,18 @@ public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context, 
             {
                 orderItem.Order.Status = OrderStatus.Delivered;
 
+            }
+
+            var supplierProfile = context.SupplierProfiles.Find(orderItem.SupplierId);
+            if (supplierProfile != null)
+            {
+                supplierProfile.Balance += orderItem.Price * orderItem.Quantity;
+                supplierProfile.BalanceTransactions.Add(new SupplierBalanceTransaction
+                {
+                    TransactionType = TransactionType.Revenue,
+                    Amount = orderItem.Price * orderItem.Quantity,
+                    Reason = $"Revenue from order: {orderItem.Id}, and item: {orderItem.ProductName}"
+                });
             }
         }
 
