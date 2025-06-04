@@ -393,11 +393,9 @@ public static class EmailTemplates
           </table>
         </body>
         </html>";
-
-    public static string OrderItemStatusChangedEmailTemplate = @"
+    public static readonly string OrderItemStatusChangedEmailTemplate = @"
 <!DOCTYPE html>
 <html lang=""ar"" dir=""rtl"">
-
 <head>
     <meta charset=""UTF-8"">
     <title>تحديث حالة المنتج في طلبك</title>
@@ -453,19 +451,18 @@ public static class EmailTemplates
     </style>
 </head>
 
-<body>
+<body style=""direction: rtl; text-align: right;"">
     <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""padding: 20px 0;"">
         <tr>
             <td align=""center"">
                 <table class=""container"" cellpadding=""0"" cellspacing=""0"">
                     <tr>
                         <td align=""center"">
-                            <img src=""https://ecommerce.markomedhat.com/media/{IMAGE_NAME}""
-                                alt=""تحديث حالة الطلب"" width=""300"" style=""max-width:100%; display:block;"">
+                            <img src=""https://ecommerce.markomedhat.com/media/{IMAGE_NAME}"" alt=""تحديث حالة الطلب"" width=""300"" style=""max-width:100%; display:block;"">
                         </td>
                     </tr>
                     <tr>
-                        <td style=""color: #333333; font-size: 16px; line-height: 1.6; padding: 0 20px;"">
+                        <td style=""direction: rtl; text-align: right; color: #333333; font-size: 16px; line-height: 1.6; padding: 0 20px;"">
                             <h2 style=""margin: 0 0 15px;"">مرحبًا {CUSTOMER_NAME}،</h2>
 
                             <div class=""order-info"">
@@ -474,8 +471,7 @@ public static class EmailTemplates
                                 <p style=""margin: 0 0 5px;"">تاريخ التحديث: {DATE}</p>
                             </div>
 
-                            <p style=""margin: 20px 0 10px;"">لمتابعة الطلب أو التحقق من حالة الشحن، اضغط على الرابط
-                                أدناه:</p>
+                            <p style=""margin: 20px 0 10px;"">لمتابعة الطلب أو التحقق من حالة الشحن، اضغط على الرابط أدناه:</p>
                             <p><a href=""{TRACKING_LINK}"" class=""button"">تتبع الطلب</a></p>
 
                             <p style=""margin: 20px 0 10px;"">نحن هنا دائمًا إذا كنت بحاجة لأي مساعدة.</p>
@@ -483,7 +479,7 @@ public static class EmailTemplates
                         </td>
                     </tr>
                     <tr>
-                        <td align=""center"" class=""footer"">
+                        <td align=""center"" class=""footer"" style=""direction: rtl; text-align: center;"">
                             &copy; 2025 جميع الحقوق محفوظة. لا ترد على هذا البريد الإلكتروني.
                         </td>
                     </tr>
@@ -492,7 +488,6 @@ public static class EmailTemplates
         </tr>
     </table>
 </body>
-
 </html>
 ";
 }
