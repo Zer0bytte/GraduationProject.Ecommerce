@@ -30,6 +30,6 @@ public class OrderItemStatusChangedEventConsumer(IEmailSender emailSender) : ICo
         template = template.Replace("{CUSTOMER_NAME}", context.Message.CustomerName);
         template = template.Replace("{PRODUCT_NAME}", context.Message.ProductName);
         template = template.Replace("{DATE}", DateTime.UtcNow.ToShortDateString());
-        await emailSender.SendEmailAsync(context.Message.Email, "تم تأكيد الطلب بنجاح", template);
+        await emailSender.SendEmailAsync(context.Message.Email, "تم تحديث حالة الطلب بنجاح", template);
     }
 }
