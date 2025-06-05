@@ -40,7 +40,7 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
             Category = product.Category.Name,
             ImageUrl = imageUrl,
             Price = product.Price,
-            DiscountedPrice = product.Discount >= 1 ? product.Price * (1 - product.Discount / 100m) : 0,
+            DiscountedPrice =  product.Price * (1 - product.Discount / 100m),
             DiscountPercentage = product.Discount,
             Quantity = INITIAL_QUANTITY,
             Title = product.Title
