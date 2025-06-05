@@ -16,7 +16,7 @@ public class OrderItem : BaseEntity
     public Guid? SupplierId { get; set; }
     public SupplierProfile? Supplier { get; set; }
     public OrderItemStatus Status { get; set; } = OrderItemStatus.Pending;
-
+    public string? CancellationReason { get; set; }
     public void Cancel()
     {
         Status = OrderItemStatus.Cancelled;

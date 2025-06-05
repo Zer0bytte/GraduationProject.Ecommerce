@@ -29,7 +29,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                     && o.PaymentStatus == PaymentStatus.Pending && o.Status != OrderStatus.Cancelled
                     && DateTime.UtcNow > o.OrderDate.AddMinutes(10)).ToListAsync(stoppingToken);
 
-                if (orders.Count == 0) return;
+                if (orders.Count == 0) continue;
 
                 await context.Orders
                     .Include(o => o.OrderItems)
@@ -38,15 +38,17 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                     && DateTime.UtcNow > o.OrderDate.AddMinutes(10))
                     .ExecuteUpdateAsync(prop => prop
                     .SetProperty(p => p.Status, OrderStatus.Cancelled)
-                    .SetProperty(p => p.PaymentStatus, PaymentStatus.Failed),
+                    .SetProperty(p => p.PaymentStatus, PaymentStatus.Failed)
+                    .SetProperty(p => p.CancellationReason, "Payment timeout"),
                     stoppingToken);
 
-                        await context.OrderItems
-                        .Where(oi => oi.Order.PaymentMethod == PaymentMethod.Online
-                             && oi.Order.PaymentStatus == PaymentStatus.Pending
-                             && DateTime.UtcNow > oi.Order.OrderDate.AddMinutes(10))
-                        .ExecuteUpdateAsync(prop => prop
-                        .SetProperty(p => p.Status, OrderItemStatus.Cancelled), stoppingToken);
+                await context.OrderItems
+                .Where(oi => oi.Order.PaymentMethod == PaymentMethod.Online
+                     && oi.Order.PaymentStatus == PaymentStatus.Pending
+                     && DateTime.UtcNow > oi.Order.OrderDate.AddMinutes(10))
+                .ExecuteUpdateAsync(prop => prop
+                .SetProperty(p => p.Status, OrderItemStatus.Cancelled)
+                .SetProperty(p => p.CancellationReason, "Payment timeout"), stoppingToken);
 
 
                 foreach (var order in orders)
@@ -56,7 +58,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                         OrderId = order.Id
                     }, stoppingToken);
                 }
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
             }
 
         }
