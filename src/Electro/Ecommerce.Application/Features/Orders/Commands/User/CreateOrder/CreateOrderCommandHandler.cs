@@ -63,7 +63,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
                     SupplierId = product.SupplierId,
                     Status = OrderItemStatus.Pending
                 });
-                orderPriceDetails += product.Price * (1 - product.Discount / 100m);
+                orderPriceDetails += product.Price * (1 - product.Discount / 100m) * cartItem.Quantity;
             }
 
             Order order = new Order
