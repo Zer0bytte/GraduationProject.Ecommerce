@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Application.Features.Cart.Commands.AddToCart;
 
-public class AddToCartCommandHandler(IApplicationDbContext context, IDistributedCache cache, IHttpContextAccessor httpContextAccessor) : IRequestHandler<AddToCartCommand, AddToCartResult>
+public class AddToCartCommandHandler(IApplicationDbContext context, IDistributedCache cache, HostingConfig hostingConfig) : IRequestHandler<AddToCartCommand, AddToCartResult>
 {
     const int FIRST_IMAGE_INDEX = 0;
     const int INITIAL_QUANTITY = 1;
@@ -32,8 +32,7 @@ public class AddToCartCommandHandler(IApplicationDbContext context, IDistributed
 
         if (product.IsOutOfStock()) throw new InternalServerException($"Product: '{product.Title}' max stock value is: {product.Stock}");
 
-        HttpRequest httpRequest = httpContextAccessor.HttpContext.Request;
-        string imageUrl = httpRequest.Scheme + "://" + httpRequest.Host + "/media/" + product.Images[FIRST_IMAGE_INDEX].NameOnServer;
+        string imageUrl = hostingConfig.HostName + "/media/" + product.Images[FIRST_IMAGE_INDEX].NameOnServer;
 
         CartItemDto newCartItem = new CartItemDto
         {

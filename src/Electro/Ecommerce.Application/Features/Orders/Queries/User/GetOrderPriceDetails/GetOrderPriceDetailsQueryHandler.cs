@@ -8,8 +8,7 @@ internal sealed class GetOrderPriceDetailsQueryHandler(IApplicationDbContext con
     public async Task<GetOrderPriceDetailsResponse> Handle(GetOrderPriceDetailsQuery request, CancellationToken cancellationToken)
     {
         GetCartResult cart = await sender.Send(new GetCartQuery() { Id = request.CartId });
-        Domain.Entities.Address? address = await context.Addresses.FindAsync(request.AddressId);
-        if (address is null) throw new NotFoundException("Address", request.AddressId);
+
         decimal subTotal = 0;
         foreach (CartItemDto item in cart.Cart.CartItems)
         {

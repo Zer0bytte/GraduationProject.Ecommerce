@@ -36,6 +36,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
 
             CartDto? cart = JsonConvert.DeserializeObject<CartDto>(cartJson);
             List<OrderItem> orderItems = new();
+            decimal orderPriceDetails = 0;
             foreach (CartItemDto cartItem in cart.CartItems)
             {
                 Product? product = await context.Products
@@ -62,12 +63,9 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
                     SupplierId = product.SupplierId,
                     Status = OrderItemStatus.Pending
                 });
+                orderPriceDetails += product.Price * (1 - product.Discount / 100m);
             }
-            var orderPriceDetails = await sender.Send(new GetOrderPriceDetailsQuery
-            {
-                AddressId = address.Id,
-                CartId = command.CartId
-            });
+
             Order order = new Order
             {
                 Id = Guid.NewGuid(),
@@ -79,7 +77,7 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
                 Status = OrderStatus.Pending,
                 PaymentStatus = PaymentStatus.None,
                 UserId = ICurrentUser.Id,
-                SubTotal = orderPriceDetails.SubTotal,
+                SubTotal = orderPriceDetails,
             };
 
             decimal orderTotalPrice = order.SubTotal + order.ShippingPrice;

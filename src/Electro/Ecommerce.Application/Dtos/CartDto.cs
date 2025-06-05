@@ -8,7 +8,25 @@ public class CartDto
     public decimal ShippingPrice { get; set; }
     public decimal SubTotal
     {
-        get { return CartItems.Sum(i => i.Price * i.Quantity); }
+        get { return GetSubTotal(); }
     }
 
+    private decimal GetSubTotal()
+    {
+        decimal subtotal = 0;
+        foreach (var item in CartItems)
+        {
+            if (item.DiscountedPrice > 0)
+            {
+                subtotal += item.DiscountedPrice;
+            }
+            else
+            {
+                subtotal += item.Price;
+            }
+
+        }
+
+        return subtotal;
+    }
 }
