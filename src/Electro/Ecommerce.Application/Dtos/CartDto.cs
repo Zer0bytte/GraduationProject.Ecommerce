@@ -18,11 +18,11 @@ public class CartDto
         {
             if (item.DiscountedPrice > 0)
             {
-                subtotal += item.DiscountedPrice;
+                subtotal += item.DiscountedPrice * item.Quantity;
             }
             else
             {
-                subtotal += item.Price;
+                subtotal += item.Price * item.Quantity;
             }
 
         }
