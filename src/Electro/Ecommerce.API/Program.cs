@@ -83,6 +83,7 @@ try
         dbContext.Database.MigrateAsync().GetAwaiter().GetResult();
         await SeedRoles.Seed(roleManager);
         await SeedAdmins.Seed(usermanager);
+        await SeedUsers.Seed(usermanager);
         
         DirectoryConfiguration config = scope.ServiceProvider.GetRequiredService<DirectoryConfiguration>();
         if (!Directory.Exists(config.MediaDirectory))

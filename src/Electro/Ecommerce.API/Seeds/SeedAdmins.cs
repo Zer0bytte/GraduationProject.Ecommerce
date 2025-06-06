@@ -8,31 +8,6 @@ public class SeedAdmins
 
     public static async Task Seed(UserManager<AppUser> userManager)
     {
-        var users = userManager.Users.ToList();
-
-        foreach (var user in users)
-        {
-            // Generate password reset token
-            var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-
-            // Reset the password
-            var result = await userManager.ResetPasswordAsync(user, resetToken, "Password@123");
-
-            if (result.Succeeded)
-            {
-                Console.WriteLine($"Password reset for user: {user.UserName}");
-            }
-            else
-            {
-                Console.WriteLine($"Failed to reset password for user: {user.UserName}. Errors:");
-                foreach (var error in result.Errors)
-                {
-                    Console.WriteLine($"- {error.Description}");
-                }
-            }
-        }
-
-
         if (userManager.Users.Count() == 0)
         {
             AppUser user = new AppUser
