@@ -24,6 +24,7 @@ public class PaymentWebhookCommandHandler(IApplicationDbContext context) : IRequ
 
             order.PaymentStatus = PaymentStatus.Failed;
             order.CancellationReason = "Payment failed";
+            order.Status = OrderStatus.Completed;
             foreach (OrderItem item in orderItems)
             {
                 Product? product = context.Products.Find(item.ProductId);

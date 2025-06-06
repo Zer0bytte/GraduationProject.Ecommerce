@@ -39,7 +39,8 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                     .ExecuteUpdateAsync(prop => prop
                     .SetProperty(p => p.Status, OrderStatus.Cancelled)
                     .SetProperty(p => p.PaymentStatus, PaymentStatus.Failed)
-                    .SetProperty(p => p.CancellationReason, "Payment timeout"),
+                    .SetProperty(p => p.CancellationReason, "Payment timeout")
+                    .SetProperty(p => p.Status, OrderStatus.Completed),
                     stoppingToken);
 
                 await context.OrderItems

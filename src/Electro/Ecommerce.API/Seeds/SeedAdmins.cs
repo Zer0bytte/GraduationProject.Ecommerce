@@ -31,7 +31,13 @@ public class SeedUsers
 
     public static async Task Seed(UserManager<AppUser> userManager)
     {
-        string[] usersEmails = ["user1@electro.com", "user2@electro.com"];
+        string[] usersEmails = [
+                "user1@electro.com",
+                "user2@electro.com",
+                "user3@electro.com",
+                "user4@electro.com",
+                "user5@electro.com",
+            ];
         foreach (var email in usersEmails)
         {
             if (!userManager.Users.Where(u => u.Email == email).Any())
