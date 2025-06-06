@@ -10,7 +10,7 @@ public class GetAllSuppliersQueryHandler(IApplicationDbContext context) : IReque
         baseQuery = baseQuery;
 
 
-        IQueryable<GetAllSuppliersResult> source = baseQuery.Select(sup => new GetAllSuppliersResult
+        IQueryable<GetAllSuppliersResult> source = baseQuery.OrderByDescending(s=>s.CreatedOn).Select(sup => new GetAllSuppliersResult
         {
             SupplierId = sup.Id,
             BusinessName = sup.BusinessName,
