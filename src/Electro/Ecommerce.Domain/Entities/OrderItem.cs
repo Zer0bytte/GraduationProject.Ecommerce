@@ -17,9 +17,10 @@ public class OrderItem : BaseEntity
     public SupplierProfile? Supplier { get; set; }
     public OrderItemStatus Status { get; set; } = OrderItemStatus.Pending;
     public string? CancellationReason { get; set; }
-    public void Cancel()
+    public void Cancel(string? cancellationReason = null)
     {
         Status = OrderItemStatus.Cancelled;
+        CancellationReason = cancellationReason;
     }
 }
 

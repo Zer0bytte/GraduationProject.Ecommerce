@@ -7,14 +7,7 @@ public class PaymentWebhookCommandHandler(IApplicationDbContext context) : IRequ
         Order? order = context.Orders.Find(Guid.Parse(command.Payload.CartId));
         if (order is null) return;
 
-        List<OrderItemDetails> orderItems = context.OrderItems
-            .Where(o => o.OrderId == order.Id)
-            .Select(x => new OrderItemDetails
-            {
-                ProductId = x.ProductId,
-                Quantity = x.Quantity,
-                Price = x.Price
-            }).ToList();
+        var orderItems = await context.OrderItems.Where(o => o.OrderId == order.Id).ToListAsync();
 
         TransactionRefernce? transaction = context.TransactionRefernces.FirstOrDefault(t => t.TransactionRefId == command.Payload.TranRef);
         if (transaction is null) return;
@@ -25,37 +18,22 @@ public class PaymentWebhookCommandHandler(IApplicationDbContext context) : IRequ
         {
             order.PaymentStatus = PaymentStatus.Paid;
             transaction.PaidOn = DateTime.UtcNow;
-
-            //foreach (OrderItemDetails item in orderItems)
-            //{
-            //    Product? product = await context.Products
-            //        .Include(p => p.Supplier)
-            //        .FirstOrDefaultAsync(p => p.Id == item.ProductId, cancellationToken);
-
-            //    if (product?.Supplier is not null)
-            //    {
-            //        product.Supplier.Balance += item.Price * item.Quantity;
-            //        product.Supplier.BalanceTransactions.Add(new SupplierBalanceTransaction
-            //        {
-            //            TransactionType = TransactionType.Revenue,
-            //            Amount = item.Price * item.Quantity,
-            //            Reason = $"Revenue from order: {order.Id}, and item: {product.Title}"
-            //        });
-            //    }
-            //}
         }
         else
         {
 
             order.PaymentStatus = PaymentStatus.Failed;
-
-            foreach (OrderItemDetails item in orderItems)
+            order.CancellationReason = "Payment failed";
+            foreach (OrderItem item in orderItems)
             {
                 Product? product = context.Products.Find(item.ProductId);
                 if (product is not null)
                 {
                     product.Stock += item.Quantity;
                 }
+                item.Cancel("Payment failed!");
+
+
             }
         }
 
@@ -63,10 +41,4 @@ public class PaymentWebhookCommandHandler(IApplicationDbContext context) : IRequ
 
 
     }
-}
-public record OrderItemDetails
-{
-    public Guid ProductId { get; set; }
-    public int Quantity { get; set; }
-    public decimal Price { get; set; }
 }
