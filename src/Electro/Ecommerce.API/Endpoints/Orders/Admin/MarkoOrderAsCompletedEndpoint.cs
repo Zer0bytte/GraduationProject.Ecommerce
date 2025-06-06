@@ -7,7 +7,7 @@ public class MarkoOrderAsCompletedEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/admin/orders/{id}/complete", async (Guid id, ISender sender) =>
+        app.MapPut("/api/admin/orders/{id}/complete", async (Guid id, ISender sender) =>
         {
 
             MarkOrderAsCompletedResult result = await sender.Send(new MarkOrderAsCompletedCommand
