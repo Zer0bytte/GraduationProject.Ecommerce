@@ -1,4 +1,5 @@
-﻿namespace Ecommerce.Application.Features.Products.Queries.GetProductByd;
+﻿
+namespace Ecommerce.Application.Features.Products.Queries.GetProductByd;
 
 public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingConfig hostingConfig, ICurrentUser currentUser) : IRequestHandler<GetProductByIdQuery, GetProductByIdResult>
 {
@@ -35,6 +36,11 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
                 Stars = rev.Stars,
                 ReviewImage = imageUrl + rev.ReviewImageNameOnServer
             }).ToList(),
+            ProductBids = product.AuctionBids.Select(b => new ProductBidResult
+            {
+                Username = MaskName(b.User.FullName, 4),
+                Price = b.Price
+            }).ToList(),
             IsAuction = product.IsAuction,
             AuctionEndDate = product.AuctionExpirationDate,
             BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) : product.MinumumBidPrice
@@ -49,6 +55,20 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
         return product;
 
 
+    }
+
+    private string MaskName(string fullName, int visibleChars)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+            return string.Empty;
+
+        if (visibleChars >= fullName.Length)
+            return fullName;
+
+        string visiblePart = fullName.Substring(0, visibleChars);
+        string maskedPart = new string('*', fullName.Length - visibleChars);
+
+        return visiblePart + maskedPart;
     }
 
     private static StockStatus CalculateStockStatus(int stock)
