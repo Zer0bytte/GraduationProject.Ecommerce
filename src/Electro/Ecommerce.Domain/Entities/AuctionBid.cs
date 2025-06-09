@@ -6,5 +6,7 @@ public class AuctionBid : BaseEntity
     public decimal Price { get; set; }
     public AppUser User { get; set; } = default!;
     public Guid UserId { get; set; }
+    public Product Product { get; set; }
+    public Guid ProductId { get; set; }
 
 }

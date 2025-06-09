@@ -32,7 +32,9 @@ public record GetProductByIdResult
     public ICollection<ImageResult> Images { get; set; } = default!;
     public bool CanReview { get; set; }
     public List<ProductReviewResult> ProductReviews { get; set; } = [];
-    public List<OptionGroupDto> ProductOptions { get; set; } = [];
+    public bool IsAuction { get; set; }
+    public DateTime? AuctionEndDate { get; set; }
+    public decimal? BidMinimumPrice { get; set; }
 }
 
 public record ImageResult

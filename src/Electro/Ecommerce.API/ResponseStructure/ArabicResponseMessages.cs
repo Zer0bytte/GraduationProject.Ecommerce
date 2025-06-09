@@ -37,7 +37,10 @@ public static class ArabicResponseMessages
         public const string AddedToCart = "تم إضافة المنتج إلى السلة";
         public const string UpdatedCart = "تم تحديث السلة بنجاح";
     }
-
+    public static class Auction
+    {
+        public const string PlaceBid = "تم إضافة العرض بنجاح";
+    }
     public static class Reviews
     {
         public const string Created = "شكراً لك، تم إضافة التقييم بنجاح";

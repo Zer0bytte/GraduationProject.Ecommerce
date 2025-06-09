@@ -4,6 +4,7 @@ using Ecommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace grad.Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250609131041_RenameAuctionBids")]
+    partial class RenameAuctionBids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,7 +168,7 @@ namespace grad.Ecommerce.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
@@ -473,7 +476,7 @@ namespace grad.Ecommerce.Migrations
                     b.Property<int>("Discount")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsAuction")
+                    b.Property<bool?>("IsAuction")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
@@ -935,19 +938,15 @@ namespace grad.Ecommerce.Migrations
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.AuctionBid", b =>
                 {
-                    b.HasOne("Ecommerce.Domain.Entities.Product", "Product")
+                    b.HasOne("Ecommerce.Domain.Entities.Product", null)
                         .WithMany("AuctionBids")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("Ecommerce.Domain.Entities.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });

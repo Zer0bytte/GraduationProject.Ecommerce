@@ -13,4 +13,5 @@ public class GetAllProductsResult
     public string Description { get; set; } = default!;
     public string[] Images { get; set; } = default!;
     public DateTime CreatedOn { get; set; }
+    public bool IsAuction { get; set; }
 }

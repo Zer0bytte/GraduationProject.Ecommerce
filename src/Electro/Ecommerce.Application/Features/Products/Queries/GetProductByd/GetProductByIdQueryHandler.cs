@@ -1,11 +1,10 @@
 ﻿namespace Ecommerce.Application.Features.Products.Queries.GetProductByd;
 
-public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser) : IRequestHandler<GetProductByIdQuery, GetProductByIdResult>
+public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingConfig hostingConfig, ICurrentUser currentUser) : IRequestHandler<GetProductByIdQuery, GetProductByIdResult>
 {
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
-        HttpRequest? httpRequest = httpContextAccessor.HttpContext?.Request;
-        string imageUrl = httpRequest?.Scheme + "://" + httpRequest?.Host + "/media/";
+        string imageUrl = hostingConfig.HostName + "/media/";
         GetProductByIdResult? product = await context.Products.Select(product => new GetProductByIdResult
         {
             Id = product.Id,
@@ -24,18 +23,10 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
             Rate = product.Reviews.Count > 0 ? product.Reviews.Sum(r => r.Stars) / product.Reviews.Count : 0,
             SupplierId = product.Supplier.UserId,
             StoreName = product.Supplier.StoreName,
-
-            ProductOptions = product.Options.GroupBy(
-                po => po.OptionGroupName).Select(g => new OptionGroupDto
-                {
-                    OptionGroupName = g.Key,
-                    Options = g.Select(opt => new OptionDto
-                    {
-                        OptionName = opt.OptionName,
-                        OptionPrice = opt.OptionPrice
-                    }).ToList()
-                }).ToList(),
-            CanReview = context.OrderItems.Any(oi => oi.ProductId == product.Id && currentUser.IsAuthenticated && oi.Order.UserId == currentUser.Id
+            CanReview = context.OrderItems.Any(oi => oi.ProductId == product.Id
+            && currentUser.IsAuthenticated
+            && oi.Order.UserId == currentUser.Id
+            && oi.Status == OrderItemStatus.Delivered
             && !product.Reviews.Any(r => r.UserId == currentUser.Id)),
             ProductReviews = product.Reviews.Select(rev => new ProductReviewResult
             {
@@ -43,8 +34,10 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, IHttpCont
                 ReviewText = rev.ReviewText,
                 Stars = rev.Stars,
                 ReviewImage = imageUrl + rev.ReviewImageNameOnServer
-            }).ToList()
-
+            }).ToList(),
+            IsAuction = product.IsAuction,
+            AuctionEndDate = product.AuctionExpirationDate,
+            BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) : product.MinumumBidPrice
         }).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
 
         if (product is null)

@@ -11,7 +11,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
 {
     private readonly IServiceScopeFactory scopeFactory;
     private readonly IBus bus;
-    private readonly TimeSpan _period = TimeSpan.FromSeconds(3);
+    private readonly TimeSpan _period = TimeSpan.FromMinutes(5);
     public OrderPaymentTimoutCheckerService(IServiceScopeFactory scopeFactory, IBus bus)
     {
         this.scopeFactory = scopeFactory;

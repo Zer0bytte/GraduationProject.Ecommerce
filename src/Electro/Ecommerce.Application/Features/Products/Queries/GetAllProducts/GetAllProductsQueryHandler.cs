@@ -9,18 +9,18 @@ using TagLib.Ape;
 
 namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts;
 
-public class GetAllProductsQueryHandler(IApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+public class GetAllProductsQueryHandler(IApplicationDbContext context, HostingConfig hostingConfig)
     : IRequestHandler<GetAllProductsQuery, CursorResult<GetAllProductsResult>>
 {
     public async Task<CursorResult<GetAllProductsResult>> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
     {
-        HttpRequest? httpRequest = httpContextAccessor.HttpContext?.Request;
-        string imageUrl = httpRequest?.Scheme + "://" + httpRequest?.Host + "/media/";
+        string imageUrl = hostingConfig.HostName + "/media/";
 
 
         IQueryable<Product> baseQuery = context.Products.AsQueryable();
         if (!string.IsNullOrWhiteSpace(query.SearchQuery))
-            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) || prd.Tags.Contains(query.SearchQuery) || prd.Description.Contains(query.SearchQuery));
+            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) 
+            || prd.Tags.Contains(query.SearchQuery) || prd.Description.Contains(query.SearchQuery));
 
         if (query.HasDiscount.HasValue && query.HasDiscount.Value)
         {
@@ -55,10 +55,8 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, IHttpCont
             {
                 baseQuery = baseQuery.Where(x => x.CreatedOn < decodedCursor.Date || x.CreatedOn == decodedCursor.Date && x.Id <= decodedCursor.LastId);
             }
-
-
-
         }
+
         var products = await baseQuery
             .OrderByDescending(x => x.CreatedOn)
             .ThenByDescending(x => x.Id)
@@ -74,7 +72,8 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, IHttpCont
                 Description = p.Description,
                 Images = p.Images.Select(p => imageUrl + p.NameOnServer).ToArray(),
                 Category = p.Category.Name,
-                CreatedOn = p.CreatedOn
+                CreatedOn = p.CreatedOn,
+                IsAuction = p.IsAuction
             }).Take(query.Limit + 1).ToListAsync(cancellationToken);
 
         var prdFinal = products.Take(query.Limit).ToList();
