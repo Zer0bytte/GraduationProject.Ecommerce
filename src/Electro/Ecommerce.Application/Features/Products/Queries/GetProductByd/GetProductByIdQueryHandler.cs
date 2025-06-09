@@ -57,7 +57,7 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
 
     }
 
-    private string MaskName(string fullName, int visibleChars)
+    private static string MaskName(string fullName, int visibleChars)
     {
         if (string.IsNullOrWhiteSpace(fullName))
             return string.Empty;
