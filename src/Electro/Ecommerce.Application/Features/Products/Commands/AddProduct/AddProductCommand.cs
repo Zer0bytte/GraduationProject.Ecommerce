@@ -12,12 +12,7 @@ public record AddProductCommand : IRequest<AddProductResult>
     public string Description { get; set; } = default!;
     public Guid CategoryId { get; set; }
     public List<IFormFile> Images { get; set; } = [];
-    public List<AddProductOption>? ProductOptions { get; set; } = [];
-}
-
-public record AddProductOption
-{
-    public string OptionGroupName { get; set; } = default!;
-    public string OptionName { get; set; } = default!;
-    public decimal OptionPrice { get; set; }
+    public bool IsAuction { get; set; }
+    public DateTime? AuctionExpirationDate { get; set; }
+    public decimal MinimumBidPrice { get; set; }
 }

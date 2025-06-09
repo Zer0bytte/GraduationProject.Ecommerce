@@ -14,7 +14,8 @@ public class AddProductReviewCommandHandler(IApplicationDbContext context,
         bool productExist = await context.Products.AsNoTracking().AnyAsync(prd => prd.Id == command.ProductId);
         if (!productExist) throw new NotFoundException("Product", command.ProductId);
 
-        bool userOrderedThisProduct = await context.Orders.AsNoTracking().AnyAsync(o => o.UserId == ICurrentUser.Id && o.OrderItems.Any(oi => oi.ProductId == command.ProductId));
+        bool userOrderedThisProduct = await context.Orders.AsNoTracking().AnyAsync(o => o.UserId == ICurrentUser.Id &&
+        o.OrderItems.Any(oi => oi.ProductId == command.ProductId && oi.Status == OrderItemStatus.Delivered));
 
         if (!userOrderedThisProduct) throw new InternalServerException("You can't review an item you havn't orderd!");
 

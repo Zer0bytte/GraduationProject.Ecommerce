@@ -20,6 +20,12 @@ public class Product : BaseEntity
     public List<OrderItem> OrderItems { get; set; } = [];
     public SupplierProfile? Supplier { get; set; }
     public Guid? SupplierId { get; set; }
+
+    public bool? IsAuction { get; set; }
+    public decimal? MinumumBidPrice { get; set; }
+    public List<AuctionBid>? AuctionBids { get; set; }
+    public DateTime? AuctionExpirationDate { get; set; }
+
     public bool IsOutOfStock()
     {
         return Stock <= 0;

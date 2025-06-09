@@ -21,8 +21,10 @@ public class AddProductCommandHandler(IApplicationDbContext context, DirectoryCo
             Stock = command.Stock,
             SKU = command.SKU,
             Tags = string.Join(",", command.Tags),
-            SupplierId = currentUser.SupplierId
-
+            SupplierId = currentUser.SupplierId,
+            IsAuction = command.IsAuction,
+            MinumumBidPrice = command.MinimumBidPrice,
+            AuctionExpirationDate = command.AuctionExpirationDate
         };
 
         foreach (IFormFile image in command.Images)
@@ -45,19 +47,6 @@ public class AddProductCommandHandler(IApplicationDbContext context, DirectoryCo
                 NameOnServer = fileName,
             });
         }
-        if (command.ProductOptions is not null)
-        {
-            foreach (AddProductOption option in command.ProductOptions)
-            {
-                product.Options.Add(new ProductOption
-                {
-                    OptionGroupName = option.OptionGroupName,
-                    OptionName = option.OptionName,
-                    OptionPrice = option.OptionPrice,
-                });
-            }
-        }
-
         await context.Products.AddAsync(product);
         await context.SaveChangesAsync(cancellationToken);
         return new AddProductResult() { IsSuccess = true };

@@ -4,6 +4,7 @@ using Ecommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace grad.Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250609080726_AddAuctionsExpirationDateNullable")]
+    partial class AddAuctionsExpirationDateNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.AppUser", b =>
@@ -177,7 +180,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuctionBid", (string)null);
+                    b.ToTable("AuctionBid");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.Category", b =>
@@ -205,7 +208,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.Conversation", b =>
@@ -245,7 +248,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Conversations", (string)null);
+                    b.ToTable("Conversations");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.CouponCode", b =>
@@ -284,7 +287,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CouponCodes", (string)null);
+                    b.ToTable("CouponCodes");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.Message", b =>
@@ -327,7 +330,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("ConversationId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.Order", b =>
@@ -388,7 +391,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.OrderItem", b =>
@@ -444,7 +447,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.Product", b =>
@@ -512,7 +515,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.ProductImage", b =>
@@ -541,7 +544,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages", (string)null);
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.ProductOption", b =>
@@ -577,7 +580,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductOptions", (string)null);
+                    b.ToTable("ProductOptions");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.ProductReview", b =>
@@ -617,7 +620,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductReviews", (string)null);
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.RefreshToken", b =>
@@ -653,7 +656,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.SupplierBalanceTransaction", b =>
@@ -680,7 +683,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("SupplierBalanceTransactions", (string)null);
+                    b.ToTable("SupplierBalanceTransactions");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.SupplierProfile", b =>
@@ -748,7 +751,7 @@ namespace grad.Ecommerce.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("SupplierProfiles", (string)null);
+                    b.ToTable("SupplierProfiles");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.TransactionRefernce", b =>
@@ -788,7 +791,7 @@ namespace grad.Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TransactionRefernces", (string)null);
+                    b.ToTable("TransactionRefernces");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>

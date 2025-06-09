@@ -16,6 +16,9 @@ public interface IApplicationDbContext
     DbSet<Conversation> Conversations { get; set; }
     DbSet<Message> Messages { get; set; }
     DbSet<RefreshToken> RefreshTokens { get; set; }
+    DbSet<AppUser> Users { get; }
+    DbSet<IdentityRole<Guid>> Roles { get; }
+    DbSet<IdentityUserRole<Guid>> UserRoles { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 }
