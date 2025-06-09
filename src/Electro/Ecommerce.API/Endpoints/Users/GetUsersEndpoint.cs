@@ -8,13 +8,13 @@ public class GetUsersEndpoint : ICarterModule
     {
         app.MapGet("/api/users", async ([AsParameters] GetUsersQuery query, ISender sender) =>
         {
-            IEnumerable<GetUsersResult> result = await sender.Send(query);
-            return Results.Ok(ApiResponse<IEnumerable<GetUsersResult>>.Success(result));
+            PagedResult<GetUsersResult> result = await sender.Send(query);
+            return Results.Ok(ApiResponse<PagedResult<GetUsersResult>>.Success(result));
 
         })
             .RequireAuthorization("Admin")
             .WithTags("Users")
             .WithSummary("Get Users")
-            .Produces<IEnumerable<GetUsersResult>>();
+            .Produces< ApiResponse<PagedResult<GetUsersResult>>>();
     }
 }
