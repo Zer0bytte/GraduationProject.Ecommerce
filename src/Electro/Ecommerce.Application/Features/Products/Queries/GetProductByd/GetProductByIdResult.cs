@@ -36,6 +36,7 @@ public record GetProductByIdResult
     public bool IsAuction { get; set; }
     public DateTime? AuctionEndDate { get; set; }
     public decimal? BidMinimumPrice { get; set; }
+    public bool CanBid { get; set; }
 }
 
 public record ImageResult

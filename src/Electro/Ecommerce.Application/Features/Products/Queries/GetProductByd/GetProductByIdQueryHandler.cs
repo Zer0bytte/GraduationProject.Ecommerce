@@ -43,7 +43,8 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
             }).ToList(),
             IsAuction = product.IsAuction,
             AuctionEndDate = product.AuctionExpirationDate,
-            BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) : product.MinumumBidPrice
+            BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) : product.MinumumBidPrice,
+            CanBid = !product.AuctionBids.Any(b=>b.UserId == currentUser.Id)
         }).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
 
         if (product is null)
