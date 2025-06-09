@@ -29,7 +29,10 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                     && o.PaymentStatus == PaymentStatus.Pending && o.Status != OrderStatus.Cancelled
                     && DateTime.UtcNow > o.OrderDate.AddMinutes(10)).ToListAsync(stoppingToken);
 
-                if (orders.Count == 0) continue;
+                if (orders.Count == 0) {
+                    await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                    continue;
+                }
 
                 await context.Orders
                     .Include(o => o.OrderItems)

@@ -4,6 +4,6 @@ namespace Ecommerce.Application.Features.Users.Queries.GetAdminUsers;
 
 public class GetUsersQuery : PagedQuery, IRequest<PagedResult<GetUsersResult>>
 {
-    public string SearchQuery { get; set; }
+    public string? SearchQuery { get; set; }
     public UserTypes UsersType { get; set; }
 }

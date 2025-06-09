@@ -28,6 +28,7 @@ public class GetUsersQueryHandler(IApplicationDbContext context)
             || u.Email!.Contains(query.SearchQuery));
         }
 
+        var count = await source.CountAsync();
 
         source = source.Skip((query.Page - 1) * query.Limit)
             .Take(query.Limit);
@@ -42,7 +43,6 @@ public class GetUsersQueryHandler(IApplicationDbContext context)
                 });
 
 
-        var count = await source.CountAsync();
         return PagedResult<GetUsersResult>.Create(query, count, usersInRole); ;
 
     }
