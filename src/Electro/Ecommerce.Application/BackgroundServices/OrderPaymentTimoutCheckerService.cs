@@ -28,7 +28,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
 
                 var orders = await context.Orders.Where(o => o.PaymentMethod == PaymentMethod.Online
                     && o.PaymentStatus == PaymentStatus.Pending && o.Status != OrderStatus.Cancelled
-                    && DateTime.UtcNow > o.OrderDate.AddMinutes(10)).ToListAsync(stoppingToken);
+                    && DateTime.Now > o.OrderDate.AddMinutes(10)).ToListAsync(stoppingToken);
 
                 if (orders.Count > 0)
                 {
@@ -36,7 +36,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                         .Include(o => o.OrderItems)
                         .Where(o => o.PaymentMethod == PaymentMethod.Online
                         && o.PaymentStatus == PaymentStatus.Pending
-                        && DateTime.UtcNow > o.OrderDate.AddMinutes(10))
+                        && DateTime.Now > o.OrderDate.AddMinutes(10))
                         .ExecuteUpdateAsync(prop => prop
                         .SetProperty(p => p.Status, OrderStatus.Cancelled)
                         .SetProperty(p => p.PaymentStatus, PaymentStatus.Failed)
@@ -47,7 +47,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                     await context.OrderItems
                     .Where(oi => oi.Order.PaymentMethod == PaymentMethod.Online
                          && oi.Order.PaymentStatus == PaymentStatus.Pending
-                         && DateTime.UtcNow > oi.Order.OrderDate.AddMinutes(10))
+                         && DateTime.Now > oi.Order.OrderDate.AddMinutes(10))
                     .ExecuteUpdateAsync(prop => prop
                     .SetProperty(p => p.Status, OrderItemStatus.Cancelled)
                     .SetProperty(p => p.CancellationReason, "Payment timeout"), stoppingToken);
