@@ -69,7 +69,7 @@ try
         .WithOrigins(origins);
     }));
 
-    builder.Services.AddHostedService<OrderPaymentTimoutCheckerService>();
+    builder.Services.AddHostedService<OrderPaymentTimeoutCheckerService>();
 
     WebApplication app = builder.Build();
     app.UseCors("web");
