@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ImageProcessor.Common.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,13 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
 {
     private readonly IServiceScopeFactory scopeFactory;
     private readonly IBus bus;
+    private readonly ILogger<OrderPaymentTimoutCheckerService> _logger;
     private readonly TimeSpan _period = TimeSpan.FromMinutes(5);
-    public OrderPaymentTimoutCheckerService(IServiceScopeFactory scopeFactory, IBus bus)
+    public OrderPaymentTimoutCheckerService(IServiceScopeFactory scopeFactory, IBus bus, ILogger<OrderPaymentTimoutCheckerService> logger)
     {
         this.scopeFactory = scopeFactory;
         this.bus = bus;
+        _logger = logger;
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -30,6 +34,7 @@ public class OrderPaymentTimoutCheckerService : BackgroundService
                     && o.PaymentStatus == PaymentStatus.Pending && o.Status != OrderStatus.Cancelled
                     && DateTime.Now > o.OrderDate.AddMinutes(10)).ToListAsync(stoppingToken);
 
+                _logger.LogInformation($"Orders Should Cancelled Count :{orders.Count}");
                 if (orders.Count > 0)
                 {
                     await context.Orders
