@@ -1,6 +1,7 @@
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Rules;
 using MassTransit;
+using MassTransit.Transports;
 using Microsoft.Extensions.Hosting;
 using TagLib.Ape;
 
@@ -51,15 +52,14 @@ public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context, 
 
         if (command.Status == OrderItemStatus.Delivered)
         {
-            bool allItemsDelivered = await context.OrderItems
-                .Where(oi => oi.OrderId == orderItem.OrderId && oi.Status != OrderItemStatus.Cancelled)
-                .AllAsync(oi => oi.Status == OrderItemStatus.Delivered);
-
-            if (allItemsDelivered)
+            if (!context.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId
+               && new[] { OrderItemStatus.Pending, OrderItemStatus.Confirmed, OrderItemStatus.Shipped }
+               .Contains(oi.Status)))
             {
-                orderItem.Order.Status = OrderStatus.Delivered;
-
+                orderItem.Order.Status = OrderStatus.Completed;
             }
+
+
 
             var supplierProfile = context.SupplierProfiles.Find(orderItem.SupplierId);
             if (supplierProfile != null)
