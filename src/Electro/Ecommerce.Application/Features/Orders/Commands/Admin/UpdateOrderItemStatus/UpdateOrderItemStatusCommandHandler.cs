@@ -52,7 +52,7 @@ public class UpdateOrderItemStatusCommandHandler(IApplicationDbContext context, 
 
         if (command.Status == OrderItemStatus.Delivered)
         {
-            if (!context.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId
+            if (!context.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId && oi.Id != orderItem.Id
                && new[] { OrderItemStatus.Pending, OrderItemStatus.Confirmed, OrderItemStatus.Shipped }
                .Contains(oi.Status)))
             {
