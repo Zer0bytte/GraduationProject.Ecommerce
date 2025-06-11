@@ -1,5 +1,5 @@
-﻿using Ecommerce.Application.Features.Suppliers.Queries.GetAllSuppliers;
-using Ecommerce.Application.Features.Suppliers.Queries.GetCurrentSupplier;
+﻿using Ecommerce.Application.Features.Charts.GetCurrentSupplier;
+using Ecommerce.Application.Features.Suppliers.Queries.GetAllSuppliers;
 
 namespace Ecommerce.API.Endpoints.Suppliers;
 

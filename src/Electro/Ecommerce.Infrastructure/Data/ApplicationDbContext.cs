@@ -25,6 +25,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRole<Guid
     public DbSet<CouponCode> CouponCodes { get; set; }
     public DbSet<SupplierProfile> SupplierProfiles { get; set; }
     public DbSet<ProductOption> ProductOptions { get; set; }
+    public DbSet<SupplierNotification> SupplierNotifications { get; set; }
+
     public DbSet<SupplierBalanceTransaction> SupplierBalanceTransactions { get; set; }
     public DbSet<Conversation> Conversations { get; set; }
     public DbSet<Message> Messages { get; set; }

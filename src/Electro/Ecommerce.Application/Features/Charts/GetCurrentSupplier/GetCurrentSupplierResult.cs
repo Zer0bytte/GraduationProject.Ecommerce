@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Suppliers.Queries.GetCurrentSupplier;
+﻿namespace Ecommerce.Application.Features.Charts.GetCurrentSupplier;
 public class GetCurrentSupplierResult
 {
     public Guid Id { get; set; }

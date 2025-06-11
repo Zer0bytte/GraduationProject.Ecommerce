@@ -1,4 +1,6 @@
 ﻿using Ecommerce.Application.Features.Orders.Queries.User.GetOrderPriceDetails;
+using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace Ecommerce.Application.Features.Orders.Commands.User.CreateOrder;
 public class AsyncLock
@@ -18,7 +20,8 @@ public class AsyncLock
         public void Dispose() => _toRelease.Release();
     }
 }
-public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayService paymentService, IDistributedCache cache, ICurrentUser ICurrentUser, ISender sender)
+public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayService paymentService,
+    IDistributedCache cache, ICurrentUser currentUser)
     : IRequestHandler<CreateOrderCommand, CreateOrderResult>
 {
     private static readonly AsyncLock _lock = new AsyncLock();
@@ -31,12 +34,15 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
             if (string.IsNullOrEmpty(cartJson))
                 throw new NotFoundException("Cart", command.CartId);
 
-            Domain.Entities.Address? address = await context.Addresses.FirstOrDefaultAsync(ad => ad.Id == command.Address && ad.UserId == ICurrentUser.Id);
+            Domain.Entities.Address? address = await context.Addresses.FirstOrDefaultAsync(ad => ad.Id == command.Address && ad.UserId == currentUser.Id);
             if (address is null) throw new NotFoundException("Address", command.Address);
 
             CartDto? cart = JsonConvert.DeserializeObject<CartDto>(cartJson);
             List<OrderItem> orderItems = new();
             decimal orderPriceDetails = 0;
+
+            Dictionary<Guid, OrderNotificationDto> notifications = new();
+
             foreach (CartItemDto cartItem in cart.CartItems)
             {
                 Product? product = await context.Products
@@ -64,19 +70,42 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
                     Status = OrderItemStatus.Pending
                 });
                 orderPriceDetails += product.Price * (1 - product.Discount / 100m) * cartItem.Quantity;
-            }
 
+
+                if (notifications.ContainsKey(product.SupplierId.Value))
+                {
+                    notifications[product.SupplierId.Value].ItemsCount++;
+                }
+                else
+                {
+                    notifications[product.SupplierId.Value] = new OrderNotificationDto
+                    {
+                        ItemsCount = 1,
+                        BuyerName = currentUser.FullName
+                    };
+
+                }
+            }
+            foreach (var notification in notifications)
+            {
+                context.SupplierNotifications.Add(new SupplierNotification
+                {
+                    NotificationType = NotificationType.Order,
+                    SupplierId = notification.Key,
+                    NotificationPayload = JsonConvert.SerializeObject(notification.Value)
+                });
+            }
             Order order = new Order
             {
                 Id = Guid.NewGuid(),
-                BuyerEmail = ICurrentUser.Email,
+                BuyerEmail = currentUser.Email,
                 PaymentMethod = command.PaymentMethod,
                 OrderDate = DateTime.UtcNow,
                 OrderItems = orderItems,
                 AddressId = command.Address,
                 Status = OrderStatus.Pending,
                 PaymentStatus = PaymentStatus.None,
-                UserId = ICurrentUser.Id,
+                UserId = currentUser.Id,
                 SubTotal = orderPriceDetails,
             };
 
@@ -111,13 +140,15 @@ public class CreateOrderCommandHandler(IApplicationDbContext context, IClickPayS
 
                 TransactionRefernce transactionReference = new TransactionRefernce
                 {
-                    UserId = ICurrentUser.Id,
+                    UserId = currentUser.Id,
                     Amount = order.SubTotal,
                     OrderId = order.Id,
                     TransactionRefId = paymentIntent.TranRef,
                 };
                 await context.TransactionRefernces.AddAsync(transactionReference);
             }
+
+
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync(cancellationToken);
             await cache.RemoveAsync(command.CartId);

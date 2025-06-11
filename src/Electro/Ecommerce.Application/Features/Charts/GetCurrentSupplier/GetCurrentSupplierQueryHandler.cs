@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Suppliers.Queries.GetCurrentSupplier;
+﻿namespace Ecommerce.Application.Features.Charts.GetCurrentSupplier;
 public class GetCurrentSupplierQueryHandler(ICurrentUser currentUser, IApplicationDbContext context)
     : IRequestHandler<GetCurrentSupplierQuery, GetCurrentSupplierResult>
 {
@@ -14,7 +14,7 @@ public class GetCurrentSupplierQueryHandler(ICurrentUser currentUser, IApplicati
         var salesChart = context.OrderItems.GroupBy(oi => oi.Product.Category.Name).Select(g => new SalesChartItem
         {
             CategoryName = g.Key,
-            Count = context.OrderItems.Where(oi=>oi.SupplierId == supplier.Id && oi.Product.Category.Name == g.Key).Sum(oi=>oi.Quantity)
+            Count = context.OrderItems.Where(oi => oi.SupplierId == supplier.Id && oi.Product.Category.Name == g.Key).Sum(oi => oi.Quantity)
         })
             .ToList();
 

@@ -17,6 +17,7 @@ public interface IApplicationDbContext
     DbSet<Message> Messages { get; set; }
     DbSet<AuctionBid> AuctionBids { get; set; }
     DbSet<RefreshToken> RefreshTokens { get; set; }
+    DbSet<SupplierNotification> SupplierNotifications { get; set; }
     DbSet<AppUser> Users { get; }
     DbSet<IdentityRole<Guid>> Roles { get; }
     DbSet<IdentityUserRole<Guid>> UserRoles { get; }

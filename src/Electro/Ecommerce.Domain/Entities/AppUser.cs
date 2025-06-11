@@ -4,6 +4,7 @@ namespace Ecommerce.Domain.Entities;
 
 public class AppUser : IdentityUser<Guid>
 {
+    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     public string FullName { get; set; } = default!;
     public bool IsSeller { get; set; }
     public Guid? SupplierProfileId { get; set; }
