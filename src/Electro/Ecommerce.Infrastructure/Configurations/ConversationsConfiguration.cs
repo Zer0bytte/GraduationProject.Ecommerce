@@ -22,3 +22,13 @@ internal class ConversationsConfiguration : IEntityTypeConfiguration<Conversatio
             dbType => (MessageType)Enum.Parse(typeof(MessageType), dbType));
     }
 }
+
+
+internal class SupplierNotificationsConfigurations : IEntityTypeConfiguration<SupplierNotification>
+{
+    public void Configure(EntityTypeBuilder<SupplierNotification> builder)
+    {
+        builder.Property(c => c.NotificationType).HasConversion(type => type.ToString(),
+            dbType => (NotificationType)Enum.Parse(typeof(NotificationType), dbType));
+    }
+}
