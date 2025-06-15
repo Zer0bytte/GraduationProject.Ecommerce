@@ -38,13 +38,13 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
             }).ToList(),
             ProductBids = product.AuctionBids.Select(b => new ProductBidResult
             {
-                Username = MaskName(b.User.FullName, 4),
+                Username = b.UserId == currentUser.Id ? "انا" : MaskName(b.User.FullName, 4),
                 Price = b.Price
             }).ToList(),
             IsAuction = product.IsAuction,
             AuctionEndDate = product.AuctionExpirationDate,
-            BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) : product.MinumumBidPrice,
-            CanBid = !product.AuctionBids.Any(b=>b.UserId == currentUser.Id)
+            BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) + 1 : product.MinumumBidPrice,
+            CanBid = !product.AuctionBids.Any(b => b.UserId == currentUser.Id)
         }).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
 
         if (product is null)
