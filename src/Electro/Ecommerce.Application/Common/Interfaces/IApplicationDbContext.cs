@@ -15,7 +15,6 @@ public interface IApplicationDbContext
     DbSet<SupplierBalanceTransaction> SupplierBalanceTransactions { get; set; }
     DbSet<Conversation> Conversations { get; set; }
     DbSet<Message> Messages { get; set; }
-    DbSet<AuctionBid> AuctionBids { get; set; }
     DbSet<RefreshToken> RefreshTokens { get; set; }
     DbSet<SupplierNotification> SupplierNotifications { get; set; }
     DbSet<AppUser> Users { get; }

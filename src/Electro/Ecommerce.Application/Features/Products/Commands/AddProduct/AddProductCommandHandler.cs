@@ -22,9 +22,6 @@ public class AddProductCommandHandler(IApplicationDbContext context, DirectoryCo
             SKU = command.SKU,
             Tags = string.Join(",", command.Tags),
             SupplierId = currentUser.SupplierId,
-            IsAuction = command.IsAuction,
-            MinumumBidPrice = command.MinimumBidPrice,
-            AuctionExpirationDate = command.AuctionExpirationDate
         };
 
         foreach (IFormFile image in command.Images)

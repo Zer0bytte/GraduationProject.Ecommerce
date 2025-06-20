@@ -35,16 +35,7 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
                 ReviewText = rev.ReviewText,
                 Stars = rev.Stars,
                 ReviewImage = imageUrl + rev.ReviewImageNameOnServer
-            }).ToList(),
-            ProductBids = product.AuctionBids.Select(b => new ProductBidResult
-            {
-                Username = b.UserId == currentUser.Id ? "انا" : MaskName(b.User.FullName, 4),
-                Price = b.Price
-            }).ToList(),
-            IsAuction = product.IsAuction,
-            AuctionEndDate = product.AuctionExpirationDate,
-            BidMinimumPrice = product.AuctionBids.Any() ? product.AuctionBids.Max(b => b.Price) + 1 : product.MinumumBidPrice,
-            CanBid = !product.AuctionBids.Any(b => b.UserId == currentUser.Id)
+            }).ToList()
         }).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
 
         if (product is null)
@@ -58,20 +49,7 @@ public class GetProductByIdQueryHandler(IApplicationDbContext context, HostingCo
 
     }
 
-    private static string MaskName(string fullName, int visibleChars)
-    {
-        if (string.IsNullOrWhiteSpace(fullName))
-            return string.Empty;
-
-        if (visibleChars >= fullName.Length)
-            return fullName;
-
-        string visiblePart = fullName.Substring(0, visibleChars);
-        string maskedPart = new string('*', fullName.Length - visibleChars);
-
-        return visiblePart + maskedPart;
-    }
-
+   
     private static StockStatus CalculateStockStatus(int stock)
     {
         if (stock > 10) return StockStatus.InStock;

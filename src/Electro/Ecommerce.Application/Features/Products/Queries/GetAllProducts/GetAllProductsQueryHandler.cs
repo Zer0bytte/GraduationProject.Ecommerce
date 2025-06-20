@@ -1,11 +1,5 @@
 ﻿using Ecommerce.Application.Common.Persistance.Cursor;
-using Ecommerce.Domain.Entities;
-using Google.Apis.Auth;
 using MassTransit.Internals;
-using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
-using TagLib.Ape;
 
 namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts;
 
@@ -16,10 +10,11 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, HostingCo
     {
         string imageUrl = hostingConfig.HostName + "/media/";
 
+       
 
-        IQueryable<Product> baseQuery = context.Products.AsQueryable();
+        var baseQuery = context.Products.AsQueryable();
         if (!string.IsNullOrWhiteSpace(query.SearchQuery))
-            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery) 
+            baseQuery = baseQuery.Where(prd => prd.Title.Contains(query.SearchQuery)
             || prd.Tags.Contains(query.SearchQuery) || prd.Description.Contains(query.SearchQuery));
 
         if (query.HasDiscount.HasValue && query.HasDiscount.Value)
@@ -44,20 +39,17 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, HostingCo
             baseQuery = baseQuery.Where(p => p.CategoryId == query.CategoryId);
         }
 
-        if (!string.IsNullOrWhiteSpace(query.OptionGroupName) && !string.IsNullOrWhiteSpace(query.OptionValue))
-        {
-            baseQuery = baseQuery.Where(product => product.Options.Any(option => option.OptionGroupName == query.OptionGroupName && option.OptionName == query.OptionValue));
-        }
+
         if (!string.IsNullOrWhiteSpace(query.Cursor))
         {
-            var decodedCursor = Cursor.Decode(query.Cursor);
+            Cursor? decodedCursor = Cursor.Decode(query.Cursor);
             if (decodedCursor is not null)
             {
                 baseQuery = baseQuery.Where(x => x.CreatedOn < decodedCursor.Date || x.CreatedOn == decodedCursor.Date && x.Id <= decodedCursor.LastId);
             }
         }
 
-        var products = await baseQuery
+        List<GetAllProductsResult> products = await baseQuery
             .OrderByDescending(x => x.CreatedOn)
             .ThenByDescending(x => x.Id)
             .Select(p => new GetAllProductsResult
@@ -73,16 +65,15 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, HostingCo
                 Images = p.Images.Select(p => imageUrl + p.NameOnServer).ToArray(),
                 Category = p.Category.Name,
                 CreatedOn = p.CreatedOn,
-                IsAuction = p.IsAuction
             }).Take(query.Limit + 1).ToListAsync(cancellationToken);
 
-        var prdFinal = products.Take(query.Limit).ToList();
+        List<GetAllProductsResult> prdFinal = products.Take(query.Limit).ToList();
 
-        var hasMore = products.Count > query.Limit;
+        bool hasMore = products.Count > query.Limit;
         DateTime? nextDate = products.Count > query.Limit ? products[^1].CreatedOn : null;
         Guid? nextId = products.Count > query.Limit ? products[^1].Id : null;
 
-        var result = new CursorResult<GetAllProductsResult>
+        CursorResult<GetAllProductsResult> result = new CursorResult<GetAllProductsResult>
         {
             Items = prdFinal,
             Cursor = nextDate is not null && nextId is not null ? Cursor.Encode(nextDate.Value, nextId.Value) : null,
