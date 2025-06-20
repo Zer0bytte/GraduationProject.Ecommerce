@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Features.Users.Commands.RestoreUser;
+﻿using Ecommerce.Application.Features.Users.Commands.ReactivateUser;
 
 namespace Ecommerce.API.Endpoints.Users;
 

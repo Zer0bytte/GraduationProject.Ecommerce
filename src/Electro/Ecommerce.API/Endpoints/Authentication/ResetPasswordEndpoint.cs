@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Features.Authentication.Commands.ResetPassword;
+﻿using Ecommerce.Application.Features.Authentication.Commands.ForgotPassword;
 
 namespace Ecommerce.API.Endpoints.Authentication;
 

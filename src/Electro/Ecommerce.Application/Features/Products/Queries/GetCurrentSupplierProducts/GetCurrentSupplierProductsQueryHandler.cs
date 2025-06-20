@@ -1,7 +1,7 @@
 ﻿using Ecommerce.Application.Common.Persistance.Cursor;
 using MassTransit.Internals;
 
-namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts;
+namespace Ecommerce.Application.Features.Products.Queries.GetCurrentSupplierProducts;
 
 public class GetCurrentSupplierProductsQueryHandler(IApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser)
     : IRequestHandler<GetCurrentSupplierProductsQuery, CursorResult<GetCurrentSupplierProductsResult>>

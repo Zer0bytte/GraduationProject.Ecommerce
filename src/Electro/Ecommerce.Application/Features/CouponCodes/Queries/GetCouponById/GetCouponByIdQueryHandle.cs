@@ -1,6 +1,4 @@
-﻿using Ecommerce.Application.Features.CouponCodes.Queries.GetById;
-
-namespace Ecommerce.Application.Features.CouponCodes.Queries.GetCouponById;
+﻿namespace Ecommerce.Application.Features.CouponCodes.Queries.GetCouponById;
 public class GetCouponByIdQueryHandle(IApplicationDbContext context) : IRequestHandler<GetCouponByIdQuery, GetCouponByIdResult>
 {
     public async Task<GetCouponByIdResult> Handle(GetCouponByIdQuery request, CancellationToken cancellationToken)

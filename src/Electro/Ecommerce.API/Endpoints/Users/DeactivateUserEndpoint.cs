@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Features.Users.Commands.DeleteAdmin;
+﻿using Ecommerce.Application.Features.Users.Commands.DeactivateUser;
 
 namespace Ecommerce.API.Endpoints.Users;
 

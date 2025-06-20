@@ -1,5 +1,6 @@
 ﻿
 using Ecommerce.Application.Features.CouponCodes.Commands.DeactivateCouponCode;
+using Ecommerce.Application.Features.CouponCodes.Commands.ReactivateCouponCode;
 
 namespace Ecommerce.API.Endpoints.CouponCode;
 

@@ -1,6 +1,6 @@
 ﻿using Ecommerce.Application.Common.Enums;
 
-namespace Ecommerce.Application.Features.Users.Queries.GetAdminUsers;
+namespace Ecommerce.Application.Features.Users.Queries.GetUsers;
 
 public class GetUsersQuery : PagedQuery, IRequest<PagedResult<GetUsersResult>>
 {

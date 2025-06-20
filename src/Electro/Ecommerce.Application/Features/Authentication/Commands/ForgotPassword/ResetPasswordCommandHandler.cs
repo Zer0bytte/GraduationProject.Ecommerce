@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Authentication.Commands.ResetPassword;
+﻿namespace Ecommerce.Application.Features.Authentication.Commands.ForgotPassword;
 public class ResetPasswordCommandHandler(UserManager<AppUser> userManager, IBus bus) : IRequestHandler<ResetPasswordCommand, ResetPasswordResult>
 {
     public async Task<ResetPasswordResult> Handle(ResetPasswordCommand command, CancellationToken cancellationToken)

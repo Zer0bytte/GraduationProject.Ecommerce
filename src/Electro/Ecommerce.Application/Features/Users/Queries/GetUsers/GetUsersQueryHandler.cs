@@ -2,7 +2,7 @@
 using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace Ecommerce.Application.Features.Users.Queries.GetAdminUsers;
+namespace Ecommerce.Application.Features.Users.Queries.GetUsers;
 
 public class GetUsersQueryHandler(IApplicationDbContext context)
     : IRequestHandler<GetUsersQuery, PagedResult<GetUsersResult>>

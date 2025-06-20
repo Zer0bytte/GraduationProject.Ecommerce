@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Users.Queries.GetAdminUsers;
+﻿namespace Ecommerce.Application.Features.Users.Queries.GetUsers;
 
 public record GetUsersResult
 {

@@ -1,6 +1,7 @@
 ﻿using Ecommerce.API.ResponseStructure;
 using Ecommerce.Application.Common.Persistance.Cursor;
 using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
+using Ecommerce.Application.Features.Products.Queries.GetCurrentSupplierProducts;
 using Ecommerce.Application.Features.Products.Queries.GetMostSoldProducts;
 using System.Collections.Generic;
 

@@ -1,5 +1,7 @@
-﻿namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory;
-internal sealed class UpdateCategoryCommandHandler(IApplicationDbContext context) : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResult>
+﻿using Ecommerce.Application.Caching;
+
+namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory;
+internal sealed class UpdateCategoryCommandHandler(IApplicationDbContext context, DeleteCategoriesCache categoriesCache) : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResult>
 {
     public async Task<UpdateCategoryResult> Handle(UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
@@ -15,7 +17,7 @@ internal sealed class UpdateCategoryCommandHandler(IApplicationDbContext context
         category.ModifiedOn = DateTime.UtcNow;
 
         await context.SaveChangesAsync(cancellationToken);
-
+        await categoriesCache.DeleteAsync();
         return new UpdateCategoryResult
         {
             IsSuccess = true

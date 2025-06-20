@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Users.Commands.DeleteAdmin;
+﻿namespace Ecommerce.Application.Features.Users.Commands.DeactivateUser;
 
 public record DeactivateUserResult
 {

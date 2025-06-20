@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Features.Users.Queries.GetAdminUsers;
+﻿using Ecommerce.Application.Features.Users.Queries.GetUsers;
 
 namespace Ecommerce.API.Endpoints.Users;
 

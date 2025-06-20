@@ -1,7 +1,4 @@
-﻿
-using Ecommerce.Application.Features.CouponCodes.Queries.GetById;
-using Ecommerce.Application.Features.CouponCodes.Queries.GetCouponById;
-using Ecommerce.Application.Features.CouponCodes.Queries.GetCouponCodes;
+﻿using Ecommerce.Application.Features.CouponCodes.Queries.GetCouponById;
 
 namespace Ecommerce.API.Endpoints.CouponCode;
 

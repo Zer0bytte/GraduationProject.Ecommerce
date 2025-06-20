@@ -1,5 +1,5 @@
 ﻿using Ecommerce.Application.Common.Persistance.Cursor;
-using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
+using Ecommerce.Application.Features.Products.Queries.GetCurrentSupplierProducts;
 
 namespace Ecommerce.API.Endpoints.Products;
 

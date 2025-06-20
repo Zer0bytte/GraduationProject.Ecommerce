@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts;
+﻿namespace Ecommerce.Application.Features.Products.Queries.GetCurrentSupplierProducts;
 
 public class GetCurrentSupplierProductsResult
 {

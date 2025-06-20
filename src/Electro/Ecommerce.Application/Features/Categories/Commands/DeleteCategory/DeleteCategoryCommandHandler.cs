@@ -1,6 +1,8 @@
-﻿namespace Ecommerce.Application.Features.Categories.Commands.DeleteCategory;
+﻿using Ecommerce.Application.Caching;
 
-public class DeleteCategoryCommandHandler(IApplicationDbContext context) : IRequestHandler<DeleteCategoryCommand, DeleteCategoryResult>
+namespace Ecommerce.Application.Features.Categories.Commands.DeleteCategory;
+
+public class DeleteCategoryCommandHandler(IApplicationDbContext context, DeleteCategoriesCache categoriesCache) : IRequestHandler<DeleteCategoryCommand, DeleteCategoryResult>
 {
     public async Task<DeleteCategoryResult> Handle(DeleteCategoryCommand command, CancellationToken cancellationToken)
     {
@@ -10,6 +12,7 @@ public class DeleteCategoryCommandHandler(IApplicationDbContext context) : IRequ
         category.MarkAsDeleted();
 
         await context.SaveChangesAsync(cancellationToken);
+        await categoriesCache.DeleteAsync();
         return new DeleteCategoryResult
         {
             IsSuccess = true

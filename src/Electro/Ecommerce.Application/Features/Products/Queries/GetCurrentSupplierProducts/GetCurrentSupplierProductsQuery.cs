@@ -1,6 +1,6 @@
 ﻿using Ecommerce.Application.Common.Persistance.Cursor;
 
-namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts;
+namespace Ecommerce.Application.Features.Products.Queries.GetCurrentSupplierProducts;
 
 public class GetCurrentSupplierProductsQuery : CursorQuery, IRequest<CursorResult<GetCurrentSupplierProductsResult>>
 {

@@ -21,6 +21,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 using Serilog;
+using StackExchange.Redis;
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
@@ -51,6 +52,9 @@ try
     builder.Services.AddSingleton<IClickPayService, ClickPayService>();
     builder.Services.AddExceptionHandler<CustomExceptionHandler>();
     builder.Services.AddSignalR();
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect("localhost:6379") // or use your Redis URL
+);
 
 
     builder.Services.AddOpenApi("v1", options =>

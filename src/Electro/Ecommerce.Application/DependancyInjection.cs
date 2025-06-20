@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Application.Behaviours;
+using Ecommerce.Application.Caching;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -21,6 +22,8 @@ public static class DependancyInjection
             busConfig.AddConsumers(Assembly.GetExecutingAssembly());
             busConfig.UsingInMemory((context, config) => config.ConfigureEndpoints(context));
         });
+
+        services.AddScoped<DeleteCategoriesCache>();
         return services;
     }
 }

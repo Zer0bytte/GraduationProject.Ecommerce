@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.CouponCodes.Commands.DeactivateCouponCode;
+﻿namespace Ecommerce.Application.Features.CouponCodes.Commands.ReactivateCouponCode;
 public class ReactivateCouponCodeCommandHandler(IApplicationDbContext context) : IRequestHandler<ReactivateCouponCodeCommand, ReactivateCouponCodeResult>
 {
     public async Task<ReactivateCouponCodeResult> Handle(ReactivateCouponCodeCommand command, CancellationToken cancellationToken)

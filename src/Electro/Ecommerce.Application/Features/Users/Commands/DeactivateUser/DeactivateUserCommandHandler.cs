@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Users.Commands.DeleteAdmin;
+﻿namespace Ecommerce.Application.Features.Users.Commands.DeactivateUser;
 
 public class DeactivateUserCommandHandler(UserManager<AppUser> userManager, ICurrentUser currentUser, IApplicationDbContext context) : IRequestHandler<DeactivateUserCommand, DeactivateUserResult>
 {

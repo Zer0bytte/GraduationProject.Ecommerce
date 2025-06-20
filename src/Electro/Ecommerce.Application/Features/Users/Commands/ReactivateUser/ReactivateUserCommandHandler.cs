@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.Features.Users.Commands.RestoreUser;
+﻿namespace Ecommerce.Application.Features.Users.Commands.ReactivateUser;
 public class ReactivateUserCommandHandler(UserManager<AppUser> userManager) : IRequestHandler<ReactivateUserCommand, ReactivateUserResult>
 {
     public async Task<ReactivateUserResult> Handle(ReactivateUserCommand command, CancellationToken cancellationToken)
@@ -10,7 +10,7 @@ public class ReactivateUserCommandHandler(UserManager<AppUser> userManager) : IR
             throw new ApplicationException("هذا المستخدم نشط بالفعل");
 
         await userManager.SetLockoutEndDateAsync(user, null);
-       
+
         return new ReactivateUserResult
         {
             IsSuccess = true

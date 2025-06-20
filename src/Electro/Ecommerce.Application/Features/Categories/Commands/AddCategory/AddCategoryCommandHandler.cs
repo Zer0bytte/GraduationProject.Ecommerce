@@ -1,9 +1,11 @@
-﻿using ImageProcessor;
+﻿using Ecommerce.Application.Caching;
+using ImageProcessor;
 using ImageProcessor.Plugins.WebP.Imaging.Formats;
-
+using StackExchange.Redis;
 namespace Ecommerce.Application.Features.Categories.Commands.AddCategory;
 
-public class AddCategoryCommandHandler(IApplicationDbContext context, DirectoryConfiguration directoryConfiguration) : IRequestHandler<AddCategoryCommand, AddCategoryResult>
+public class AddCategoryCommandHandler(IApplicationDbContext context, DirectoryConfiguration directoryConfiguration,
+    DeleteCategoriesCache deleteCategoriesCache) : IRequestHandler<AddCategoryCommand, AddCategoryResult>
 {
     public async Task<AddCategoryResult> Handle(AddCategoryCommand command, CancellationToken cancellationToken)
     {
@@ -34,6 +36,7 @@ public class AddCategoryCommandHandler(IApplicationDbContext context, DirectoryC
 
         await context.SaveChangesAsync(cancellationToken);
 
+        await deleteCategoriesCache.DeleteAsync();
         return new AddCategoryResult
         {
             IsSuccess = true
