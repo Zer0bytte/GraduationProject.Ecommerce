@@ -4,6 +4,7 @@ using Ecommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace grad.Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250621162805_ChangeSupplierVerificationDataToDB")]
+    partial class ChangeSupplierVerificationDataToDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -708,17 +711,29 @@ namespace grad.Ecommerce.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("NationalIdBackNameOnServer")
+                    b.Property<string>("NationalIdBackNameOnServer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("NationalIdBackNameOnServer2")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<byte[]>("NationalIdFrontNameOnServer")
+                    b.Property<string>("NationalIdFrontNameOnServer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("NationalIdFrontNameOnServer2")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("StoreName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("TaxCardNameOnServer")
+                    b.Property<string>("TaxCardNameOnServer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("TaxCardNameOnServer2")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("TaxNumber")

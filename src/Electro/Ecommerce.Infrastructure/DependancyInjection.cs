@@ -43,6 +43,10 @@ public static class DependancyInjection
         services.AddSingleton(hostingConfig);
 
 
+        SMTPConfig sMTPConfig = new();
+        configuration.GetSection("SMTPConfig").Bind(sMTPConfig);
+        services.AddSingleton(sMTPConfig);
+
         ChatGptConfig chatGptConfig = new();
         configuration.GetSection("ChatGptConfig").Bind(chatGptConfig);
         services.AddSingleton(chatGptConfig);

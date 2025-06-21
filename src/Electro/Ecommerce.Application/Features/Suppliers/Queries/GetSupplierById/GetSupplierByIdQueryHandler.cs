@@ -1,4 +1,6 @@
-﻿namespace Ecommerce.Application.Features.Suppliers.Queries.GetSupplierById;
+﻿using System.Buffers.Text;
+
+namespace Ecommerce.Application.Features.Suppliers.Queries.GetSupplierById;
 
 public class GetSupplierByIdQueryHandler(IApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdResult>
 {
@@ -18,9 +20,9 @@ public class GetSupplierByIdQueryHandler(IApplicationDbContext context, IHttpCon
             TaxNumber = supplier.TaxNumber,
             VerificationStatus = supplier.VerificationStatus,
             NationalIdNumber = supplier.NationalId,
-            NationalIdFront = imageUrl + supplier.NationalIdFrontNameOnServer,
-            NationalIdBack = imageUrl + supplier.NationalIdBackNameOnServer,
-            TaxCard = imageUrl + supplier.TaxCardNameOnServer,
+            NationalIdFront = $"data:image/jpeg;base64,{Convert.ToBase64String(supplier.NationalIdFrontNameOnServer)}",
+            NationalIdBack = $"data:image/jpeg;base64,{Convert.ToBase64String(supplier.NationalIdBackNameOnServer)}",
+            TaxCard = $"data:image/jpeg;base64,{Convert.ToBase64String(supplier.TaxCardNameOnServer)}",
 
         };
 

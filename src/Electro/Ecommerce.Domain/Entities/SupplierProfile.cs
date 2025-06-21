@@ -21,9 +21,11 @@ public class SupplierProfile : BaseEntity
     public string NationalId { get; set; } = default!;
     public List<Product> Products { get; set; } = [];
     public List<SupplierBalanceTransaction> BalanceTransactions { get; set; } = [];
-    public string NationalIdFrontNameOnServer { get; set; } = default!;
-    public string NationalIdBackNameOnServer { get; set; } = default!;
-    public string TaxCardNameOnServer { get; set; } = default!;
+    public byte[]? NationalIdFrontNameOnServer { get; set; } 
+    public byte[]? NationalIdBackNameOnServer { get; set; } 
+    public byte[]? TaxCardNameOnServer{ get; set; }
+
+ 
     public string? VerificationFailureReason { get; set; }
     public Governorate Governorate { get; set; }
     public VerificationStatus VerificationStatus { get; set; } = VerificationStatus.Pending;

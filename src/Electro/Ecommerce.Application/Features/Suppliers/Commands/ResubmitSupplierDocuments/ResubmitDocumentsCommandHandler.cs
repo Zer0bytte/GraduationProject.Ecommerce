@@ -8,9 +8,9 @@ public class ResubmitDocumentsCommandHandler(IApplicationDbContext context, ICur
 
         if (supplier.VerificationStatus == VerificationStatus.Rejected)
         {
-            string Front = await SaveFileAsync(command.IdFront);
-            string Back = await SaveFileAsync(command.IdBack);
-            string Tax = await SaveFileAsync(command.TaxCard);
+            byte[] Front = await ConvertToBytesAsync(command.IdFront);
+            byte[] Back = await ConvertToBytesAsync(command.IdBack);
+            byte[] Tax = await ConvertToBytesAsync(command.TaxCard);
 
             supplier.NationalIdFrontNameOnServer = Front;
             supplier.NationalIdBackNameOnServer = Back;
@@ -36,5 +36,12 @@ public class ResubmitDocumentsCommandHandler(IApplicationDbContext context, ICur
         }
 
         return fileName;
+    }
+
+    private async Task<byte[]> ConvertToBytesAsync(IFormFile file)
+    {
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        return ms.ToArray();
     }
 }

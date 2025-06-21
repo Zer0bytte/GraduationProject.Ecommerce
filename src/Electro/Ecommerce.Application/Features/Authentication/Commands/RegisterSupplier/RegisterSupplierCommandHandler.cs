@@ -19,6 +19,13 @@ public class RegisterSupplierCommandHandler(IApplicationDbContext context,
 
         return fileName;
     }
+
+    private async Task<byte[]> ConvertToBytesAsync(IFormFile file)
+    {
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        return ms.ToArray();
+    }
     public async Task<RegisterSupplierResult> Handle(RegisterSupplierCommand command, CancellationToken cancellationToken)
     {
         RegisterUserCommandHandler registerCommand = new RegisterUserCommandHandler(userManager, bus, true);
@@ -36,9 +43,9 @@ public class RegisterSupplierCommandHandler(IApplicationDbContext context,
 
         if (registerResult.UserId != Guid.Empty)
         {
-            string nameFront = await SaveFileAsync(command.NationalIdFront);
-            string nameBack = await SaveFileAsync(command.NationalIdBack);
-            string nameTax = await SaveFileAsync(command.TaxCard);
+            byte[] nameFront = await ConvertToBytesAsync(command.NationalIdFront);
+            byte[] nameBack = await ConvertToBytesAsync(command.NationalIdBack);
+            byte[] nameTax = await ConvertToBytesAsync(command.TaxCard);
 
 
             SupplierProfile supplierProfile = new SupplierProfile
