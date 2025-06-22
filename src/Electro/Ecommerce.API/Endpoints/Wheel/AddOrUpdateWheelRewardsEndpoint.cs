@@ -1,6 +1,4 @@
-﻿
-using Ecommerce.Application.Features.ProductOptions.Queries.NewFolder.GetProductOptions;
-using Ecommerce.Application.Features.Wheel.Commands.AddWheelReward;
+﻿using Ecommerce.Application.Features.Wheel.Commands.AddWheelReward;
 
 namespace Ecommerce.API.Endpoints.Wheel;
 

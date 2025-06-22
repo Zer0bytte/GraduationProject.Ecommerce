@@ -8,7 +8,8 @@ public class AddOrUpdateWheelRewardsCommandHandler(IApplicationDbContext context
         {
             Name = wr.Name,
             Probability = wr.Probability,
-            Value = wr.Value
+            Value = wr.Value,
+            IsExtraChance = wr.IsExtraChance
         });
         context.WheelRewards.AddRange(wheelRewards);
         await context.SaveChangesAsync(cancellationToken);
