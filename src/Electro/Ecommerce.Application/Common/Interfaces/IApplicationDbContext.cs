@@ -1,6 +1,10 @@
-﻿namespace Ecommerce.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+
+namespace Ecommerce.Application.Common.Interfaces;
 public interface IApplicationDbContext
 {
+    DatabaseFacade Database { get; }
+
     DbSet<Address> Addresses { get; set; }
     DbSet<Category> Categories { get; set; }
     DbSet<CouponCode> CouponCodes { get; set; }
@@ -20,6 +24,7 @@ public interface IApplicationDbContext
     DbSet<AppUser> Users { get; }
     DbSet<IdentityRole<Guid>> Roles { get; }
     DbSet<IdentityUserRole<Guid>> UserRoles { get; }
+    DbSet<WheelReward> WheelRewards { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 }

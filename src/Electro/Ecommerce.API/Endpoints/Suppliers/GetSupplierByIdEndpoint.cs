@@ -13,7 +13,7 @@ public class GetSupplierByIdEndpoint : ICarterModule
             return Results.Ok(ApiResponse<GetSupplierByIdResult>.Success(result));
 
         })
-            //.RequireAuthorization("Admin")
+            .RequireAuthorization("Admin")
             .WithTags("Suppliers")
             .WithSummary("Get Supplier By Id")
             .Produces<GetSupplierByIdResult>();

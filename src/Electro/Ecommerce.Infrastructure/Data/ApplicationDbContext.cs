@@ -29,6 +29,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRole<Guid
     public DbSet<SupplierBalanceTransaction> SupplierBalanceTransactions { get; set; }
     public DbSet<Conversation> Conversations { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<WheelReward> WheelRewards { get; set; }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     private static void SetGlobalQueryFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : BaseEntity
