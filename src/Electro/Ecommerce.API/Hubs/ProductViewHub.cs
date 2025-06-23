@@ -1,5 +1,4 @@
 ﻿using Ecommerce.Application.Common.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 public class ProductViewHub(ICurrentUser currentUser) : Hub
@@ -9,6 +8,8 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
 
     public async Task ViewProduct(string productId)
     {
+        await Groups.AddToGroupAsync(Context.ConnectionId, productId);
+
         string connectionId = Context.ConnectionId;
         string username = currentUser.IsAuthenticated ? currentUser.FullName : "Anonymous User";
 
@@ -30,23 +31,23 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
 
         List<string> usernames = _productViews[productId].Select(u => u.UserName).ToList();
 
-        await Clients.All.SendAsync("UpdateProductViewCount", productId, usernames);
+        await Clients.Group(productId).SendAsync("UpdateProductViewCount", usernames);
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        var connectionId = Context.ConnectionId;
+        string connectionId = Context.ConnectionId;
 
-        foreach (var productId in _productViews.Keys)
+        foreach (string productId in _productViews.Keys)
         {
-            var userToRemove = _productViews[productId].FirstOrDefault(u => u.ConnectionId == connectionId);
+            UserViewInfo? userToRemove = _productViews[productId].FirstOrDefault(u => u.ConnectionId == connectionId);
             if (userToRemove != null)
             {
                 _productViews[productId].Remove(userToRemove);
 
-                var usernames = _productViews[productId].Select(u => u.UserName).ToList();
+                List<string> usernames = _productViews[productId].Select(u => u.UserName).ToList();
 
-                await Clients.All.SendAsync("UpdateProductViewCount", productId, _productViews[productId].Count, usernames);
+                await Clients.Group(productId).SendAsync("UpdateProductViewCount", usernames);
             }
         }
 
