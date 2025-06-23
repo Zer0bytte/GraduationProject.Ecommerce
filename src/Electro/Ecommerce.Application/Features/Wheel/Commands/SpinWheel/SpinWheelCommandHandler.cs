@@ -1,5 +1,4 @@
 ﻿using StackExchange.Redis;
-
 namespace Ecommerce.Application.Features.Wheel.Commands.SpinWheel;
 
 public class SpinWheelCommandHandler(
@@ -19,7 +18,8 @@ public class SpinWheelCommandHandler(
 
         if (currentSpins >= 3)
         {
-            throw new ApplicationException("لقد استهلكت محاولاتك اليومية. حاول مرة أخرى غداً.");
+
+            throw new Exceptions.ApplicationException("لقد استهلكت محاولاتك اليومية. حاول مرة أخرى غداً.");
         }
 
         List<WheelReward> rewards = await context.WheelRewards.ToListAsync(cancellationToken);
@@ -27,7 +27,7 @@ public class SpinWheelCommandHandler(
         double totalProbability = rewards.Sum(r => r.Probability);
         if (Math.Abs(totalProbability - 1.0) > 0.0001)
         {
-            throw new ApplicationException("مجموع احتمالات الجوائز غير صحيح. يرجى التواصل مع الإدارة.");
+            throw new Exceptions.ApplicationException("مجموع احتمالات الجوائز غير صحيح. يرجى التواصل مع الإدارة.");
         }
 
         WheelReward selectedReward = GetRandomReward(rewards);
