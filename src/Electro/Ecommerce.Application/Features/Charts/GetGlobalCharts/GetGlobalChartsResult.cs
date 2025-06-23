@@ -7,6 +7,7 @@ public class GetGlobalChartsResult
     public int TotalSuppliersCount { get; set; }
     public int OrdersCount { get; set; }
     public int ProductsCount { get; set; }
+    public int AdminUsersCount { get; set; }
 }
 
 public record UsersEachMonthResult

@@ -1,9 +1,13 @@
-﻿namespace Ecommerce.Application.Features.Charts.GetGlobalCharts;
+﻿using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
+
+namespace Ecommerce.Application.Features.Charts.GetGlobalCharts;
 public class GetGlobalChartsQueryHandler(IApplicationDbContext context) : IRequestHandler<GetGlobalChartsQuery, GetGlobalChartsResult>
 {
     public async Task<GetGlobalChartsResult> Handle(GetGlobalChartsQuery request, CancellationToken cancellationToken)
     {
-        List<UsersEachMonthResult> usersEachMonth = await context.Users.Where(u => !u.SupplierProfileId.HasValue).OrderByDescending(u => u.CreatedOn)
+        List<UsersEachMonthResult> usersEachMonth = await context.Users.Where(u => !u.SupplierProfileId.HasValue)
+            .OrderByDescending(u => u.CreatedOn)
              .GroupBy(u => new { u.CreatedOn.Year, u.CreatedOn.Month })
              .Select(g => new UsersEachMonthResult
              {
@@ -12,6 +16,17 @@ public class GetGlobalChartsQueryHandler(IApplicationDbContext context) : IReque
              })
              .ToListAsync(cancellationToken);
 
+        var role = await context.Roles
+            .FirstOrDefaultAsync(r => r.Name == "Admin", cancellationToken);
+
+        var adminUsersCount = await context.Users
+            .Join(context.UserRoles,
+                user => user.Id,
+                userRole => userRole.UserId,
+                (user, userRole) => new { user, userRole })
+            .Where(x => x.userRole.RoleId == role.Id)
+            .Select(x => x.user)
+            .CountAsync(cancellationToken);
 
 
         int suppliersCount = await context.Users.Where(u => u.SupplierProfileId.HasValue).CountAsync(cancellationToken);
@@ -23,7 +38,8 @@ public class GetGlobalChartsQueryHandler(IApplicationDbContext context) : IReque
             TotalUsersCount = usersEachMonth.Sum(u => u.RegisteredUsersCount),
             TotalSuppliersCount = suppliersCount,
             OrdersCount = ordersCount,
-            ProductsCount = productsCount
+            ProductsCount = productsCount,
+            AdminUsersCount = adminUsersCount
         };
     }
 }
