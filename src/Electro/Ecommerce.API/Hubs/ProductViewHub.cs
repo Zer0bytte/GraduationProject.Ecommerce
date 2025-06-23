@@ -1,9 +1,12 @@
 ﻿using Ecommerce.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
+[Authorize]
 public class ProductViewHub(ICurrentUser currentUser) : Hub
 {
     private static Dictionary<string, HashSet<UserViewInfo>> _productViews = new();
+
 
     public async Task ViewProduct(string productId)
     {

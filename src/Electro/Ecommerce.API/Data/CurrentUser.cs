@@ -6,6 +6,7 @@ using System.Security.Claims;
 
 namespace Ecommerce.API.Data;
 
+
 public class CurrentUser : ICurrentUser
 {
     private readonly ClaimsPrincipal? _user;
