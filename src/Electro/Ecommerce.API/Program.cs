@@ -137,7 +137,7 @@ try
         app.UseRateLimiter();
     app.MapHub<ChatHub>("/hubs/chat");
     app.MapHub<ChatBotHub>("/hubs/aibot");
-    app.MapHub<ChatBotHub>("/hubs/product-view");
+    app.MapHub<ProductViewHub>("/hubs/product-view");
     app.Run();
 
 }
