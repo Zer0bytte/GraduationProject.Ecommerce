@@ -11,7 +11,7 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, productId);
 
         string connectionId = Context.ConnectionId;
-        string username = currentUser.IsAuthenticated ? currentUser.FullName : "Anonymous User";
+        string? username = currentUser.IsAuthenticated ? currentUser.FullName : null;
 
         UserViewInfo userViewInfo = new UserViewInfo
         {
@@ -45,7 +45,7 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
             {
                 _productViews[productId].Remove(userToRemove);
 
-                List<string> usernames = _productViews[productId].Select(u => u.UserName).ToList();
+                List<string?> usernames = _productViews[productId].Select(u => u.UserName).ToList();
 
                 await Clients.Group(productId).SendAsync("UpdateProductViewCount", usernames);
             }
@@ -58,5 +58,5 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
 public class UserViewInfo
 {
     public string ConnectionId { get; set; }
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 }
