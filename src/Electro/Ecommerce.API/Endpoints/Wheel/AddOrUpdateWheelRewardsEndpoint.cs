@@ -6,7 +6,7 @@ public class AddOrUpdateWheelRewardsEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/wheel-rewards", async (AddOrUpdateWheelRewardsCommand request, ISender sender) =>
+        app.MapPost("/api/wheel", async (AddOrUpdateWheelRewardsCommand request, ISender sender) =>
         {
             AddOrUpdateWheelRewardsResult result = await sender.Send(request);
             return Results.Ok(ApiResponse<AddOrUpdateWheelRewardsResult>.Success(result, "تم اضافة عناصر عجلة الحظ بنجاح"));

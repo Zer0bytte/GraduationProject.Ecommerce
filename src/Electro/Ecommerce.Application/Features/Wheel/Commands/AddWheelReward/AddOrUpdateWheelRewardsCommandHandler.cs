@@ -9,7 +9,8 @@ public class AddOrUpdateWheelRewardsCommandHandler(IApplicationDbContext context
             Name = wr.Name,
             Probability = wr.Probability,
             Value = wr.Value,
-            IsExtraChance = wr.IsExtraChance
+            IsExtraChance = wr.IsExtraChance,
+            ExtraRetries = wr.ExtraRetries
         });
         context.WheelRewards.AddRange(wheelRewards);
         await context.SaveChangesAsync(cancellationToken);

@@ -3,12 +3,11 @@ using Ecommerce.Application.Features.Wheel.Queries.GetWheelRewards;
 
 namespace Ecommerce.API.Endpoints.Wheel;
 
-public class GetWheelOptionsEndpoint : ICarterModule
+public class GetWheelRewardsEndpoint : ICarterModule
 {
-
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/wheel", async (ISender sender) =>
+        app.MapGet("/api/wheel/rewards", async (ISender sender) =>
         {
             GetWheelRewardsResult result = await sender.Send(new GetWheelRewardsQuery());
             return Results.Ok(ApiResponse<GetWheelRewardsResult>.Success(result));

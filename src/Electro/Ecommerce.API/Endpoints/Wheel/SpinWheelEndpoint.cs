@@ -6,7 +6,7 @@ public class SpinWheelEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/spin-wheel", async (ISender sender) =>
+        app.MapPost("/api/wheel/spin", async (ISender sender) =>
         {
             SpinWheelResult result = await sender.Send(new SpinWheelCommand());
             return Results.Ok(ApiResponse<SpinWheelResult>.Success(result));
