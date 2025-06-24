@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace Ecommerce.Application.Features.Authentication.Commands.ChangePassword;
 public class ChangePasswordResult
 {
-    public bool IsSuccess { get; set; }
+    public string AccessToken { get; set; } = default!;
+    public string RefreshToken { get; set; } = default!;
 }

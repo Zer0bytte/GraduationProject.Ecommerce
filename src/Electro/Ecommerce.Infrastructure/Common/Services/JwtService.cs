@@ -47,7 +47,7 @@ public class JwtService(JwtConfiguration jwtConfig, UserManager<AppUser> userMan
             }
         }
 
-        byte[] tokenKey = Encoding.UTF8.GetBytes(jwtConfig.Key);
+        byte[] tokenKey = Encoding.UTF8.GetBytes(jwtCopnfig.Key);
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
