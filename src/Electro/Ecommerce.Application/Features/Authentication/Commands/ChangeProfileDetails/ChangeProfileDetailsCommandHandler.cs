@@ -17,7 +17,7 @@ public class ChangeProfileDetailsCommandHandler(IApplicationDbContext context, I
             {
                 throw new Exceptions.ApplicationException("هذا الرقم مستخدم بالفعل");
             }
-            user.FullName = command.PhoneNumber;
+            user.PhoneNumber = command.PhoneNumber;
         }
 
         await context.SaveChangesAsync(cancellationToken);
