@@ -16,7 +16,8 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
         UserViewInfo userViewInfo = new UserViewInfo
         {
             ConnectionId = connectionId,
-            UserName = username
+            UserName = username,
+            UserId = currentUser.IsAuthenticated ? currentUser.Id : null
         };
 
         lock (_productViews)
@@ -25,8 +26,16 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
             {
                 _productViews[productId] = new HashSet<UserViewInfo>();
             }
+            if (currentUser.IsAuthenticated)
+            {
+                if (!_productViews[productId].Any(u => u.UserId == currentUser.Id))
+                {
+                    _productViews[productId].Add(userViewInfo);
+                }
 
-            _productViews[productId].Add(userViewInfo);
+            }
+            else
+                _productViews[productId].Add(userViewInfo);
         }
 
         List<string> usernames = _productViews[productId].Select(u => u.UserName).ToList();
@@ -58,5 +67,7 @@ public class ProductViewHub(ICurrentUser currentUser) : Hub
 public class UserViewInfo
 {
     public string ConnectionId { get; set; }
+    public Guid? UserId { get; set; } = null;
     public string? UserName { get; set; }
+
 }
