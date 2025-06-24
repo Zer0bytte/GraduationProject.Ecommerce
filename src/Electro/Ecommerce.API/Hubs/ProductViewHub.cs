@@ -3,49 +3,51 @@ using Microsoft.AspNetCore.SignalR;
 
 public class ProductViewHub(ICurrentUser currentUser) : Hub
 {
-    private static readonly Dictionary<string, HashSet<string>> _productViews = new();
+    private static Dictionary<string, HashSet<UserViewInfo>> _productViews = new();
 
 
     public async Task ViewProduct(string productId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, productId);
 
-        var random = new Random();
-        string username = currentUser.IsAuthenticated ? currentUser.FullName : $"Anonymous + {random.Next(1, 99)}";
+        string connectionId = Context.ConnectionId;
+        string? username = currentUser.IsAuthenticated ? currentUser.FullName : null;
+
+        UserViewInfo userViewInfo = new UserViewInfo
+        {
+            ConnectionId = connectionId,
+            UserName = username
+        };
 
         lock (_productViews)
         {
             if (!_productViews.ContainsKey(productId))
             {
-                _productViews[productId] = new HashSet<string>();
+                _productViews[productId] = new HashSet<UserViewInfo>();
             }
 
-            _productViews[productId].Add(username);
+            _productViews[productId].Add(userViewInfo);
         }
 
-        await Clients.Group(productId).SendAsync("UpdateProductViewCount", _productViews[productId].ToList());
+        List<string> usernames = _productViews[productId].Select(u => u.UserName).ToList();
 
+        await Clients.Group(productId).SendAsync("UpdateProductViewCount", usernames);
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        string? username = currentUser.IsAuthenticated ? currentUser.FullName : null;
+        string connectionId = Context.ConnectionId;
 
-        if (username == null)
+        foreach (string productId in _productViews.Keys)
         {
-            await base.OnDisconnectedAsync(exception);
-            return;
-        }
-
-        lock (_productViews)
-        {
-            foreach (var productId in _productViews.Keys)
+            UserViewInfo? userToRemove = _productViews[productId].FirstOrDefault(u => u.ConnectionId == connectionId);
+            if (userToRemove != null)
             {
-                if (_productViews[productId].Contains(username))
-                {
-                    _productViews[productId].Remove(username);
-                    Clients.Group(productId).SendAsync("UpdateProductViewCount", _productViews[productId].ToList());
-                }
+                _productViews[productId].Remove(userToRemove);
+
+                List<string?> usernames = _productViews[productId].Select(u => u.UserName).ToList();
+
+                await Clients.Group(productId).SendAsync("UpdateProductViewCount", usernames);
             }
         }
 

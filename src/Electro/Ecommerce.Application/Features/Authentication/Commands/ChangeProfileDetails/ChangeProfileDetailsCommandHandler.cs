@@ -13,7 +13,7 @@ public class ChangeProfileDetailsCommandHandler(IApplicationDbContext context, I
 
         if (!string.IsNullOrWhiteSpace(command.PhoneNumber))
         {
-            if (context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == command.PhoneNumber && u.Id != currentUser.Id) != null)
+            if (context.Users.Any(u => u.PhoneNumber == command.PhoneNumber && u.Id != currentUser.Id))
             {
                 throw new Exceptions.ApplicationException("هذا الرقم مستخدم بالفعل");
             }
