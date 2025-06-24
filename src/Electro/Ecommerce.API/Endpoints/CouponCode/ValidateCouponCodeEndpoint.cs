@@ -13,6 +13,7 @@ public class ValidateCouponCodeEndpoint : ICarterModule
             return Results.Ok(ApiResponse<ValidateCouponResult>.Success(result, ArabicResponseMessages.CouponCodes.Valid));
 
         })
+            .RequireRateLimiting("fixed")
             .WithTags("Coupon Codes")
             .WithSummary("Validate Coupon Code")
             .Produces<ValidateCouponResult>();

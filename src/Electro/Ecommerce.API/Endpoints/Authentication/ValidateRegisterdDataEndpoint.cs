@@ -17,6 +17,6 @@ public class ValidateRegisterdDataEndpoint : ICarterModule
             .RequireRateLimiting("fixed")
             .WithTags("Authentication")
             .WithSummary("Validate Data")
-            .Produces<ValidateEmailAndPhoneResult>(); ;
+            .Produces<ValidateEmailAndPhoneResult>();
     }
 }

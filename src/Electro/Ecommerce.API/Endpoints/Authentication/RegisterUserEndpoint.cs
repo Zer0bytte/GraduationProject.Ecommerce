@@ -16,6 +16,7 @@ public class RegisterUserEndpoint : ICarterModule
             return Results.Ok(ApiResponse<RegisterUserResult>.Success(result, ArabicResponseMessages.Authentication.RegisterSuccess));
 
         })
+                        .RequireRateLimiting("fixed")
             .WithTags("Authentication")
             .WithSummary("Register")
             .Produces<RegisterUserResult>();

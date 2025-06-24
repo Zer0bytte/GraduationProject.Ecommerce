@@ -14,7 +14,9 @@ public class LoginEndpoint : ICarterModule
             return Results.Ok(ApiResponse<LoginResult>.Success(result, ArabicResponseMessages.Authentication.LoginSuccess));
 
 
-        }).WithTags("Authentication")
+        })
+            .RequireRateLimiting("fixed")
+            .WithTags("Authentication")
             .WithSummary("Login")
             .Produces<LoginResult>(); ;
     }
