@@ -1,4 +1,7 @@
-﻿namespace Ecommerce.Application.Features.Reviews.Commands.AddProductReview;
+﻿using ImageProcessor;
+using ImageProcessor.Plugins.WebP.Imaging.Formats;
+
+namespace Ecommerce.Application.Features.Reviews.Commands.AddProductReview;
 
 public class AddProductReviewCommandHandler(IApplicationDbContext context,
     ICurrentUser ICurrentUser, DirectoryConfiguration directoryConfiguration)
@@ -29,12 +32,22 @@ public class AddProductReviewCommandHandler(IApplicationDbContext context,
 
         if (command.Image is not null)
         {
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(command.Image.FileName);
+            string fileName = Guid.NewGuid().ToString() + ".webp";
             string filePath = Path.Combine(directoryConfiguration.MediaDirectory, fileName);
-            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            using (FileStream webPFileStream = new FileStream(filePath, FileMode.Create))
             {
-                await command.Image.CopyToAsync(fileStream);
+                using (ImageFactory imageFactory = new ImageFactory(preserveExifData: false))
+                {
+
+                    imageFactory.Load(command.Image.OpenReadStream())
+                                .Format(new WebPFormat())
+                                .Quality(75)
+                                .Save(webPFileStream);
+                }
             }
+
+
+            
             productReview.ReviewImageNameOnServer = fileName;
         }
 
