@@ -39,7 +39,10 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, HostingCo
             baseQuery = baseQuery.Where(p => p.CategoryId == query.CategoryId);
         }
 
-
+        if (query.SupplierId.HasValue && query.SupplierId != Guid.Empty)
+        {
+            baseQuery = baseQuery.Where(p => p.SupplierId == query.SupplierId);
+        }
         if (!string.IsNullOrWhiteSpace(query.Cursor))
         {
             Cursor? decodedCursor = Cursor.Decode(query.Cursor);
