@@ -41,7 +41,7 @@ public class GetAllProductsQueryHandler(IApplicationDbContext context, HostingCo
 
         if (query.SupplierId.HasValue && query.SupplierId != Guid.Empty)
         {
-            baseQuery = baseQuery.Where(p => p.SupplierId == query.SupplierId);
+            baseQuery = baseQuery.Where(p => p.Supplier.UserId == query.SupplierId);
         }
         if (!string.IsNullOrWhiteSpace(query.Cursor))
         {
