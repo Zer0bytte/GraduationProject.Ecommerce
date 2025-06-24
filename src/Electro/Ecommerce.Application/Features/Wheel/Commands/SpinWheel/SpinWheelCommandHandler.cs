@@ -19,7 +19,7 @@ public class SpinWheelCommandHandler(
         if (currentSpins >= 3)
         {
 
-            throw new Exceptions.ApplicationException("لقد استهلكت محاولاتك اليومية. حاول مرة أخرى غداً.");
+            //throw new Exceptions.ApplicationException("لقد استهلكت محاولاتك اليومية. حاول مرة أخرى غداً.");
         }
 
         List<WheelReward> rewards = await context.WheelRewards.ToListAsync(cancellationToken);
