@@ -11,6 +11,7 @@ public class ChangePasswordEndpoint : ICarterModule
             ChangePasswordResult result = await sender.Send(command);
             return Results.Ok(ApiResponse<ChangePasswordResult>.Success(result, "تم تحديث كلمة المرور بنجاح, برجاء اعادة تسجيل الدخول"));
         })
+            .RequireAuthorization()
             .WithTags("Authentication")
             .WithSummary("Change Password")
             .Produces<ApiResponse<ChangePasswordResult>>();

@@ -3,7 +3,7 @@ public class ChangePasswordCommandHandler(UserManager<AppUser> userManager, ICur
 {
     public async Task<ChangePasswordResult> Handle(ChangePasswordCommand command, CancellationToken cancellationToken)
     {
-        AppUser? user = await userManager.FindByIdAsync(currentUser.Id.ToString());
+        AppUser? user = await context.Users.FindAsync(currentUser.Id);
         if (user is null) throw new UserNotFoundException();
 
         IdentityResult result = await userManager.ChangePasswordAsync(user, command.CurrentPassword, command.NewPassword);
