@@ -30,6 +30,8 @@ public static class ArabicResponseMessages
         public const string RegisterSuccess = "تم التسجيل بنجاح، يرجى إدخال رمز التأكيد";
         public const string LoginSuccess = "تم تسجيل الدخول بنجاح";
         public const string SupplierLoginSuccess = "تم تسجيل دخول المورد بنجاح";
+        public const string ChangeProfileDetailsSuccess = "تم تعديل بياناتك بنجاح";
+        public const string EmailConfirmedSuccess = "تم تأكيد حسابك بنجاح";
     }
 
     public static class Cart

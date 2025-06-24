@@ -10,7 +10,7 @@ public class ConfirmEmailEndpoint : ICarterModule
         app.MapPost("/api/auth/confirm-email", async (ConfirmEmailCommand command, ISender sender) =>
         {
             ConfirmEmailResult result = await sender.Send(command);
-            return Results.Ok(ApiResponse<ConfirmEmailResult>.Success(result, "تم تأكيد حسابك بنجاح"));
+            return Results.Ok(ApiResponse<ConfirmEmailResult>.Success(result, ArabicResponseMessages.Authentication.EmailConfirmedSuccess));
 
         })
             .WithTags("Authentication")
