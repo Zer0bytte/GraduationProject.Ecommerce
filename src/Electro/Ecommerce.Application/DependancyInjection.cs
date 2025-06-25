@@ -16,6 +16,8 @@ public static class DependancyInjection
         });
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+
         services.AddMassTransit(busConfig =>
         {
             busConfig.SetKebabCaseEndpointNameFormatter();
