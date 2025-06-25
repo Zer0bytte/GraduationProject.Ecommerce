@@ -18,7 +18,7 @@ public class GetCategoriesQueryHandler(IApplicationDbContext context, HostingCon
         DbSet<Category> source = context.Categories;
         string imageUrl = hostingConfig.HostName + "/media/";
 
-        IQueryable<GetCategoriesResult> categoriesQuery = source.OrderByDescending(c => c.CreatedOn)
+        IQueryable<GetCategoriesResult> categoriesQuery = source.OrderBy(c => c.CreatedOn)
             .Select(c => new GetCategoriesResult
             {
                 Id = c.Id,
