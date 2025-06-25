@@ -17,8 +17,8 @@ public class GetCategoriesQueryHandler(IApplicationDbContext context, HostingCon
 
         DbSet<Category> source = context.Categories;
         string imageUrl = hostingConfig.HostName + "/media/";
-        
-        IQueryable<GetCategoriesResult> categoriesQuery = source
+
+        IQueryable<GetCategoriesResult> categoriesQuery = source.OrderByDescending(c => c.CreatedOn)
             .Select(c => new GetCategoriesResult
             {
                 Id = c.Id,
@@ -35,9 +35,9 @@ public class GetCategoriesQueryHandler(IApplicationDbContext context, HostingCon
 
         await cache.SetStringAsync(
             cacheKey,
-            JsonConvert.SerializeObject(result),new DistributedCacheEntryOptions
+            JsonConvert.SerializeObject(result), new DistributedCacheEntryOptions
             {
-                
+
             });
 
         return result;
